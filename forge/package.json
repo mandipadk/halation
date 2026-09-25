@@ -1,0 +1,9 @@
+{
+  "name": "@halation/forge",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.ts",
+    "test": "node --test *.test.ts"
+  }
+}

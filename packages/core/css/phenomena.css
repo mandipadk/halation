@@ -1,0 +1,15 @@
+/* Phenomena: a stage holds one, behind its content. */
+.hl-stage { position: relative; isolation: isolate; overflow: hidden; }
+.hl-phenomenon { position: absolute; inset: 0; z-index: -1; }
+.hl-stage > :not(.hl-phenomenon) { position: relative; }
+/* Foil presses the heading's words itself; the heading stays for reading. */
+.hl-pressed { color: transparent !important; }
+.hl-pressed * { color: transparent !important; }
+/* Halation: the brightest things glow in the accent's hue. */
+.hl-halated { filter: url(#hl-halation); }
+#hl-halation .hl-halation-core { flood-color: var(--color-halation); flood-opacity: calc(0.85 * var(--hl-glow, 1)); }
+#hl-halation .hl-halation-edge { flood-color: var(--color-halation); flood-opacity: calc(0.4 * var(--hl-glow, 1)); }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .hl-halated { filter: none; text-shadow: 0 0 0.4em color-mix(in oklab, var(--color-halation) 22%, transparent); } }
+:root[data-theme="light"] .hl-halated { filter: none; text-shadow: 0 0 0.4em color-mix(in oklab, var(--color-halation) 22%, transparent); }
+/* Film grain, as a still texture over a stage. */
+.hl-grain { position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0.11; mix-blend-mode: overlay; background-size: 220px; }

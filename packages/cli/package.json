@@ -1,0 +1,32 @@
+{
+  "name": "@halation/cli",
+  "version": "0.1.0",
+  "description": "Halation's command line: lint source against the rulebook, check a rendered page, and set a project up for agents.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "halation": "./bin/halation.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["bin", "src", "kit"],
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "dependencies": {
+    "@halation/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "playwright-core": ">=1.40"
+  },
+  "peerDependenciesMeta": {
+    "playwright-core": {
+      "optional": true
+    }
+  }
+}

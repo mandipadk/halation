@@ -1,0 +1,38 @@
+{
+  "textStyles": [
+    { "name": "display-xl", "size": "52 to 116 px, fluid", "usage": "The one hero line on a page." },
+    { "name": "display", "size": "36 to 60 px, fluid", "usage": "Section headlines on marketing pages." },
+    { "name": "title-1", "size": "28 to 36 px, fluid", "usage": "Page titles in products; dialog heroes." },
+    { "name": "title-2", "size": "24 px", "usage": "Section titles inside a page." },
+    { "name": "title-3", "size": "20 px", "usage": "Card and group titles." },
+    { "name": "body-lg", "size": "18 px", "usage": "Lead paragraphs under a headline." },
+    { "name": "body", "size": "16 px", "usage": "Reading text." },
+    { "name": "body-sm", "size": "14 px", "usage": "Interface text: controls, lists, tables." },
+    { "name": "caption", "size": "13 px", "usage": "Metadata, helper text, footnotes." },
+    { "name": "micro", "size": "12 px", "usage": "Badges, keyboard keys, counters. Never sentences." }
+  ],
+  "durations": [
+    { "name": "press", "ms": 120, "usage": "Press feedback (scale to 0.97)." },
+    { "name": "hover", "ms": 150, "usage": "Hover color and fill changes." },
+    { "name": "popover", "ms": 180, "usage": "Tooltips, menus, popovers; exits of anything." },
+    { "name": "dialog", "ms": 240, "usage": "Dialogs, toasts, panels." },
+    { "name": "sheet", "ms": 500, "usage": "Sheets and drawers that follow a drag (with ease-drawer)." },
+    { "name": "reveal", "ms": 600, "usage": "The one-time blur rise on page entrance and scroll." }
+  ],
+  "eases": [
+    { "name": "out", "usage": "Anything entering, leaving or responding. The default." },
+    { "name": "in-out", "usage": "Something moving or morphing between two places on screen." },
+    { "name": "drawer", "usage": "Sheets and drawers that follow a drag." },
+    { "name": "spring", "usage": "Things that snap into place: toggles, drag release. Never menus or text." }
+  ],
+  "moves": [
+    { "name": "press", "what": "A pressed control scales to 0.97." },
+    { "name": "unfold", "what": "Menus and popovers grow out of the control that opened them." },
+    { "name": "focus pull", "what": "The page behind a dialog softens while the dialog comes into focus." },
+    { "name": "glide", "what": "The tab indicator moves between tabs on the in-out curve." },
+    { "name": "settle", "what": "A switch thumb springs across." },
+    { "name": "bloom", "what": "A button blooms once in the halation color when its work is done." },
+    { "name": "stack", "what": "Toasts stack with depth and fan out when pointed at." },
+    { "name": "rise", "what": "Content arrives in reading order out of a soft blur, once." }
+  ]
+}

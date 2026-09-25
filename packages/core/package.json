@@ -1,0 +1,51 @@
+{
+  "name": "@halation/core",
+  "version": "0.1.0",
+  "description": "Halation's foundations without a framework: tokens and styles, phenomena, daylight, signature, motion and the rendered check.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./phenomena": {
+      "types": "./dist/types/phenomena/index.d.ts",
+      "default": "./src/phenomena/index.js"
+    },
+    "./signature": {
+      "types": "./dist/types/signature/index.d.ts",
+      "default": "./src/signature/index.js"
+    },
+    "./motion": {
+      "types": "./dist/types/motion/index.d.ts",
+      "default": "./src/motion/index.js"
+    },
+    "./check": {
+      "types": "./dist/types/check/index.d.ts",
+      "default": "./src/check/index.js"
+    },
+    "./styles.css": "./css/styles.css",
+    "./tokens.css": "./css/tokens.css",
+    "./tailwind.css": "./css/tailwind.css",
+    "./rules.json": "./rules.json",
+    "./swatches.json": "./swatches.json"
+  },
+  "files": [
+    "src",
+    "css",
+    "dist",
+    "rules.json",
+    "contrast.md",
+    "swatches.json"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.js"
+  }
+}

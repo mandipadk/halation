@@ -1,0 +1,21 @@
+/* The lit edge: one pixel of the project's light along the top of the window. */
+.hl-lit-edge, .hl-lit-edge-glow { position: fixed; left: 0; right: 0; top: 0; pointer-events: none; z-index: 2147483000; background: radial-gradient(38% 100% at var(--hl-edge-x, 50%) 0%, var(--color-light-core), transparent 100%); }
+.hl-lit-edge { height: 1px; }
+.hl-lit-edge-glow { height: 10px; filter: blur(6px); opacity: 0.35; }
+/* The seal */
+.hl-seal { display: inline-flex; flex: none; line-height: 0; }
+.hl-seal svg { display: block; }
+button.hl-seal { border: 0; padding: 0; background: none; cursor: pointer; border-radius: 30%; }
+/* The darkroom: a red safelight over the page, the grid, and the labels. */
+.hl-darkroom body > :not(.hl-darkroom-overlay):not(.hl-darkroom-panel):not(.hl-lit-edge):not(.hl-lit-edge-glow) { filter: grayscale(1) sepia(1) saturate(6) hue-rotate(-38deg) brightness(0.62) contrast(1.15); }
+.hl-darkroom-overlay { position: absolute; top: 0; left: 0; z-index: 2147482000; pointer-events: none; background-image: linear-gradient(to bottom, oklch(62% 0.2 28 / 16%) 1px, transparent 1px); background-size: 100% 8px; }
+.hl-darkroom-label { position: absolute; font-family: var(--font-mono); font-size: 10.5px; padding: 1px 5px; border-radius: 4px; background: oklch(20% 0.06 28); color: oklch(78% 0.16 28); white-space: nowrap; }
+.hl-darkroom-panel { position: fixed; z-index: 2147482001; right: 16px; bottom: 16px; max-width: 320px; padding: 12px 14px; border-radius: 12px; background: oklch(16% 0.05 28); color: oklch(80% 0.14 28); font: 12px/1.5 var(--font-sans); display: grid; gap: 4px; }
+.hl-darkroom-panel b { font-weight: 600; }
+.hl-darkroom-panel small { font-size: 11px; opacity: 0.75; }
+.hl-darkroom-leave { justify-self: start; margin-top: 6px; font: 500 12px/1 var(--font-sans); color: oklch(16% 0.05 28); background: oklch(80% 0.14 28); border: 0; border-radius: 999px; padding: 7px 12px; cursor: pointer; }
+.hl-darkroom-leave:focus-visible { outline: 2px solid oklch(80% 0.14 28); outline-offset: 2px; }
+/* The colophon */
+.hl-colophon { display: grid; gap: 18px; justify-items: center; text-align: center; }
+.hl-colophon-role { font-size: var(--text-caption); color: var(--color-fg-muted); }
+.hl-colophon-who { font-size: var(--text-title-3); letter-spacing: var(--text-title-3--letter-spacing); font-weight: 500; margin-top: 2px; }

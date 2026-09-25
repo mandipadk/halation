@@ -1,0 +1,346 @@
+[
+  {
+    "id": "R1",
+    "slug": "one-accent",
+    "says": "One accent, used as a signal: identity, focus, selection, live state.",
+    "why": "Color that means something is only noticed when it's rare.",
+    "instead": "Neutral surfaces and ink; the accent only where it carries meaning.",
+    "caught": [
+      "Theme",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R2",
+    "slug": "primary-is-ink",
+    "says": "The one main action is ink: white on dark, black on light.",
+    "why": "Keeps the accent free to mean something, and the main action obvious in both modes.",
+    "instead": "An ink button; accent fills only for identity moments.",
+    "caught": [
+      "Page check"
+    ]
+  },
+  {
+    "id": "R3",
+    "slug": "light-not-paint",
+    "says": "No gradients as decoration. Depth comes from light: atmospheres, lit edges, shadows.",
+    "why": "Decorative gradients are the most common sign of generated design.",
+    "instead": "An atmosphere behind the page, or a raised surface.",
+    "caught": [
+      "Theme",
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "\\b(bg-gradient-|bg-linear-|bg-radial-|bg-conic-|from-\\w+-\\d{2,3}\\b)|(?<!mask(?:-image)?:[^;{}]*)(linear|radial|conic)-gradient\\(",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "css",
+          "scss"
+        ],
+        "level": "error",
+        "skip": "phenomena|(halation|packages)/core/"
+      }
+    ]
+  },
+  {
+    "id": "R4",
+    "slug": "contrast",
+    "says": "Every text and background pair passes WCAG 2 in both modes.",
+    "why": "Legibility isn't a style choice.",
+    "instead": "Use the text roles; the forge solves their contrast.",
+    "caught": [
+      "Forge",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R5",
+    "slug": "sentence-case",
+    "says": "Sentence case everywhere. No uppercase labels.",
+    "why": "Capitals shout, and spaced-out capitals are a generated-design cliché.",
+    "instead": "A smaller or lighter text style.",
+    "caught": [
+      "Lint",
+      "Page check"
+    ],
+    "lint": [
+      {
+        "pattern": "\\buppercase\\b|text-transform:\\s*uppercase",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "css",
+          "scss"
+        ],
+        "level": "error"
+      }
+    ]
+  },
+  {
+    "id": "R6",
+    "slug": "no-tracking",
+    "says": "No letter-spacing beyond what the text styles set.",
+    "why": "Tracking is tuned per size already; extra spacing is how eyebrows get made.",
+    "instead": "The text style for that size.",
+    "caught": [
+      "Theme"
+    ],
+    "lint": [
+      {
+        "pattern": "\\btracking-(wide|wider|widest|\\[)|letter-spacing:\\s*(0?\\.\\d*[1-9]|[1-9]\\d*(\\.\\d+)?)(em|rem|px)|letterSpacing:\\s*[\\\"'`]?(0?\\.\\d*[1-9]|[1-9])",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "css",
+          "scss"
+        ],
+        "level": "error",
+        "skip": "(halation|packages)/core/css/tokens"
+      }
+    ]
+  },
+  {
+    "id": "R7",
+    "slug": "ten-styles",
+    "says": "Ten named text styles; no other sizes.",
+    "why": "A small scale is what makes pages feel composed.",
+    "instead": "The nearest style.",
+    "caught": [
+      "Theme",
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "\\btext-(xs|sm|base|lg|xl|[2-9]xl)\\b|\\btext-\\[[\\d.]+(px|rem|em)\\]",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro"
+        ],
+        "level": "error"
+      }
+    ]
+  },
+  {
+    "id": "R8",
+    "slug": "one-serif-phrase",
+    "says": "At most one serif phrase in a headline, and only at title sizes and up.",
+    "why": "It's an accent in the voice; twice is a costume.",
+    "instead": "Plain type for everything else.",
+    "caught": [
+      "Page check"
+    ]
+  },
+  {
+    "id": "R9",
+    "slug": "no-dot-separators",
+    "says": "Facts are never joined with dots or bars.",
+    "why": "A joined string has to be parsed; structure can be scanned.",
+    "instead": "The Facts component, or separate lines with their own weight.",
+    "caught": [
+      "Lint",
+      "Page check"
+    ],
+    "lint": [
+      {
+        "pattern": "\\s[·•]\\s|\\s&(middot|bull|#183|#8226);\\s",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "ts",
+          "js",
+          "md"
+        ],
+        "level": "error"
+      },
+      {
+        "pattern": ">[^<>{}()=;:]*[^\\s<>{}()=;:|]\\s\\|\\s[^\\s<>{}()=;:|][^<>{}()=;:]*<",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro"
+        ],
+        "level": "warn"
+      }
+    ]
+  },
+  {
+    "id": "R10",
+    "slug": "no-status-dots",
+    "says": "No status dots, and no tinted pills with a dot and same-hue text.",
+    "why": "It reads as generated, and color alone doesn't say what the state is.",
+    "instead": "A word and a shape; only the shape carries color.",
+    "caught": [
+      "Lint",
+      "Page check"
+    ],
+    "lint": [
+      {
+        "pattern": "[\"'`](?=[^\"'`]*\\brounded-full\\b)(?=[^\"'`]*(\\bsize-(1|1\\.5|2|2\\.5)(?![\\w/.-])|\\bw-(1|1\\.5|2|2\\.5)(?![\\w/.-])[^\"'`]*\\bh-(1|1\\.5|2|2\\.5)(?![\\w/.-])|\\bh-(1|1\\.5|2|2\\.5)(?![\\w/.-])[^\"'`]*\\bw-(1|1\\.5|2|2\\.5)(?![\\w/.-])))[^\"'`]*[\"'`]",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro"
+        ],
+        "level": "warn"
+      }
+    ]
+  },
+  {
+    "id": "R11",
+    "slug": "mono-on-surfaces",
+    "says": "Monospace only inside a surface: keys, code wells, token names on cards.",
+    "why": "Loose monospace on the page reads as a terminal, and as generated.",
+    "instead": "Geist, with tabular figures for numbers.",
+    "caught": [
+      "Page check"
+    ]
+  },
+  {
+    "id": "R12",
+    "slug": "tabular-numbers",
+    "says": "Numbers that sit in columns or change use tabular figures.",
+    "why": "They line up and don't jitter as they change.",
+    "instead": "The value style, which sets tabular figures.",
+    "caught": [
+      "Theme",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R13",
+    "slug": "lines-before-boxes",
+    "says": "Hairlines separate; a box only when something must read as an object. Never a box inside a box.",
+    "why": "Card soup flattens hierarchy.",
+    "instead": "A divider or spacing.",
+    "caught": [
+      "Page check",
+      "Critic"
+    ]
+  },
+  {
+    "id": "R14",
+    "slug": "motion-laws",
+    "says": "Interface motion stays under 300 ms, exits take 70% of the enter, nothing loops while idle.",
+    "why": "Motion should explain a change, never make anyone wait.",
+    "instead": "The moves and their durations.",
+    "caught": [
+      "Theme",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R15",
+    "slug": "one-atmosphere",
+    "says": "One atmosphere per page, and it dims behind content.",
+    "why": "An atmosphere is a place, not a decoration.",
+    "instead": "The page's one light, with its quiet zone.",
+    "caught": [
+      "Page check"
+    ]
+  },
+  {
+    "id": "R17",
+    "slug": "raw-colors",
+    "says": "Colors come from tokens, never from literal values in markup.",
+    "why": "A literal color is a color the system can't check, theme or keep in contrast.",
+    "instead": "A color role: bg-surface, text-fg-muted, border-line and so on.",
+    "caught": [
+      "Theme",
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "\\b(bg|text|border|fill|stroke|ring|outline|from|to|via|shadow|decoration)-\\[(#|rgba?\\(|hsla?\\(|oklch\\()|style=\\{\\{[^}]*(#[0-9a-fA-F]{3,8}\\b|rgba?\\(|hsla?\\(|oklch\\()",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro"
+        ],
+        "level": "error"
+      }
+    ]
+  },
+  {
+    "id": "R18",
+    "slug": "lens-fonts",
+    "says": "Type comes from the project's lens: its display, text and code faces.",
+    "why": "Inter, Roboto and system stacks are the default look of generated design.",
+    "instead": "The --font-sans, --font-serif and --font-mono tokens.",
+    "caught": [
+      "Theme",
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "font-family:\\s*[\\\"']?(Inter|Roboto|Arial|Helvetica|Open Sans|Poppins|Montserrat)\\b|\\bfont-\\[['\\\"]?(Inter|Roboto|Arial|Helvetica|Open Sans|Poppins|Montserrat)|fontFamily:\\s*[\\\"'`]?(Inter|Roboto|Arial|Helvetica|Open Sans|Poppins|Montserrat)\\b",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "css",
+          "scss"
+        ],
+        "level": "error"
+      }
+    ]
+  },
+  {
+    "id": "R16",
+    "slug": "key-gap",
+    "says": "Keys in a combination keep a visible gap.",
+    "why": "Each key should read as its own key.",
+    "instead": "The Keys component.",
+    "caught": [
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "</kbd>\\s*<kbd",
+        "flags": "i",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro"
+        ],
+        "level": "warn"
+      }
+    ]
+  }
+]

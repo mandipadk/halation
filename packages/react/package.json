@@ -1,0 +1,37 @@
+{
+  "name": "@halation/react",
+  "version": "0.1.0",
+  "description": "Halation for React: components on Base UI, phenomena, motion and the signature.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    "./styles.css": "./styles.css"
+  },
+  "files": ["dist", "styles.css"],
+  "sideEffects": ["*.css"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@halation/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "jsdom": "^30.1.1",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "~6.0.2",
+    "vitest": "^5.0.2"
+  }
+}

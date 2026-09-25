@@ -1,0 +1,101 @@
+/* The page's layout. Color, type and motion come from Halation; this file
+   only places things, using the spacing token (--spacing is 4px). */
+
+.hero {
+  display: grid;
+  align-items: end;
+  min-height: min(80svh, 760px);
+  padding: calc(var(--spacing) * 28) calc(var(--spacing) * 6) calc(var(--spacing) * 16);
+}
+
+.hero-copy,
+.page,
+.footer {
+  width: 100%;
+  max-width: 1080px;
+  margin-inline: auto;
+}
+
+.hero-copy {
+  display: grid;
+  justify-items: start;
+  gap: calc(var(--spacing) * 6);
+}
+
+.lead {
+  max-width: 38rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing) * 3);
+  padding-top: calc(var(--spacing) * 2);
+}
+
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 18rem;
+  align-items: start;
+  gap: calc(var(--spacing) * 16);
+  padding: calc(var(--spacing) * 16) calc(var(--spacing) * 6);
+}
+
+.checklist {
+  display: grid;
+  gap: calc(var(--spacing) * 4);
+  scroll-margin-top: calc(var(--spacing) * 8);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: calc(var(--spacing) * 4);
+}
+
+.row-end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: calc(var(--spacing) * 2);
+}
+
+.about {
+  display: grid;
+  gap: calc(var(--spacing) * 4);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--spacing) * 3);
+  padding: calc(var(--spacing) * 8) calc(var(--spacing) * 6) calc(var(--spacing) * 12);
+  box-shadow: inset 0 1px 0 var(--color-line);
+}
+
+@media (max-width: 760px) {
+  .hero {
+    min-height: 70svh;
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+    gap: calc(var(--spacing) * 12);
+    padding-inline: calc(var(--spacing) * 4);
+  }
+  .footer {
+    align-items: flex-start;
+    padding-inline: calc(var(--spacing) * 4);
+  }
+}
+
+@media (max-width: 520px) {
+  .row-end {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: var(--spacing);
+  }
+}

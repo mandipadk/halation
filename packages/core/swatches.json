@@ -1,0 +1,842 @@
+[
+  {
+    "id": "vermilion",
+    "name": "Vermilion",
+    "roles": [
+      {
+        "name": "canvas",
+        "usage": "The page. Everything sits on it.",
+        "light": "#fafafa",
+        "dark": "#050505"
+      },
+      {
+        "name": "surface",
+        "usage": "Raised content: cards, panels, the sidebar.",
+        "light": "#ffffff",
+        "dark": "#0c0c0c"
+      },
+      {
+        "name": "raised",
+        "usage": "Floating layers: menus, popovers, dialogs.",
+        "light": "#ffffff",
+        "dark": "#131313"
+      },
+      {
+        "name": "fill",
+        "usage": "Neutral control fill: secondary buttons, inputs at rest, chips.",
+        "light": "#f0f0f0",
+        "dark": "#1b1b1b"
+      },
+      {
+        "name": "fill-hover",
+        "usage": "Neutral fill under the pointer.",
+        "light": "#e8e8e8",
+        "dark": "#202020"
+      },
+      {
+        "name": "fill-active",
+        "usage": "Pressed or selected neutral fill.",
+        "light": "#dfdfdf",
+        "dark": "#282828"
+      },
+      {
+        "name": "fg",
+        "usage": "Primary text and icons.",
+        "light": "#121212",
+        "dark": "#fafafa"
+      },
+      {
+        "name": "fg-muted",
+        "usage": "Secondary text: descriptions, metadata, placeholders people must read.",
+        "light": "#585858",
+        "dark": "#b3b3b3"
+      },
+      {
+        "name": "fg-subtle",
+        "usage": "Tertiary marks only: disabled text, large decorative numerals, separators' labels. Never body copy.",
+        "light": "#7a7a7a",
+        "dark": "#797979"
+      },
+      {
+        "name": "ink",
+        "usage": "Primary action fill (the one most important button).",
+        "light": "#161616",
+        "dark": "#f2f2f2"
+      },
+      {
+        "name": "ink-hover",
+        "usage": "Primary action under the pointer.",
+        "light": "#333333",
+        "dark": "#d7d7d7"
+      },
+      {
+        "name": "on-ink",
+        "usage": "Text and icons on ink.",
+        "light": "#fafafa",
+        "dark": "#0d0d0d"
+      },
+      {
+        "name": "line",
+        "usage": "Hairlines: borders, dividers.",
+        "light": "#00000014",
+        "dark": "#ffffff17"
+      },
+      {
+        "name": "line-strong",
+        "usage": "Input borders and lines that must be seen.",
+        "light": "#00000024",
+        "dark": "#ffffff26"
+      },
+      {
+        "name": "scrim",
+        "usage": "Behind modal dialogs.",
+        "light": "#16161652",
+        "dark": "#00000099"
+      },
+      {
+        "name": "accent",
+        "usage": "The one color: selection, focus, live state, the brand mark.",
+        "light": "#ff6b3d",
+        "dark": "#ff6b3d"
+      },
+      {
+        "name": "accent-hover",
+        "usage": "Accent fills under the pointer.",
+        "light": "#ed5a2b",
+        "dark": "#ff8158"
+      },
+      {
+        "name": "on-accent",
+        "usage": "Text and icons on an accent fill.",
+        "light": "#1d0d08",
+        "dark": "#1d0d08"
+      },
+      {
+        "name": "accent-soft",
+        "usage": "Tinted backgrounds: selected rows, accent chips.",
+        "light": "#fdede8",
+        "dark": "#20110d"
+      },
+      {
+        "name": "accent-soft-hover",
+        "usage": "Tinted backgrounds under the pointer.",
+        "light": "#ffe5dd",
+        "dark": "#2d1710"
+      },
+      {
+        "name": "accent-fg",
+        "usage": "Accent-colored text and icons on neutral or soft grounds.",
+        "light": "#c63400",
+        "dark": "#ff9977"
+      },
+      {
+        "name": "ring",
+        "usage": "Focus rings and the accent's visible edges.",
+        "light": "#f56234",
+        "dark": "#ff6b3d"
+      },
+      {
+        "name": "positive",
+        "usage": "Success: saved, running, verified.",
+        "light": "#2e9052",
+        "dark": "#5ebc7b"
+      },
+      {
+        "name": "positive-soft",
+        "usage": "Background for positive messages and chips.",
+        "light": "#e8f3ea",
+        "dark": "#101812"
+      },
+      {
+        "name": "positive-fg",
+        "usage": "Positive text and icons.",
+        "light": "#05773b",
+        "dark": "#68c584"
+      },
+      {
+        "name": "warning",
+        "usage": "Needs attention, nothing lost yet.",
+        "light": "#a27000",
+        "dark": "#cf9a35"
+      },
+      {
+        "name": "warning-soft",
+        "usage": "Background for warning messages and chips.",
+        "light": "#f5efe4",
+        "dark": "#1a150c"
+      },
+      {
+        "name": "warning-fg",
+        "usage": "Warning text and icons.",
+        "light": "#875900",
+        "dark": "#dfa946"
+      },
+      {
+        "name": "critical",
+        "usage": "Errors and destructive actions.",
+        "light": "#cb4644",
+        "dark": "#fd736d"
+      },
+      {
+        "name": "critical-soft",
+        "usage": "Background for critical messages and chips.",
+        "light": "#fdebe9",
+        "dark": "#201210"
+      },
+      {
+        "name": "critical-fg",
+        "usage": "Critical text and icons.",
+        "light": "#b02a2d",
+        "dark": "#ff948c"
+      },
+      {
+        "name": "light-core",
+        "usage": "Atmospheres: the core of the light (in light mode, the soft shade).",
+        "light": "#e6dbd8",
+        "dark": "#fff4f1"
+      },
+      {
+        "name": "light-edge",
+        "usage": "Atmospheres: the light's tinted edge (in light mode, the deeper shade).",
+        "light": "#d9c2bb",
+        "dark": "#fcb8a3"
+      },
+      {
+        "name": "halation",
+        "usage": "The glow film gives bright things, in the accent's hue.",
+        "light": "#d45c37",
+        "dark": "#ef5c2d"
+      }
+    ]
+  },
+  {
+    "id": "cobalt",
+    "name": "Cobalt",
+    "roles": [
+      {
+        "name": "canvas",
+        "usage": "The page. Everything sits on it.",
+        "light": "#fafafa",
+        "dark": "#050505"
+      },
+      {
+        "name": "surface",
+        "usage": "Raised content: cards, panels, the sidebar.",
+        "light": "#ffffff",
+        "dark": "#0c0c0c"
+      },
+      {
+        "name": "raised",
+        "usage": "Floating layers: menus, popovers, dialogs.",
+        "light": "#ffffff",
+        "dark": "#131313"
+      },
+      {
+        "name": "fill",
+        "usage": "Neutral control fill: secondary buttons, inputs at rest, chips.",
+        "light": "#f0f0f0",
+        "dark": "#1b1b1b"
+      },
+      {
+        "name": "fill-hover",
+        "usage": "Neutral fill under the pointer.",
+        "light": "#e8e8e8",
+        "dark": "#202020"
+      },
+      {
+        "name": "fill-active",
+        "usage": "Pressed or selected neutral fill.",
+        "light": "#dfdfdf",
+        "dark": "#282828"
+      },
+      {
+        "name": "fg",
+        "usage": "Primary text and icons.",
+        "light": "#121212",
+        "dark": "#fafafa"
+      },
+      {
+        "name": "fg-muted",
+        "usage": "Secondary text: descriptions, metadata, placeholders people must read.",
+        "light": "#585858",
+        "dark": "#b3b3b3"
+      },
+      {
+        "name": "fg-subtle",
+        "usage": "Tertiary marks only: disabled text, large decorative numerals, separators' labels. Never body copy.",
+        "light": "#7a7a7a",
+        "dark": "#797979"
+      },
+      {
+        "name": "ink",
+        "usage": "Primary action fill (the one most important button).",
+        "light": "#161616",
+        "dark": "#f2f2f2"
+      },
+      {
+        "name": "ink-hover",
+        "usage": "Primary action under the pointer.",
+        "light": "#333333",
+        "dark": "#d7d7d7"
+      },
+      {
+        "name": "on-ink",
+        "usage": "Text and icons on ink.",
+        "light": "#fafafa",
+        "dark": "#0d0d0d"
+      },
+      {
+        "name": "line",
+        "usage": "Hairlines: borders, dividers.",
+        "light": "#00000014",
+        "dark": "#ffffff17"
+      },
+      {
+        "name": "line-strong",
+        "usage": "Input borders and lines that must be seen.",
+        "light": "#00000024",
+        "dark": "#ffffff26"
+      },
+      {
+        "name": "scrim",
+        "usage": "Behind modal dialogs.",
+        "light": "#16161652",
+        "dark": "#00000099"
+      },
+      {
+        "name": "accent",
+        "usage": "The one color: selection, focus, live state, the brand mark.",
+        "light": "#3f90ff",
+        "dark": "#3f90ff"
+      },
+      {
+        "name": "accent-hover",
+        "usage": "Accent fills under the pointer.",
+        "light": "#2e80ee",
+        "dark": "#53a1ff"
+      },
+      {
+        "name": "on-accent",
+        "usage": "Text and icons on an accent fill.",
+        "light": "#09121f",
+        "dark": "#09121f"
+      },
+      {
+        "name": "accent-soft",
+        "usage": "Tinted backgrounds: selected rows, accent chips.",
+        "light": "#e8f0fc",
+        "dark": "#0d141f"
+      },
+      {
+        "name": "accent-soft-hover",
+        "usage": "Tinted backgrounds under the pointer.",
+        "light": "#ddeafd",
+        "dark": "#101c2c"
+      },
+      {
+        "name": "accent-fg",
+        "usage": "Accent-colored text and icons on neutral or soft grounds.",
+        "light": "#0a66d1",
+        "dark": "#7bb7ff"
+      },
+      {
+        "name": "ring",
+        "usage": "Focus rings and the accent's visible edges.",
+        "light": "#3f90ff",
+        "dark": "#4495ff"
+      },
+      {
+        "name": "positive",
+        "usage": "Success: saved, running, verified.",
+        "light": "#2e9052",
+        "dark": "#5ebc7b"
+      },
+      {
+        "name": "positive-soft",
+        "usage": "Background for positive messages and chips.",
+        "light": "#e8f3ea",
+        "dark": "#101812"
+      },
+      {
+        "name": "positive-fg",
+        "usage": "Positive text and icons.",
+        "light": "#05773b",
+        "dark": "#68c584"
+      },
+      {
+        "name": "warning",
+        "usage": "Needs attention, nothing lost yet.",
+        "light": "#a27000",
+        "dark": "#cf9a35"
+      },
+      {
+        "name": "warning-soft",
+        "usage": "Background for warning messages and chips.",
+        "light": "#f5efe4",
+        "dark": "#1a150c"
+      },
+      {
+        "name": "warning-fg",
+        "usage": "Warning text and icons.",
+        "light": "#875900",
+        "dark": "#dfa946"
+      },
+      {
+        "name": "critical",
+        "usage": "Errors and destructive actions.",
+        "light": "#cb4644",
+        "dark": "#fd736d"
+      },
+      {
+        "name": "critical-soft",
+        "usage": "Background for critical messages and chips.",
+        "light": "#fdebe9",
+        "dark": "#201210"
+      },
+      {
+        "name": "critical-fg",
+        "usage": "Critical text and icons.",
+        "light": "#b02a2d",
+        "dark": "#ff948c"
+      },
+      {
+        "name": "light-core",
+        "usage": "Atmospheres: the core of the light (in light mode, the soft shade).",
+        "light": "#d9dee6",
+        "dark": "#f2f7ff"
+      },
+      {
+        "name": "light-edge",
+        "usage": "Atmospheres: the light's tinted edge (in light mode, the deeper shade).",
+        "light": "#bcc8da",
+        "dark": "#a8cdff"
+      },
+      {
+        "name": "halation",
+        "usage": "The glow film gives bright things, in the accent's hue.",
+        "light": "#4385e4",
+        "dark": "#3e8fff"
+      }
+    ]
+  },
+  {
+    "id": "jade",
+    "name": "Jade",
+    "roles": [
+      {
+        "name": "canvas",
+        "usage": "The page. Everything sits on it.",
+        "light": "#fafafa",
+        "dark": "#050505"
+      },
+      {
+        "name": "surface",
+        "usage": "Raised content: cards, panels, the sidebar.",
+        "light": "#ffffff",
+        "dark": "#0c0c0c"
+      },
+      {
+        "name": "raised",
+        "usage": "Floating layers: menus, popovers, dialogs.",
+        "light": "#ffffff",
+        "dark": "#131313"
+      },
+      {
+        "name": "fill",
+        "usage": "Neutral control fill: secondary buttons, inputs at rest, chips.",
+        "light": "#f0f0f0",
+        "dark": "#1b1b1b"
+      },
+      {
+        "name": "fill-hover",
+        "usage": "Neutral fill under the pointer.",
+        "light": "#e8e8e8",
+        "dark": "#202020"
+      },
+      {
+        "name": "fill-active",
+        "usage": "Pressed or selected neutral fill.",
+        "light": "#dfdfdf",
+        "dark": "#282828"
+      },
+      {
+        "name": "fg",
+        "usage": "Primary text and icons.",
+        "light": "#121212",
+        "dark": "#fafafa"
+      },
+      {
+        "name": "fg-muted",
+        "usage": "Secondary text: descriptions, metadata, placeholders people must read.",
+        "light": "#585858",
+        "dark": "#b3b3b3"
+      },
+      {
+        "name": "fg-subtle",
+        "usage": "Tertiary marks only: disabled text, large decorative numerals, separators' labels. Never body copy.",
+        "light": "#7a7a7a",
+        "dark": "#797979"
+      },
+      {
+        "name": "ink",
+        "usage": "Primary action fill (the one most important button).",
+        "light": "#161616",
+        "dark": "#f2f2f2"
+      },
+      {
+        "name": "ink-hover",
+        "usage": "Primary action under the pointer.",
+        "light": "#333333",
+        "dark": "#d7d7d7"
+      },
+      {
+        "name": "on-ink",
+        "usage": "Text and icons on ink.",
+        "light": "#fafafa",
+        "dark": "#0d0d0d"
+      },
+      {
+        "name": "line",
+        "usage": "Hairlines: borders, dividers.",
+        "light": "#00000014",
+        "dark": "#ffffff17"
+      },
+      {
+        "name": "line-strong",
+        "usage": "Input borders and lines that must be seen.",
+        "light": "#00000024",
+        "dark": "#ffffff26"
+      },
+      {
+        "name": "scrim",
+        "usage": "Behind modal dialogs.",
+        "light": "#16161652",
+        "dark": "#00000099"
+      },
+      {
+        "name": "accent",
+        "usage": "The one color: selection, focus, live state, the brand mark.",
+        "light": "#24c187",
+        "dark": "#24c187"
+      },
+      {
+        "name": "accent-hover",
+        "usage": "Accent fills under the pointer.",
+        "light": "#00b178",
+        "dark": "#3ed196"
+      },
+      {
+        "name": "on-accent",
+        "usage": "Text and icons on an accent fill.",
+        "light": "#04160d",
+        "dark": "#04160d"
+      },
+      {
+        "name": "accent-soft",
+        "usage": "Tinted backgrounds: selected rows, accent chips.",
+        "light": "#e9f5ee",
+        "dark": "#0d1913"
+      },
+      {
+        "name": "accent-soft-hover",
+        "usage": "Tinted backgrounds under the pointer.",
+        "light": "#dff1e7",
+        "dark": "#10231a"
+      },
+      {
+        "name": "accent-fg",
+        "usage": "Accent-colored text and icons on neutral or soft grounds.",
+        "light": "#007c4c",
+        "dark": "#35cb90"
+      },
+      {
+        "name": "ring",
+        "usage": "Focus rings and the accent's visible edges.",
+        "light": "#00a66f",
+        "dark": "#24c187"
+      },
+      {
+        "name": "positive",
+        "usage": "Success: saved, running, verified.",
+        "light": "#2e9052",
+        "dark": "#5ebc7b"
+      },
+      {
+        "name": "positive-soft",
+        "usage": "Background for positive messages and chips.",
+        "light": "#e8f3ea",
+        "dark": "#101812"
+      },
+      {
+        "name": "positive-fg",
+        "usage": "Positive text and icons.",
+        "light": "#05773b",
+        "dark": "#68c584"
+      },
+      {
+        "name": "warning",
+        "usage": "Needs attention, nothing lost yet.",
+        "light": "#a27000",
+        "dark": "#cf9a35"
+      },
+      {
+        "name": "warning-soft",
+        "usage": "Background for warning messages and chips.",
+        "light": "#f5efe4",
+        "dark": "#1a150c"
+      },
+      {
+        "name": "warning-fg",
+        "usage": "Warning text and icons.",
+        "light": "#875900",
+        "dark": "#dfa946"
+      },
+      {
+        "name": "critical",
+        "usage": "Errors and destructive actions.",
+        "light": "#cb4644",
+        "dark": "#fd736d"
+      },
+      {
+        "name": "critical-soft",
+        "usage": "Background for critical messages and chips.",
+        "light": "#fdebe9",
+        "dark": "#201210"
+      },
+      {
+        "name": "critical-fg",
+        "usage": "Critical text and icons.",
+        "light": "#b02a2d",
+        "dark": "#ff948c"
+      },
+      {
+        "name": "light-core",
+        "usage": "Atmospheres: the core of the light (in light mode, the soft shade).",
+        "light": "#d7e1db",
+        "dark": "#f0f9f4"
+      },
+      {
+        "name": "light-edge",
+        "usage": "Atmospheres: the light's tinted edge (in light mode, the deeper shade).",
+        "light": "#b8cdc2",
+        "dark": "#97dcba"
+      },
+      {
+        "name": "halation",
+        "usage": "The glow film gives bright things, in the accent's hue.",
+        "light": "#00a267",
+        "dark": "#00ae75"
+      }
+    ]
+  },
+  {
+    "id": "amber",
+    "name": "Amber",
+    "roles": [
+      {
+        "name": "canvas",
+        "usage": "The page. Everything sits on it.",
+        "light": "#fafafa",
+        "dark": "#050505"
+      },
+      {
+        "name": "surface",
+        "usage": "Raised content: cards, panels, the sidebar.",
+        "light": "#ffffff",
+        "dark": "#0c0c0c"
+      },
+      {
+        "name": "raised",
+        "usage": "Floating layers: menus, popovers, dialogs.",
+        "light": "#ffffff",
+        "dark": "#131313"
+      },
+      {
+        "name": "fill",
+        "usage": "Neutral control fill: secondary buttons, inputs at rest, chips.",
+        "light": "#f0f0f0",
+        "dark": "#1b1b1b"
+      },
+      {
+        "name": "fill-hover",
+        "usage": "Neutral fill under the pointer.",
+        "light": "#e8e8e8",
+        "dark": "#202020"
+      },
+      {
+        "name": "fill-active",
+        "usage": "Pressed or selected neutral fill.",
+        "light": "#dfdfdf",
+        "dark": "#282828"
+      },
+      {
+        "name": "fg",
+        "usage": "Primary text and icons.",
+        "light": "#121212",
+        "dark": "#fafafa"
+      },
+      {
+        "name": "fg-muted",
+        "usage": "Secondary text: descriptions, metadata, placeholders people must read.",
+        "light": "#585858",
+        "dark": "#b3b3b3"
+      },
+      {
+        "name": "fg-subtle",
+        "usage": "Tertiary marks only: disabled text, large decorative numerals, separators' labels. Never body copy.",
+        "light": "#7a7a7a",
+        "dark": "#797979"
+      },
+      {
+        "name": "ink",
+        "usage": "Primary action fill (the one most important button).",
+        "light": "#161616",
+        "dark": "#f2f2f2"
+      },
+      {
+        "name": "ink-hover",
+        "usage": "Primary action under the pointer.",
+        "light": "#333333",
+        "dark": "#d7d7d7"
+      },
+      {
+        "name": "on-ink",
+        "usage": "Text and icons on ink.",
+        "light": "#fafafa",
+        "dark": "#0d0d0d"
+      },
+      {
+        "name": "line",
+        "usage": "Hairlines: borders, dividers.",
+        "light": "#00000014",
+        "dark": "#ffffff17"
+      },
+      {
+        "name": "line-strong",
+        "usage": "Input borders and lines that must be seen.",
+        "light": "#00000024",
+        "dark": "#ffffff26"
+      },
+      {
+        "name": "scrim",
+        "usage": "Behind modal dialogs.",
+        "light": "#16161652",
+        "dark": "#00000099"
+      },
+      {
+        "name": "accent",
+        "usage": "The one color: selection, focus, live state, the brand mark.",
+        "light": "#f9ad26",
+        "dark": "#f9ad26"
+      },
+      {
+        "name": "accent-hover",
+        "usage": "Accent fills under the pointer.",
+        "light": "#e89d00",
+        "dark": "#ffbd3e"
+      },
+      {
+        "name": "on-accent",
+        "usage": "Text and icons on an accent fill.",
+        "light": "#190f03",
+        "dark": "#190f03"
+      },
+      {
+        "name": "accent-soft",
+        "usage": "Tinted backgrounds: selected rows, accent chips.",
+        "light": "#faf3e8",
+        "dark": "#1f170d"
+      },
+      {
+        "name": "accent-soft-hover",
+        "usage": "Tinted backgrounds under the pointer.",
+        "light": "#fbeede",
+        "dark": "#2b2010"
+      },
+      {
+        "name": "accent-fg",
+        "usage": "Accent-colored text and icons on neutral or soft grounds.",
+        "light": "#9b6100",
+        "dark": "#f9ad26"
+      },
+      {
+        "name": "ring",
+        "usage": "Focus rings and the accent's visible edges.",
+        "light": "#cb8200",
+        "dark": "#f9ad26"
+      },
+      {
+        "name": "positive",
+        "usage": "Success: saved, running, verified.",
+        "light": "#2e9052",
+        "dark": "#5ebc7b"
+      },
+      {
+        "name": "positive-soft",
+        "usage": "Background for positive messages and chips.",
+        "light": "#e8f3ea",
+        "dark": "#101812"
+      },
+      {
+        "name": "positive-fg",
+        "usage": "Positive text and icons.",
+        "light": "#05773b",
+        "dark": "#68c584"
+      },
+      {
+        "name": "warning",
+        "usage": "Needs attention, nothing lost yet.",
+        "light": "#a27000",
+        "dark": "#cf9a35"
+      },
+      {
+        "name": "warning-soft",
+        "usage": "Background for warning messages and chips.",
+        "light": "#f5efe4",
+        "dark": "#1a150c"
+      },
+      {
+        "name": "warning-fg",
+        "usage": "Warning text and icons.",
+        "light": "#875900",
+        "dark": "#dfa946"
+      },
+      {
+        "name": "critical",
+        "usage": "Errors and destructive actions.",
+        "light": "#cb4644",
+        "dark": "#fd736d"
+      },
+      {
+        "name": "critical-soft",
+        "usage": "Background for critical messages and chips.",
+        "light": "#fdebe9",
+        "dark": "#201210"
+      },
+      {
+        "name": "critical-fg",
+        "usage": "Critical text and icons.",
+        "light": "#b02a2d",
+        "dark": "#ff948c"
+      },
+      {
+        "name": "light-core",
+        "usage": "Atmospheres: the core of the light (in light mode, the soft shade).",
+        "light": "#e3ddd5",
+        "dark": "#fcf6ee"
+      },
+      {
+        "name": "light-edge",
+        "usage": "Atmospheres: the light's tinted edge (in light mode, the deeper shade).",
+        "light": "#d2c5b4",
+        "dark": "#ebc38c"
+      },
+      {
+        "name": "halation",
+        "usage": "The glow film gives bright things, in the accent's hue.",
+        "light": "#b97600",
+        "dark": "#c98000"
+      }
+    ]
+  }
+]
