@@ -11,7 +11,11 @@
     ".": "./src/index.js",
     "./package.json": "./package.json"
   },
-  "files": ["bin", "src", "kit"],
+  "files": [
+    "bin",
+    "src",
+    "kit"
+  ],
   "engines": {
     "node": ">=20.6"
   },
@@ -28,5 +32,17 @@
     "playwright-core": {
       "optional": true
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandipadk/halation.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://halation.mandip.dev",
+  "bugs": {
+    "url": "https://github.com/mandipadk/halation/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

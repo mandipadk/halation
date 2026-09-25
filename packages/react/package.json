@@ -7,11 +7,19 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
     "./styles.css": "./styles.css"
   },
-  "files": ["dist", "styles.css"],
-  "sideEffects": ["*.css"],
+  "files": [
+    "dist",
+    "styles.css"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "vitest run"
@@ -33,5 +41,17 @@
     "react-dom": "^19.3.0",
     "typescript": "~6.0.2",
     "vitest": "^5.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandipadk/halation.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://halation.mandip.dev",
+  "bugs": {
+    "url": "https://github.com/mandipadk/halation/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

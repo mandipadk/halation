@@ -47,5 +47,17 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "node --test test/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandipadk/halation.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://halation.mandip.dev",
+  "bugs": {
+    "url": "https://github.com/mandipadk/halation/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

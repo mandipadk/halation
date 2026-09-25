@@ -17,5 +17,14 @@
   "scripts": {
     "build": "node ../cli/bin/halation.js skill > template/.claude/skills/halation/SKILL.md",
     "test": "node --test \"test/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mandipadk/halation.git",
+    "directory": "packages/create"
+  },
+  "homepage": "https://halation.mandip.dev",
+  "bugs": {
+    "url": "https://github.com/mandipadk/halation/issues"
   }
 }
