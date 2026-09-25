@@ -8,7 +8,8 @@
     "test": "pnpm -r run test",
     "dev": "pnpm --filter @halation/docs run dev",
     "build:docs": "pnpm --filter @halation/docs run build",
-    "lint": "node packages/cli/bin/halation.js lint apps/docs/src packages/react/src"
+    "lint": "node packages/cli/bin/halation.js lint apps/docs/src packages/react/src",
+    "deploy:docs": "pnpm build && pnpm --filter @halation/docs run deploy"
   },
   "devDependencies": {
     "typescript": "~6.0.2"
