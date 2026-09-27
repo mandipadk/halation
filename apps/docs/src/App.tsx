@@ -1,6 +1,6 @@
 import { HalationProvider } from "@halation/react"
 import { lazy, Suspense, useEffect, type ComponentType } from "react"
-import { DocsBar, PAGES } from "./parts/Bar.tsx"
+import { Appearance, PAGES } from "./parts/Bar.tsx"
 import { usePath } from "./router.tsx"
 import { SiteContext, useSiteState } from "./site.tsx"
 import { Home } from "./landing/Home.tsx"
@@ -42,13 +42,13 @@ export function App() {
   return (
     <SiteContext.Provider value={site}>
       <HalationProvider name="Halation" accent={site.accent} theme={site.theme}>
-        <Nav />
-        {docs ? <DocsBar path={path} /> : null}
-        <main data-docs={docs ? "" : undefined}>
+        <Nav path={path} docs={docs} />
+        <main id="main" tabIndex={-1} data-docs={docs ? "" : undefined}>
           <Suspense fallback={<div style={{ minHeight: "70svh" }} />}>
             <Page />
           </Suspense>
         </main>
+        {docs ? <Appearance /> : null}
         <Footer />
       </HalationProvider>
     </SiteContext.Provider>

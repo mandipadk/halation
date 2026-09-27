@@ -14,19 +14,22 @@
 /* The floating bar */
 .capsule-bar { position: fixed; inset: 14px 0 auto; z-index: 50; display: flex; justify-content: center; padding-inline: var(--edge); pointer-events: none; }
 .capsule {
-  pointer-events: auto; display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 14px; border-radius: var(--radius-full);
+  pointer-events: auto; max-width: 100%; display: flex; align-items: center; gap: 6px; padding: 6px 6px 6px 14px; border-radius: var(--radius-full);
   background: color-mix(in oklab, var(--color-raised) 62%, transparent);
   backdrop-filter: blur(22px) saturate(1.6); -webkit-backdrop-filter: blur(22px) saturate(1.6);
   box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-fg) 9%, transparent), inset 0 1px 0 color-mix(in oklab, var(--color-fg) 14%, transparent), 0 12px 40px -12px oklch(0% 0 0 / 60%);
 }
 .capsule a { text-decoration: none; }
 .capsule-brand { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: var(--text-body-sm); color: var(--color-fg); padding-right: 10px; }
-.capsule-links { display: flex; }
+.capsule-links { display: flex; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.capsule-links::-webkit-scrollbar { display: none; }
+.capsule-links a { flex: none; }
+.capsule-links a[aria-current="page"] { color: var(--color-fg); background: var(--color-fill); }
 .capsule-links a { font-size: var(--text-body-sm); color: var(--color-fg-muted); padding: 7px 11px; border-radius: var(--radius-full); transition: color var(--hl-d-hover) ease, background-color var(--hl-d-hover) ease; }
 @media (hover: hover) { .capsule-links a:hover { color: var(--color-fg); background: var(--color-fill); } }
 .capsule-cta { font-size: var(--text-body-sm); font-weight: 500; color: var(--color-canvas); background: var(--color-fg); padding: 7px 14px; border-radius: var(--radius-full); margin-left: 4px; transition: transform var(--hl-d-press) var(--ease-out); }
 .capsule-cta:active { transform: scale(0.97); }
-@media (max-width: 640px) { .capsule-links a:not(:first-child) { display: none; } }
+@media (max-width: 640px) { .capsule-brand span:last-child { display: none; } .capsule-brand { padding-right: 4px; } .capsule-links { mask-image: linear-gradient(to right, black 85%, transparent); } }
 
 /* Hero */
 .hero-x { position: relative; min-height: max(100svh, 680px); display: grid; align-items: end; overflow: clip; isolation: isolate; }

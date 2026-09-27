@@ -7,6 +7,8 @@ export function navigate(to: string) {
   history.pushState(null, "", to)
   listeners.forEach((l) => l())
   if (!to.includes("#")) window.scrollTo({ top: 0 })
+  // A new page takes focus, as a page load would: the link clicked doesn't keep it.
+  requestAnimationFrame(() => document.getElementById("main")?.focus({ preventScroll: true }))
 }
 
 export function usePath() {

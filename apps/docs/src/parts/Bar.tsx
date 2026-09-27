@@ -1,5 +1,4 @@
 import { SegmentedControl } from "@halation/react"
-import { Link } from "../router.tsx"
 import { useSite, type Accent } from "../site.tsx"
 
 export const PAGES = [
@@ -19,28 +18,17 @@ export const ACCENTS: { value: Accent; label: string; color: string }[] = [
   { value: "amber", label: "Amber", color: "#f0b429" },
 ]
 
-/** The docs' own row, under the site's bar: the sections, and the appearance a reader can try on. */
-export function DocsBar({ path }: { path: string }) {
+/** In the docs, a small pill in the corner for trying the examples in another accent or mode. */
+export function Appearance() {
   const { theme, setTheme, accent, setAccent } = useSite()
   return (
-    <div className="docs-bar">
-      <div className="wrap docs-bar-row">
-        <nav className="nav" aria-label="Documentation">
-          {PAGES.map((p) => (
-            <Link key={p.href} href={p.href} aria-current={path.startsWith(p.href) ? "page" : undefined}>
-              {p.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="controls">
-          <div className="swatches" role="radiogroup" aria-label="Accent">
-            {ACCENTS.map((a) => (
-              <button key={a.value} type="button" role="radio" aria-checked={accent === a.value} aria-label={a.label} title={a.label} className="swatch" style={{ ["--c" as string]: a.color }} onClick={() => setAccent(a.value)} />
-            ))}
-          </div>
-          <SegmentedControl aria-label="Appearance" value={theme} onValueChange={setTheme} options={[{ value: "system", label: "System" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} />
-        </div>
+    <div className="appearance" role="group" aria-label="Try the docs in another accent or mode">
+      <div className="swatches" role="radiogroup" aria-label="Accent">
+        {ACCENTS.map((a) => (
+          <button key={a.value} type="button" role="radio" aria-checked={accent === a.value} aria-label={a.label} title={a.label} className="swatch" style={{ ["--c" as string]: a.color }} onClick={() => setAccent(a.value)} />
+        ))}
       </div>
+      <SegmentedControl aria-label="Appearance" value={theme} onValueChange={setTheme} options={[{ value: "system", label: "System" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} />
     </div>
   )
 }
