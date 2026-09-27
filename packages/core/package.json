@@ -1,6 +1,6 @@
 {
   "name": "@halation/core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Halation's foundations without a framework: tokens and styles, phenomena, daylight, signature, motion and the rendered check.",
   "license": "MIT",
   "type": "module",
