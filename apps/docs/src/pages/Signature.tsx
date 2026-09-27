@@ -1,4 +1,4 @@
-import { Button, Colophon, Facts, Field, Grain, Heading, Input, Seal, Serif, ShareCard, Stage, Text, darkroom, useDarkroom } from "@halation/react"
+import { Button, Colophon, Facts, Field, Grain, Heading, Input, Seal, ShareCard, Stage, Text, darkroom, useDarkroom } from "@halation/react"
 import { batch, drawSeal, playChime, score } from "@halation/core/signature"
 import { useMemo, useState } from "react"
 import { PageHead } from "../parts/Demo.tsx"
@@ -11,7 +11,7 @@ export function Signature() {
   const foil = useMemo(() => ({ drawMark: drawSeal(clean) }), [clean])
   return (
     <div className="wrap">
-      <PageHead kicker="Signature" title={<>Signed in <Serif>light.</Serif></>}>
+      <PageHead kicker="Signature" title={<>Signed in light.</>}>
         Something built with Halation is recognizable without a logo in the corner. Every piece of its signature is generated from one thing: its name. Type one.
       </PageHead>
       <div className="grid-2" style={{ alignItems: "center", paddingBottom: 56 }}>

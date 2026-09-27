@@ -1,11 +1,11 @@
-import { Heading, Serif, Text } from "@halation/react"
+import { Heading, Text } from "@halation/react"
 import { Code } from "../parts/Code.tsx"
 import { PageHead } from "../parts/Demo.tsx"
 
 export function Start() {
   return (
     <div className="wrap">
-      <PageHead kicker="Start" title={<>Up and running in a <Serif>minute.</Serif></>}>
+      <PageHead kicker="Start" title={<>Up and running in a minute.</>}>
         A new project comes set up: the system, a starting page, and an agent kit so Claude Code and other agents know the rules from the first edit.
       </PageHead>
 

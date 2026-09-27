@@ -31,7 +31,7 @@ export function Motion() {
   }, [tempo])
   return (
     <div className="wrap">
-      <PageHead kicker="Motion" title={<>Things move because something <Serif>happened.</Serif></>}>
+      <PageHead kicker="Motion" title={<>Things move because something happened.</>}>
         Physics, so things have weight and keep their speed, and the camera, so attention moves the way focus does. Change the tempo and try each move again.
       </PageHead>
       <div className="row" style={{ marginBottom: 40 }}>

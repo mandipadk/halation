@@ -1,4 +1,4 @@
-import { Heading, Serif, Stage, Text } from "@halation/react"
+import { Heading, Stage, Text } from "@halation/react"
 import { Link } from "../router.tsx"
 
 const OFF_FRAME = { position: 118 }
@@ -9,7 +9,7 @@ export function NotFound() {
     <Stage phenomenon="rays" className="hero" options={OFF_FRAME}>
       <div className="hero-inner" data-quiet="">
         <Heading level={1} size="display">
-          Out of <Serif>frame.</Serif>
+          Out of frame.
         </Heading>
         <Text size="body-lg" className="lead">
           This page moved, or never was. Everything else is where you left it.

@@ -35,7 +35,7 @@ import { Demo, PageHead } from "../parts/Demo.tsx"
 export function Components() {
   return (
     <div className="wrap">
-      <PageHead kicker="Components" title={<>Every one, <Serif>live.</Serif></>}>
+      <PageHead kicker="Components" title={<>Every one, live.</>}>
         Built on Base UI, styled by Halation. Press, open, type and tab through them: every state, both modes, the keyboard.
       </PageHead>
       <div className="demos" style={{ paddingBottom: 96 }}>

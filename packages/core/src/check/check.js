@@ -2,7 +2,8 @@
 // computed it. Lint reads source; this reads the result, so it catches what
 // source can't show (a string built at runtime, a class from a library, a
 // color that only fails in dark mode). The darkroom and `halation check`
-// both run it.
+// both run it. Anything inside [data-counterexample] (a deliberate "don't do
+// this" in docs or marketing) is left out.
 
 const SEPARATOR = /\s[·•]\s/
 const LIGHT_ONLY = new Set(["box-shadow", "filter"])
@@ -63,7 +64,7 @@ export function check(root = document.body) {
     list.push(selector(el))
     found.set(id, list)
   }
-  const all = [...root.querySelectorAll("*")].filter((el) => !el.closest(".hl-darkroom-overlay, .hl-darkroom-panel"))
+  const all = [...root.querySelectorAll("*")].filter((el) => !el.closest(".hl-darkroom-overlay, .hl-darkroom-panel, [data-counterexample]"))
   let ink = 0
   let accentArea = 0
   const accent = parseColor(getComputedStyle(document.documentElement).getPropertyValue("--color-accent") || "transparent")

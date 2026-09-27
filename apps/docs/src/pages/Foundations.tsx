@@ -39,7 +39,7 @@ const roles = (swatches as { id: string; roles: Role[] }[])[0].roles
 export function Foundations() {
   return (
     <div className="wrap">
-      <PageHead kicker="Foundations" title={<>One accent in, <Serif>everything</Serif> out.</>}>
+      <PageHead kicker="Foundations" title={<>One accent in, everything out.</>}>
         Every color is computed from one accent and proven for contrast in both modes before it ships. Change the accent and the appearance at the top: everything here follows.
       </PageHead>
 

@@ -1,6 +1,6 @@
 import { SegmentedControl } from "@halation/react"
-import { sealSvg } from "@halation/core/signature"
 import { Link } from "../router.tsx"
+import { useSite, type Accent } from "../site.tsx"
 
 export const PAGES = [
   { href: "/start", label: "Start" },
@@ -12,7 +12,6 @@ export const PAGES = [
   { href: "/rules", label: "Rules" },
 ]
 
-export type Accent = "vermilion" | "cobalt" | "jade" | "amber"
 export const ACCENTS: { value: Accent; label: string; color: string }[] = [
   { value: "vermilion", label: "Vermilion", color: "#ff6b3d" },
   { value: "cobalt", label: "Cobalt", color: "#3f7cf0" },
@@ -20,15 +19,13 @@ export const ACCENTS: { value: Accent; label: string; color: string }[] = [
   { value: "amber", label: "Amber", color: "#f0b429" },
 ]
 
-export function Bar({ path, accent, setAccent, theme, setTheme }: { path: string; accent: Accent; setAccent: (a: Accent) => void; theme: "system" | "light" | "dark"; setTheme: (t: "system" | "light" | "dark") => void }) {
+/** The docs' own row, under the site's bar: the sections, and the appearance a reader can try on. */
+export function DocsBar({ path }: { path: string }) {
+  const { theme, setTheme, accent, setAccent } = useSite()
   return (
-    <header className="bar">
-      <div className="wrap bar-row">
-        <Link href="/" className="brand" aria-label="Halation, home">
-          <span className="hl-seal" aria-hidden dangerouslySetInnerHTML={{ __html: sealSvg("Halation", 24) }} />
-          <span>Halation</span>
-        </Link>
-        <nav className="nav" aria-label="Sections">
+    <div className="docs-bar">
+      <div className="wrap docs-bar-row">
+        <nav className="nav" aria-label="Documentation">
           {PAGES.map((p) => (
             <Link key={p.href} href={p.href} aria-current={path.startsWith(p.href) ? "page" : undefined}>
               {p.label}
@@ -44,6 +41,6 @@ export function Bar({ path, accent, setAccent, theme, setTheme }: { path: string
           <SegmentedControl aria-label="Appearance" value={theme} onValueChange={setTheme} options={[{ value: "system", label: "System" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} />
         </div>
       </div>
-    </header>
+    </div>
   )
 }

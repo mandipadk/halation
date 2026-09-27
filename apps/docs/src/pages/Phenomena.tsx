@@ -40,7 +40,7 @@ export function Phenomena() {
   return (
     <>
       <div className="wrap">
-        <PageHead kicker="Phenomena" title={<>Things the world <Serif>does.</Serif></>}>
+        <PageHead kicker="Phenomena" title={<>Things the world does.</>}>
           Ten real processes, simulated rather than faked, each answering your pointer and the time of day. One per page, behind content, dimmed where the words are.
         </PageHead>
         <div className="glass" style={{ display: "grid", gap: 14, marginBottom: 48 }}>

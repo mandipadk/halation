@@ -1,4 +1,4 @@
-import { Heading, Serif, Text } from "@halation/react"
+import { Heading, Text } from "@halation/react"
 import rules from "@halation/core/rules.json"
 import { Code } from "../parts/Code.tsx"
 import { PageHead } from "../parts/Demo.tsx"
@@ -8,7 +8,7 @@ type Rule = { id: string; says: string; why: string; instead: string; caught: st
 export function Rules() {
   return (
     <div className="wrap">
-      <PageHead kicker="Rules" title={<>Taste, written down as <Serif>rules.</Serif></>}>
+      <PageHead kicker="Rules" title={<>Taste, written down as rules.</>}>
         Each rule has a reason, a way to catch it and what to do instead. The same list becomes the agent's skill, the lint rules, the page check and this page, so guidance and enforcement never drift apart.
       </PageHead>
       <section className="section">

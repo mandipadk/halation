@@ -5,6 +5,9 @@
   --hl-tempo: 1;
   --hl-spring: var(--ease-spring);
   --hl-exit: 0.7;
+}
+/* Durations follow the nearest tempo: set data-tempo on the page or on any part of it. */
+:root, [data-tempo] {
   --hl-d-press: calc(var(--duration-press) * var(--hl-tempo));
   --hl-d-hover: calc(var(--duration-hover) * var(--hl-tempo));
   --hl-d-popover: calc(var(--duration-popover) * var(--hl-tempo));
@@ -12,8 +15,9 @@
   --hl-d-sheet: calc(var(--duration-sheet) * var(--hl-tempo));
   --hl-d-reveal: calc(var(--duration-reveal) * var(--hl-tempo));
 }
-:root[data-tempo="calm"] { --hl-tempo: 1.25; --hl-spring: var(--ease-out); }
-:root[data-tempo="lively"] { --hl-tempo: 0.85; }
+[data-tempo="calm"] { --hl-tempo: 1.25; --hl-spring: var(--ease-out); }
+[data-tempo="lively"] { --hl-tempo: 0.85; }
+[data-tempo="crisp"] { --hl-tempo: 1; --hl-spring: var(--ease-spring); }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
