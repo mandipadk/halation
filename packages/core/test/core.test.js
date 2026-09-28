@@ -63,3 +63,34 @@ test("the rulebook has reasons and alternatives for every rule", () => {
   assert.ok(rules.length >= 18)
   for (const r of rules) assert.ok(r.id && r.says && r.why && r.instead, r.id)
 })
+
+test("every open hue's derived accent passes contrast in both modes", async () => {
+  const { deriveAccent, CLOSED_HUES } = await import("../src/color/index.js")
+  for (let h = 0; h < 360; h += 3) {
+    if (h > CLOSED_HUES[0] && h < CLOSED_HUES[1]) continue
+    const r = deriveAccent(h)
+    for (const m of ["light", "dark"]) {
+      assert.ok(r[m].checks.link >= 4.5, `link at hue ${h} in ${m}: ${r[m].checks.link}`)
+      assert.ok(r[m].checks.onAccent >= 4.5, `text on accent at hue ${h}: ${r[m].checks.onAccent}`)
+    }
+  }
+})
+
+test("purple is closed, and closed hues move to the nearest open edge", async () => {
+  const { openHue } = await import("../src/color/index.js")
+  assert.equal(openHue(300), 258)
+  assert.equal(openHue(330), 345)
+  assert.equal(openHue(300, 1), 345)
+  assert.equal(openHue(37), 37)
+})
+
+test("the sky knows its day", async () => {
+  const { sky, formatClock } = await import("../src/instruments/index.js")
+  const day = sky({ sunrise: 408, sunset: 1142 })
+  assert.ok(day.elevation(day.noon) > 30)
+  assert.ok(Math.abs(day.elevation(408)) < 1)
+  assert.equal(day.describe(21 * 60 + 30).phase, "Night")
+  assert.equal(day.describe(19 * 60).phase, "Golden hour")
+  assert.deepEqual(formatClock(0), ["12:00", "am"])
+  assert.deepEqual(formatClock(13 * 60 + 5), ["1:05", "pm"])
+})

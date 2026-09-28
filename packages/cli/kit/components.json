@@ -1,83 +1,439 @@
 {
   "package": "@halation/react",
   "components": [
-    { "name": "HalationProvider", "use": "Wrap the app once. Sets accent, tempo and theme, hosts tooltips and toasts, and puts on the project's signature.", "example": "<HalationProvider name=\"Lumen\" accent=\"vermilion\">{children}</HalationProvider>" },
-    { "name": "Text", "use": "Any running text, in one of the ten styles (size) with an optional tone: muted, subtle, accent or critical.", "example": "<Text size=\"body-sm\" tone=\"muted\">Synced a minute ago</Text>" },
-    { "name": "Heading", "use": "Headlines. level sets the element and its default style (1 is display-xl, 3 is title-1); size overrides the style.", "example": "<Heading level={3}>Storage</Heading>" },
-    { "name": "Serif", "use": "The one italic serif phrase inside a headline, at title sizes and up (R8).", "example": "<Heading level={1}>Every app, <Serif>twice</Serif></Heading>" },
-    { "name": "Value", "use": "A number with tabular figures and a quieter unit.", "example": "<Value unit=\"MB\">412</Value>" },
-    { "name": "Button", "use": "Actions. One ink button per view for the main action; secondary (the default) or ghost for the rest; critical for destructive ones. busy/busyLabel and done/doneLabel change the label in place.", "example": "<Button variant=\"ink\" busy={saving} busyLabel=\"Saving\" done={saved} doneLabel=\"Saved\">Save changes</Button>" },
-    { "name": "Kbd", "use": "A single key.", "example": "<Kbd>Esc</Kbd>" },
-    { "name": "Keys", "use": "A keyboard shortcut; each key on its own cap with a gap (R16).", "example": "<Keys keys={[\"⌘\", \"K\"]} />" },
-    { "name": "State", "use": "A status as a word and a glyph, never a colored dot (R10). Kinds: running, done, selected, info, draft, warning, critical.", "example": "<State kind=\"running\">Syncing</State>" },
-    { "name": "Facts", "use": "Metadata about a thing: labels and values on their own lines, instead of facts joined with dots (R9).", "example": "<Facts items={[[\"Size\", \"412 MB\"], [\"Updated\", \"Today\"]]} />" },
-    { "name": "Fact", "use": "One label and value inside Facts, when the value is richer than a string.", "example": "<Facts><Fact label=\"Size\"><Value unit=\"MB\">412</Value></Fact></Facts>" },
-    { "name": "Surface", "use": "A box, only when something must read as an object (R13). elevation: flat, raised or overlay. Never put one inside another.", "example": "<Surface elevation=\"raised\"><Text>Drop files here</Text></Surface>" },
-    { "name": "Divider", "use": "A hairline between groups; the first choice before a box.", "example": "<Divider />" },
-    { "name": "List", "use": "A list of rows separated by hairlines.", "example": "<List><ListRow title=\"Claude\" detail=\"412 MB\" /></List>" },
-    { "name": "ListRow", "use": "A row: something leading, a title with an optional detail, and something trailing. selected marks it chosen.", "example": "<ListRow leading={<Avatar name=\"Ada Lovelace\" />} title=\"Ada Lovelace\" detail=\"Owner\" trailing={<Button variant=\"ghost\" size=\"sm\">Remove</Button>} />" },
-    { "name": "Field", "use": "A labelled control with an optional description and an error that says what's wrong and how to fix it.", "example": "<Field label=\"Project name\" description=\"Shown on the seal.\" error={error}><Input name=\"name\" /></Field>" },
-    { "name": "Input", "use": "A single-line text input, usually inside Field.", "example": "<Input name=\"email\" type=\"email\" />" },
-    { "name": "Textarea", "use": "Multi-line text, inside Field.", "example": "<Field label=\"Notes\"><Textarea rows={4} /></Field>" },
-    { "name": "Checkbox", "use": "An independent yes or no that takes effect when the form is saved.", "example": "<Checkbox label=\"Email me when it's done\" defaultChecked />" },
-    { "name": "Radio", "use": "One option in a RadioGroup.", "example": "<Radio value=\"weekly\" label=\"Weekly\" />" },
-    { "name": "RadioGroup", "use": "One choice out of a few, with each option visible.", "example": "<RadioGroup defaultValue=\"weekly\"><Radio value=\"daily\" label=\"Daily\" /><Radio value=\"weekly\" label=\"Weekly\" /></RadioGroup>" },
-    { "name": "Switch", "use": "An on or off setting that takes effect at once.", "example": "<Switch label=\"Sync automatically\" defaultChecked />" },
-    { "name": "Slider", "use": "A value picked from a range.", "example": "<Slider defaultValue={40} min={0} max={100} />" },
-    { "name": "SegmentedControl", "use": "One of two to five views or modes, side by side.", "example": "<SegmentedControl aria-label=\"View\" defaultValue=\"list\" options={[{ value: \"list\", label: \"List\" }, { value: \"grid\", label: \"Grid\" }]} />" },
-    { "name": "Tabs", "use": "Switching between panels of one page; the indicator glides between tabs.", "example": "<Tabs.Root defaultValue=\"files\"><Tabs.List><Tabs.Tab value=\"files\">Files</Tabs.Tab><Tabs.Tab value=\"activity\">Activity</Tabs.Tab></Tabs.List><Tabs.Panel value=\"files\">{files}</Tabs.Panel><Tabs.Panel value=\"activity\">{activity}</Tabs.Panel></Tabs.Root>" },
-    { "name": "Menu", "use": "Actions tucked behind a button. Items take an icon, keys for their shortcut, and tone=\"critical\".", "example": "<Menu.Root><Menu.Trigger render={<Button>Options</Button>} /><Menu.Popup><Menu.Item keys={[\"⌘\", \"D\"]}>Duplicate</Menu.Item><Menu.Separator /><Menu.Item tone=\"critical\">Delete</Menu.Item></Menu.Popup></Menu.Root>" },
-    { "name": "Popover", "use": "More detail or a small form anchored to a control.", "example": "<Popover.Root><Popover.Trigger render={<Button>Details</Button>} /><Popover.Popup title=\"Storage\" description=\"What this project keeps on disk.\">{details}</Popover.Popup></Popover.Root>" },
-    { "name": "Tooltip", "use": "A short label for a control on hover or focus, with an optional shortcut.", "example": "<Tooltip content=\"Duplicate\" keys={[\"⌘\", \"D\"]}><Button>Duplicate</Button></Tooltip>" },
-    { "name": "TooltipProvider", "use": "Shares tooltip timing. HalationProvider already includes it; use it only for tooltips rendered outside the provider.", "example": "<TooltipProvider>{children}</TooltipProvider>" },
-    { "name": "Select", "use": "One choice out of many, in a list.", "example": "<Select aria-label=\"Accent\" defaultValue=\"vermilion\" options={[{ value: \"vermilion\", label: \"Vermilion\" }, { value: \"cobalt\", label: \"Cobalt\" }]} />" },
-    { "name": "Dialog", "use": "A decision that has to be made before going on. The page behind softens.", "example": "<Dialog.Root><Dialog.Trigger render={<Button variant=\"critical\">Delete project</Button>} /><Dialog.Popup title=\"Delete this project?\" description=\"Its files stay on disk.\" actions={<><Dialog.Close render={<Button>Cancel</Button>} /><Button variant=\"critical\">Delete</Button></>} /></Dialog.Root>" },
-    { "name": "Sheet", "use": "A panel you can pull away, from the bottom or the right, for filters, details or mobile menus.", "example": "<Sheet.Root side=\"right\"><Sheet.Trigger render={<Button>Filters</Button>} /><Sheet.Popup title=\"Filters\" side=\"right\">{filters}</Sheet.Popup></Sheet.Root>" },
-    { "name": "ToastProvider", "use": "Hosts toasts. HalationProvider already includes it.", "example": "<ToastProvider>{children}</ToastProvider>" },
-    { "name": "useToast", "use": "Confirms something finished, or reports a failure, without interrupting.", "example": "const toast = useToast(); toast({ title: \"Saved\", type: \"success\" })" },
-    { "name": "Avatar", "use": "A person, as a photo or their initials.", "example": "<Avatar name=\"Ada Lovelace\" src={photo} />" },
-    { "name": "Skeleton", "use": "A still placeholder while content loads. It never shimmers.", "example": "<Skeleton width={160} />" },
-    { "name": "Count", "use": "A number that changes; its digits roll to the new value.", "example": "<Count value={downloads} />" },
-    { "name": "Rise", "use": "Content that arrives in reading order out of a soft blur, once, when first seen.", "example": "<Rise as=\"section\"><Heading>What it does</Heading><Text>{summary}</Text></Rise>" },
-    { "name": "Stage", "use": "A hero with atmosphere: one phenomenon behind content, one per page (R15). Mark the headline data-quiet so it dims behind it.", "example": "<Stage phenomenon=\"caustics\" settleAfter={12}><Heading level={1} data-quiet>Light on water</Heading></Stage>" },
-    { "name": "Seal", "use": "The project's mark, generated from its name. Alt, Shift and a click opens the darkroom.", "example": "<Seal name=\"Lumen\" chime />" },
-    { "name": "Colophon", "use": "The credits in a footer: what the project is made of.", "example": "<Colophon name=\"Lumen\" character={character} />" },
-    { "name": "Grain", "use": "Still film grain seeded by the name, laid over a stage or image.", "example": "<Grain name=\"Lumen\" />" },
-    { "name": "ShareCard", "use": "The social share image, drawn from the name, a line and the accent.", "example": "<ShareCard name=\"Lumen\" line=\"Every app, twice\" />" },
-    { "name": "useDevelop", "use": "Develops an element like a print, once per visitor. For a landing hero.", "example": "const hero = useRef(null); useDevelop(hero)" },
-    { "name": "darkroom", "use": "Opens or closes the darkroom inspector from code.", "example": "darkroom.enter()" },
-    { "name": "useDarkroom", "use": "Whether the darkroom is open, for a button that enters and leaves it.", "example": "const open = useDarkroom()" },
-    { "name": "icons", "use": "The system's glyphs: CheckIcon, PlayIcon, WrenchIcon, StopIcon, PencilIcon, InfoIcon, AlertIcon, ChevronIcon, CloseIcon. Use these or a real icon set, never emoji.", "example": "<icons.CheckIcon />" }
+    {
+      "name": "HalationProvider",
+      "use": "Wrap the app once. Sets accent, tempo and theme, hosts tooltips and toasts, and puts on the project's signature.",
+      "example": "<HalationProvider name=\"Lumen\" accent=\"vermilion\">{children}</HalationProvider>"
+    },
+    {
+      "name": "Text",
+      "use": "Any running text, in one of the ten styles (size) with an optional tone: muted, subtle, accent or critical.",
+      "example": "<Text size=\"body-sm\" tone=\"muted\">Synced a minute ago</Text>"
+    },
+    {
+      "name": "Heading",
+      "use": "Headlines. level sets the element and its default style (1 is display-xl, 3 is title-1); size overrides the style.",
+      "example": "<Heading level={3}>Storage</Heading>"
+    },
+    {
+      "name": "Serif",
+      "use": "The one italic serif phrase inside a headline, at title sizes and up (R8).",
+      "example": "<Heading level={1}>Every app, <Serif>twice</Serif></Heading>"
+    },
+    {
+      "name": "Value",
+      "use": "A number with tabular figures and a quieter unit.",
+      "example": "<Value unit=\"MB\">412</Value>"
+    },
+    {
+      "name": "Button",
+      "use": "Actions. One ink button per view for the main action; secondary (the default) or ghost for the rest; critical for destructive ones. busy/busyLabel and done/doneLabel change the label in place.",
+      "example": "<Button variant=\"ink\" busy={saving} busyLabel=\"Saving\" done={saved} doneLabel=\"Saved\">Save changes</Button>"
+    },
+    {
+      "name": "Kbd",
+      "use": "A single key.",
+      "example": "<Kbd>Esc</Kbd>"
+    },
+    {
+      "name": "Keys",
+      "use": "A keyboard shortcut; each key on its own cap with a gap (R16).",
+      "example": "<Keys keys={[\"⌘\", \"K\"]} />"
+    },
+    {
+      "name": "State",
+      "use": "A status as a word and a glyph, never a colored dot (R10). Kinds: running, done, selected, info, draft, warning, critical.",
+      "example": "<State kind=\"running\">Syncing</State>"
+    },
+    {
+      "name": "Facts",
+      "use": "Metadata about a thing: labels and values on their own lines, instead of facts joined with dots (R9).",
+      "example": "<Facts items={[[\"Size\", \"412 MB\"], [\"Updated\", \"Today\"]]} />"
+    },
+    {
+      "name": "Fact",
+      "use": "One label and value inside Facts, when the value is richer than a string.",
+      "example": "<Facts><Fact label=\"Size\"><Value unit=\"MB\">412</Value></Fact></Facts>"
+    },
+    {
+      "name": "Surface",
+      "use": "A box, only when something must read as an object (R13). elevation: flat, raised or overlay. Never put one inside another.",
+      "example": "<Surface elevation=\"raised\"><Text>Drop files here</Text></Surface>"
+    },
+    {
+      "name": "Divider",
+      "use": "A hairline between groups; the first choice before a box.",
+      "example": "<Divider />"
+    },
+    {
+      "name": "List",
+      "use": "A list of rows separated by hairlines.",
+      "example": "<List><ListRow title=\"Claude\" detail=\"412 MB\" /></List>"
+    },
+    {
+      "name": "ListRow",
+      "use": "A row: something leading, a title with an optional detail, and something trailing. selected marks it chosen.",
+      "example": "<ListRow leading={<Avatar name=\"Ada Lovelace\" />} title=\"Ada Lovelace\" detail=\"Owner\" trailing={<Button variant=\"ghost\" size=\"sm\">Remove</Button>} />"
+    },
+    {
+      "name": "Field",
+      "use": "A labelled control with an optional description and an error that says what's wrong and how to fix it.",
+      "example": "<Field label=\"Project name\" description=\"Shown on the seal.\" error={error}><Input name=\"name\" /></Field>"
+    },
+    {
+      "name": "Input",
+      "use": "A single-line text input, usually inside Field.",
+      "example": "<Input name=\"email\" type=\"email\" />"
+    },
+    {
+      "name": "Textarea",
+      "use": "Multi-line text, inside Field.",
+      "example": "<Field label=\"Notes\"><Textarea rows={4} /></Field>"
+    },
+    {
+      "name": "Checkbox",
+      "use": "An independent yes or no that takes effect when the form is saved.",
+      "example": "<Checkbox label=\"Email me when it's done\" defaultChecked />"
+    },
+    {
+      "name": "Radio",
+      "use": "One option in a RadioGroup.",
+      "example": "<Radio value=\"weekly\" label=\"Weekly\" />"
+    },
+    {
+      "name": "RadioGroup",
+      "use": "One choice out of a few, with each option visible.",
+      "example": "<RadioGroup defaultValue=\"weekly\"><Radio value=\"daily\" label=\"Daily\" /><Radio value=\"weekly\" label=\"Weekly\" /></RadioGroup>"
+    },
+    {
+      "name": "Switch",
+      "use": "An on or off setting that takes effect at once.",
+      "example": "<Switch label=\"Sync automatically\" defaultChecked />"
+    },
+    {
+      "name": "Slider",
+      "use": "A value picked from a range.",
+      "example": "<Slider defaultValue={40} min={0} max={100} />"
+    },
+    {
+      "name": "SegmentedControl",
+      "use": "One of two to five views or modes, side by side.",
+      "example": "<SegmentedControl aria-label=\"View\" defaultValue=\"list\" options={[{ value: \"list\", label: \"List\" }, { value: \"grid\", label: \"Grid\" }]} />"
+    },
+    {
+      "name": "Tabs",
+      "use": "Switching between panels of one page; the indicator glides between tabs.",
+      "example": "<Tabs.Root defaultValue=\"files\"><Tabs.List><Tabs.Tab value=\"files\">Files</Tabs.Tab><Tabs.Tab value=\"activity\">Activity</Tabs.Tab></Tabs.List><Tabs.Panel value=\"files\">{files}</Tabs.Panel><Tabs.Panel value=\"activity\">{activity}</Tabs.Panel></Tabs.Root>"
+    },
+    {
+      "name": "Menu",
+      "use": "Actions tucked behind a button. Items take an icon, keys for their shortcut, and tone=\"critical\".",
+      "example": "<Menu.Root><Menu.Trigger render={<Button>Options</Button>} /><Menu.Popup><Menu.Item keys={[\"⌘\", \"D\"]}>Duplicate</Menu.Item><Menu.Separator /><Menu.Item tone=\"critical\">Delete</Menu.Item></Menu.Popup></Menu.Root>"
+    },
+    {
+      "name": "Popover",
+      "use": "More detail or a small form anchored to a control.",
+      "example": "<Popover.Root><Popover.Trigger render={<Button>Details</Button>} /><Popover.Popup title=\"Storage\" description=\"What this project keeps on disk.\">{details}</Popover.Popup></Popover.Root>"
+    },
+    {
+      "name": "Tooltip",
+      "use": "A short label for a control on hover or focus, with an optional shortcut.",
+      "example": "<Tooltip content=\"Duplicate\" keys={[\"⌘\", \"D\"]}><Button>Duplicate</Button></Tooltip>"
+    },
+    {
+      "name": "TooltipProvider",
+      "use": "Shares tooltip timing. HalationProvider already includes it; use it only for tooltips rendered outside the provider.",
+      "example": "<TooltipProvider>{children}</TooltipProvider>"
+    },
+    {
+      "name": "Select",
+      "use": "One choice out of many, in a list.",
+      "example": "<Select aria-label=\"Accent\" defaultValue=\"vermilion\" options={[{ value: \"vermilion\", label: \"Vermilion\" }, { value: \"cobalt\", label: \"Cobalt\" }]} />"
+    },
+    {
+      "name": "Dialog",
+      "use": "A decision that has to be made before going on. The page behind softens.",
+      "example": "<Dialog.Root><Dialog.Trigger render={<Button variant=\"critical\">Delete project</Button>} /><Dialog.Popup title=\"Delete this project?\" description=\"Its files stay on disk.\" actions={<><Dialog.Close render={<Button>Cancel</Button>} /><Button variant=\"critical\">Delete</Button></>} /></Dialog.Root>"
+    },
+    {
+      "name": "Sheet",
+      "use": "A panel you can pull away, from the bottom or the right, for filters, details or mobile menus.",
+      "example": "<Sheet.Root side=\"right\"><Sheet.Trigger render={<Button>Filters</Button>} /><Sheet.Popup title=\"Filters\" side=\"right\">{filters}</Sheet.Popup></Sheet.Root>"
+    },
+    {
+      "name": "ToastProvider",
+      "use": "Hosts toasts. HalationProvider already includes it.",
+      "example": "<ToastProvider>{children}</ToastProvider>"
+    },
+    {
+      "name": "useToast",
+      "use": "Confirms something finished, or reports a failure, without interrupting.",
+      "example": "const toast = useToast(); toast({ title: \"Saved\", type: \"success\" })"
+    },
+    {
+      "name": "Avatar",
+      "use": "A person, as a photo or their initials.",
+      "example": "<Avatar name=\"Ada Lovelace\" src={photo} />"
+    },
+    {
+      "name": "Skeleton",
+      "use": "A still placeholder while content loads. It never shimmers.",
+      "example": "<Skeleton width={160} />"
+    },
+    {
+      "name": "Count",
+      "use": "A number that changes; its digits roll to the new value.",
+      "example": "<Count value={downloads} />"
+    },
+    {
+      "name": "Rise",
+      "use": "Content that arrives in reading order out of a soft blur, once, when first seen.",
+      "example": "<Rise as=\"section\"><Heading>What it does</Heading><Text>{summary}</Text></Rise>"
+    },
+    {
+      "name": "Stage",
+      "use": "A hero with atmosphere: one phenomenon behind content, one per page (R15). Mark the headline data-quiet so it dims behind it.",
+      "example": "<Stage phenomenon=\"caustics\" settleAfter={12}><Heading level={1} data-quiet>Light on water</Heading></Stage>"
+    },
+    {
+      "name": "Seal",
+      "use": "The project's mark, generated from its name. Alt, Shift and a click opens the darkroom.",
+      "example": "<Seal name=\"Lumen\" chime />"
+    },
+    {
+      "name": "Colophon",
+      "use": "The credits in a footer: what the project is made of.",
+      "example": "<Colophon name=\"Lumen\" character={character} />"
+    },
+    {
+      "name": "Grain",
+      "use": "Still film grain seeded by the name, laid over a stage or image.",
+      "example": "<Grain name=\"Lumen\" />"
+    },
+    {
+      "name": "ShareCard",
+      "use": "The social share image, drawn from the name, a line and the accent.",
+      "example": "<ShareCard name=\"Lumen\" line=\"Every app, twice\" />"
+    },
+    {
+      "name": "useDevelop",
+      "use": "Develops an element like a print, once per visitor. For a landing hero.",
+      "example": "const hero = useRef(null); useDevelop(hero)"
+    },
+    {
+      "name": "darkroom",
+      "use": "Opens or closes the darkroom inspector from code.",
+      "example": "darkroom.enter()"
+    },
+    {
+      "name": "useDarkroom",
+      "use": "Whether the darkroom is open, for a button that enters and leaves it.",
+      "example": "const open = useDarkroom()"
+    },
+    {
+      "name": "Lens",
+      "use": "A command palette that pulls focus: a lit carriage on the chosen row, the rest softening with distance. For any app with more than a handful of places to go.",
+      "example": "<Lens open={open} onOpenChange={setOpen} groups={[{ name: \"Copies\", items: [{ id: \"work\", title: \"Claude Work\", onSelect: openWork }] }]} />"
+    },
+    {
+      "name": "useLensShortcut",
+      "use": "Opens Lens on ⌘K (Ctrl+K elsewhere).",
+      "example": "useLensShortcut(() => setOpen(true))"
+    },
+    {
+      "name": "ShortcutRecorder",
+      "use": "Records a key combination with keycaps that go down while held. Refuses taken shortcuts and keys with no modifier, in words. Label it with what the shortcut does.",
+      "example": "<ShortcutRecorder value={keys} onValueChange={setKeys} label=\"Switches to Claude Work\" onMessage={setNote} />"
+    },
+    {
+      "name": "TAKEN_SHORTCUTS",
+      "use": "The shortcuts macOS keeps for itself, with the reason for each. Spread it into your own list of taken shortcuts.",
+      "example": "taken={{ ...TAKEN_SHORTCUTS, \"⌘N\": \"⌘N makes a new copy.\" }}"
+    },
+    {
+      "name": "Sundial",
+      "use": "A time-of-day picker set by moving the sun, showing the real sky for that minute. For schedules and quiet hours; value is minutes after midnight.",
+      "example": "<Sundial value={minutes} onValueChange={setMinutes} label=\"Quiet hours begin at\" />"
+    },
+    {
+      "name": "LitTabs",
+      "use": "Tabs whose selection is a carriage of light; labels gain weight as it passes. Use for a page's main sections.",
+      "example": "<LitTabs aria-label=\"Sections\" items={[{ value: \"all\", label: \"Overview\", content: <Overview /> }]} />"
+    },
+    {
+      "name": "Dial",
+      "use": "A rotary knob with detents that click, lit ticks and a rolling number. For intensity, volume, zoom: a value tuned by feel.",
+      "example": "<Dial value={level} onValueChange={setLevel} label=\"Intensity\" />"
+    },
+    {
+      "name": "AccentForge",
+      "use": "An accent picker that derives every accent role from a hue and shows each pair's contrast in both modes. Purple hues are closed.",
+      "example": "<AccentForge hue={hue} onHueChange={setHue} />"
+    },
+    {
+      "name": "LightTable",
+      "use": "A file drop zone that backlights under the dragged file; dropped photos land as prints that develop. For uploads, avatars and imports.",
+      "example": "<LightTable onFiles={upload} />"
+    },
+    {
+      "name": "icons",
+      "use": "The system's glyphs: CheckIcon, PlayIcon, WrenchIcon, StopIcon, PencilIcon, InfoIcon, AlertIcon, ChevronIcon, CloseIcon. Use these or a real icon set, never emoji.",
+      "example": "<icons.CheckIcon />"
+    }
   ],
-  "types": ["TextStyle", "Tone", "ButtonProps", "ButtonVariant", "StateKind", "StageProps", "PhenomenonName", "Character", "HalationProviderProps"],
+  "types": [
+    "TextStyle",
+    "Tone",
+    "ButtonProps",
+    "ButtonVariant",
+    "StateKind",
+    "StageProps",
+    "PhenomenonName",
+    "Character",
+    "HalationProviderProps",
+    "LensGroup",
+    "LensItem",
+    "RecorderMessage",
+    "LitTab",
+    "Print"
+  ],
   "needs": [
-    { "need": "Show a state (running, done, failed)", "use": "`<State kind=\"running\">Syncing</State>`" },
-    { "need": "Metadata about a thing", "use": "`<Facts items={[[\"Size\", \"412 MB\"]]} />`" },
-    { "need": "A keyboard shortcut", "use": "`<Keys keys={[\"⌘\", \"K\"]} />`" },
-    { "need": "Hero with atmosphere", "use": "`<Stage phenomenon=\"rays\">`, with `data-quiet` on the headline" },
-    { "need": "The main action", "use": "`<Button variant=\"ink\">`, once per view" },
-    { "need": "Any other action", "use": "`<Button>` or `<Button variant=\"ghost\">`" },
-    { "need": "Destructive action", "use": "`<Button variant=\"critical\">`, confirmed in a `Dialog`" },
-    { "need": "Headline with an accent phrase", "use": "`<Heading level={1}>Every app, <Serif>twice</Serif></Heading>`" },
-    { "need": "Running text or a label", "use": "`<Text size=\"body-sm\" tone=\"muted\">`" },
-    { "need": "A number in a column, or with a unit", "use": "`<Value unit=\"MB\">412</Value>`" },
-    { "need": "A number that changes", "use": "`<Count value={n} />`" },
-    { "need": "Separate two groups", "use": "`<Divider />` or spacing" },
-    { "need": "Something that must read as an object", "use": "`<Surface elevation=\"raised\">`" },
-    { "need": "Rows of items", "use": "`<List>` of `<ListRow title detail trailing />`" },
-    { "need": "A form control with a label and error", "use": "`<Field label error><Input /></Field>`" },
-    { "need": "On or off, applied at once", "use": "`<Switch label=\"...\" />`" },
-    { "need": "One of a few views", "use": "`<SegmentedControl>` or `<Tabs>`" },
-    { "need": "One of many options", "use": "`<Select options={...} />`" },
-    { "need": "Extra actions behind a button", "use": "`<Menu>`" },
-    { "need": "A label on hover", "use": "`<Tooltip content=\"...\" keys={...}>`" },
-    { "need": "A decision before going on", "use": "`<Dialog>`" },
-    { "need": "A pull-away panel", "use": "`<Sheet>`" },
-    { "need": "Confirm something finished", "use": "`useToast()`" },
-    { "need": "Loading placeholder", "use": "`<Skeleton />`, still, no shimmer" },
-    { "need": "Entrance on scroll", "use": "`<Rise>`" },
-    { "need": "A person", "use": "`<Avatar name=\"...\" src={...} />`" },
-    { "need": "An icon", "use": "`<icons.CheckIcon />` and the rest, never emoji" },
-    { "need": "The project's mark, credits, share image", "use": "`<Seal>`, `<Colophon>`, `<ShareCard>`" }
+    {
+      "need": "Show a state (running, done, failed)",
+      "use": "`<State kind=\"running\">Syncing</State>`"
+    },
+    {
+      "need": "Metadata about a thing",
+      "use": "`<Facts items={[[\"Size\", \"412 MB\"]]} />`"
+    },
+    {
+      "need": "A keyboard shortcut",
+      "use": "`<Keys keys={[\"⌘\", \"K\"]} />`"
+    },
+    {
+      "need": "Hero with atmosphere",
+      "use": "`<Stage phenomenon=\"rays\">`, with `data-quiet` on the headline"
+    },
+    {
+      "need": "The main action",
+      "use": "`<Button variant=\"ink\">`, once per view"
+    },
+    {
+      "need": "Any other action",
+      "use": "`<Button>` or `<Button variant=\"ghost\">`"
+    },
+    {
+      "need": "Destructive action",
+      "use": "`<Button variant=\"critical\">`, confirmed in a `Dialog`"
+    },
+    {
+      "need": "Headline with an accent phrase",
+      "use": "`<Heading level={1}>Every app, <Serif>twice</Serif></Heading>`"
+    },
+    {
+      "need": "Running text or a label",
+      "use": "`<Text size=\"body-sm\" tone=\"muted\">`"
+    },
+    {
+      "need": "A number in a column, or with a unit",
+      "use": "`<Value unit=\"MB\">412</Value>`"
+    },
+    {
+      "need": "A number that changes",
+      "use": "`<Count value={n} />`"
+    },
+    {
+      "need": "Separate two groups",
+      "use": "`<Divider />` or spacing"
+    },
+    {
+      "need": "Something that must read as an object",
+      "use": "`<Surface elevation=\"raised\">`"
+    },
+    {
+      "need": "Rows of items",
+      "use": "`<List>` of `<ListRow title detail trailing />`"
+    },
+    {
+      "need": "A form control with a label and error",
+      "use": "`<Field label error><Input /></Field>`"
+    },
+    {
+      "need": "On or off, applied at once",
+      "use": "`<Switch label=\"...\" />`"
+    },
+    {
+      "need": "One of a few views",
+      "use": "`<SegmentedControl>` or `<Tabs>`"
+    },
+    {
+      "need": "One of many options",
+      "use": "`<Select options={...} />`"
+    },
+    {
+      "need": "Extra actions behind a button",
+      "use": "`<Menu>`"
+    },
+    {
+      "need": "A label on hover",
+      "use": "`<Tooltip content=\"...\" keys={...}>`"
+    },
+    {
+      "need": "A decision before going on",
+      "use": "`<Dialog>`"
+    },
+    {
+      "need": "A pull-away panel",
+      "use": "`<Sheet>`"
+    },
+    {
+      "need": "Confirm something finished",
+      "use": "`useToast()`"
+    },
+    {
+      "need": "Loading placeholder",
+      "use": "`<Skeleton />`, still, no shimmer"
+    },
+    {
+      "need": "Entrance on scroll",
+      "use": "`<Rise>`"
+    },
+    {
+      "need": "A person",
+      "use": "`<Avatar name=\"...\" src={...} />`"
+    },
+    {
+      "need": "An icon",
+      "use": "`<icons.CheckIcon />` and the rest, never emoji"
+    },
+    {
+      "need": "The project's mark, credits, share image",
+      "use": "`<Seal>`, `<Colophon>`, `<ShareCard>`"
+    },
+    {
+      "need": "Search and jump anywhere (⌘K)",
+      "use": "`<Lens>` with `useLensShortcut`"
+    },
+    {
+      "need": "Let people set a keyboard shortcut",
+      "use": "`<ShortcutRecorder>`"
+    },
+    {
+      "need": "Pick a time of day",
+      "use": "`<Sundial>`"
+    },
+    {
+      "need": "Tune a value by feel",
+      "use": "`<Dial>`"
+    },
+    {
+      "need": "Let people pick an accent",
+      "use": "`<AccentForge>`"
+    },
+    {
+      "need": "Upload photos or files",
+      "use": "`<LightTable>`"
+    }
   ]
 }

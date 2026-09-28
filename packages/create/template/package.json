@@ -11,12 +11,12 @@
     "check": "halation check http://localhost:5173"
   },
   "dependencies": {
-    "@halation/react": "^0.1.1",
+    "@halation/react": "^0.2.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "@halation/cli": "^0.1.1",
+    "@halation/cli": "^0.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",

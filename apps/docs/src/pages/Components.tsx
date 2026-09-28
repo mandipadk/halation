@@ -31,6 +31,7 @@ import {
 } from "@halation/react"
 import { useState } from "react"
 import { Demo, PageHead } from "../parts/Demo.tsx"
+import { Instruments } from "../parts/Instruments.tsx"
 
 export function Components() {
   return (
@@ -39,6 +40,7 @@ export function Components() {
         Built on Base UI, styled by Halation. Press, open, type and tab through them: every state, both modes, the keyboard.
       </PageHead>
       <div className="demos" style={{ paddingBottom: 96 }}>
+        <Instruments />
         <Buttons />
         <States />
         <FactsDemo />

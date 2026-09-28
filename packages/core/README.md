@@ -1,6 +1,6 @@
 # @halation/core
 
-Halation without a framework: tokens and component styles as plain CSS, the phenomena, daylight, the signature, motion helpers and the rendered check.
+Halation without a framework: tokens and component styles as plain CSS, the phenomena, daylight, the signature, motion helpers, the rendered check, runtime color math (`@halation/core/color`: derive an accent's roles and their contrast from a hue) and the instruments (`@halation/core/instruments`: the sundial's sky).
 
 ```css
 @import "@halation/core/styles.css";        /* everything */

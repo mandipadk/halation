@@ -1,6 +1,6 @@
 {
   "name": "@halation/core",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Halation's foundations without a framework: tokens and styles, phenomena, daylight, signature, motion and the rendered check.",
   "license": "MIT",
   "type": "module",
@@ -26,6 +26,14 @@
     "./check": {
       "types": "./dist/types/check/index.d.ts",
       "default": "./src/check/index.js"
+    },
+    "./color": {
+      "types": "./dist/types/color/index.d.ts",
+      "default": "./src/color/index.js"
+    },
+    "./instruments": {
+      "types": "./dist/types/instruments/index.d.ts",
+      "default": "./src/instruments/index.js"
     },
     "./styles.css": "./css/styles.css",
     "./tokens.css": "./css/tokens.css",

@@ -81,7 +81,7 @@ export function check(root = document.body) {
     if (text.trim() && parseFloat(cs.letterSpacing) > parseFloat(cs.fontSize) * 0.02) note("R6", el)
     // R11: monospace loose on the page rather than inside a surface.
     if (text.trim() && /mono|menlo|courier|consolas/i.test(cs.fontFamily)) {
-      const surface = el.closest("kbd, code, pre, .hl-kbd, .hl-code, .hl-surface, [data-surface]")
+      const surface = el.closest("kbd, code, pre, .hl-kbd, .hl-cap, .hl-code, .hl-surface, [data-surface]")
       if (!surface) note("R11", el)
     }
     // R8: one serif phrase per headline, and only at title sizes and up.

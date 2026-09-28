@@ -73,3 +73,30 @@ td:first-child { white-space: nowrap; font-weight: 500; }
 @media (max-width: 720px) { .type-row { grid-template-columns: 1fr; gap: 6px; } }
 
 .near { scroll-margin-top: 56px; }
+
+/* Demos for the instruments */
+.recorder-demo { width: 100%; max-width: 620px; display: grid; gap: 14px; }
+.recorder-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 20px; border-radius: 20px; background: var(--color-raised); box-shadow: var(--shadow-overlay); }
+.recorder-row p { margin: 0; }
+.recorder-note { margin: 0; min-height: 1.5em; text-align: center; font-size: var(--text-body-sm); color: var(--color-fg-muted); }
+.recorder-note[data-tone="problem"] { color: var(--color-warning-fg); }
+.recorder-note[data-tone="done"] { color: var(--color-fg); }
+.sundial-demo, .dial-demo { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(28px, 6vw, 80px); width: 100%; padding-block: 12px; }
+.sundial-demo .hl-sundial { max-width: 380px; }
+.sundial-read { display: grid; gap: 8px; min-width: 240px; max-width: 300px; }
+.sundial-read p { margin: 0; }
+.sundial-time { font-size: clamp(3rem, 2rem + 3vw, 4.4rem); font-weight: 300; letter-spacing: -0.045em; line-height: 1; font-variant-numeric: tabular-nums; }
+.sundial-time small { font-size: 0.4em; letter-spacing: 0; margin-left: 6px; color: var(--color-fg-muted); font-weight: 400; }
+.sundial-facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin: 10px 0 0; padding-top: 12px; font-size: var(--text-body-sm); box-shadow: inset 0 1px 0 var(--color-line); }
+.sundial-facts dt { color: var(--color-fg-muted); }
+.sundial-facts dd { margin: 0; font-variant-numeric: tabular-nums; }
+.lit-panel { display: grid; gap: 6px; text-align: center; padding-top: 28px; }
+.lit-panel p { margin: 0; }
+.lamp-col { display: grid; gap: 4px; width: 100%; max-width: 280px; }
+.lamp-col p { margin: 0; }
+.lamp { width: 100%; aspect-ratio: 4 / 5; border-radius: 22px; position: relative; overflow: hidden; background: var(--color-canvas); box-shadow: inset 0 0 0 1px var(--color-line); margin-bottom: 8px; }
+/* The beam: clipped to a cone inside, softened outside, so its edges fall off like real light. */
+.lamp-beam { position: absolute; inset: -6% 0 0; filter: blur(18px); opacity: var(--level, 0.6); transition: opacity 120ms linear; }
+.lamp-beam::before { content: ""; position: absolute; inset: 0; background: var(--color-light-core); clip-path: polygon(42% 0, 58% 0, 96% 100%, 4% 100%); -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 105%); mask-image: linear-gradient(to bottom, black 30%, transparent 105%); }
+.lamp-fixture { position: absolute; left: 50%; top: 0; width: 64px; height: 10px; translate: -50% 0; border-radius: 0 0 8px 8px; background: var(--color-fill-active); }
+.lit-wrap { width: 100%; }

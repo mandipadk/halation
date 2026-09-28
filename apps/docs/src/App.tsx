@@ -1,6 +1,7 @@
 import { HalationProvider } from "@halation/react"
 import { lazy, Suspense, useEffect, type ComponentType } from "react"
 import { Appearance, PAGES } from "./parts/Bar.tsx"
+import { SiteLens } from "./parts/SiteLens.tsx"
 import { usePath } from "./router.tsx"
 import { SiteContext, useSiteState } from "./site.tsx"
 import { Home } from "./landing/Home.tsx"
@@ -50,6 +51,7 @@ export function App() {
         </main>
         {docs ? <Appearance /> : null}
         <Footer />
+        <SiteLens />
       </HalationProvider>
     </SiteContext.Provider>
   )

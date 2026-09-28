@@ -211,6 +211,12 @@ export function App({ children }) {
 | A person | `<Avatar name="..." src={...} />` |
 | An icon | `<icons.CheckIcon />` and the rest, never emoji |
 | The project's mark, credits, share image | `<Seal>`, `<Colophon>`, `<ShareCard>` |
+| Search and jump anywhere (⌘K) | `<Lens>` with `useLensShortcut` |
+| Let people set a keyboard shortcut | `<ShortcutRecorder>` |
+| Pick a time of day | `<Sundial>` |
+| Tune a value by feel | `<Dial>` |
+| Let people pick an accent | `<AccentForge>` |
+| Upload photos or files | `<LightTable>` |
 
 ## Components
 
@@ -262,6 +268,15 @@ All from `@halation/react`.
 - **useDevelop**: Develops an element like a print, once per visitor. For a landing hero. `const hero = useRef(null); useDevelop(hero)`
 - **darkroom**: Opens or closes the darkroom inspector from code. `darkroom.enter()`
 - **useDarkroom**: Whether the darkroom is open, for a button that enters and leaves it. `const open = useDarkroom()`
+- **Lens**: A command palette that pulls focus: a lit carriage on the chosen row, the rest softening with distance. For any app with more than a handful of places to go. `<Lens open={open} onOpenChange={setOpen} groups={[{ name: "Copies", items: [{ id: "work", title: "Claude Work", onSelect: openWork }] }]} />`
+- **useLensShortcut**: Opens Lens on ⌘K (Ctrl+K elsewhere). `useLensShortcut(() => setOpen(true))`
+- **ShortcutRecorder**: Records a key combination with keycaps that go down while held. Refuses taken shortcuts and keys with no modifier, in words. Label it with what the shortcut does. `<ShortcutRecorder value={keys} onValueChange={setKeys} label="Switches to Claude Work" onMessage={setNote} />`
+- **TAKEN_SHORTCUTS**: The shortcuts macOS keeps for itself, with the reason for each. Spread it into your own list of taken shortcuts. `taken={{ ...TAKEN_SHORTCUTS, "⌘N": "⌘N makes a new copy." }}`
+- **Sundial**: A time-of-day picker set by moving the sun, showing the real sky for that minute. For schedules and quiet hours; value is minutes after midnight. `<Sundial value={minutes} onValueChange={setMinutes} label="Quiet hours begin at" />`
+- **LitTabs**: Tabs whose selection is a carriage of light; labels gain weight as it passes. Use for a page's main sections. `<LitTabs aria-label="Sections" items={[{ value: "all", label: "Overview", content: <Overview /> }]} />`
+- **Dial**: A rotary knob with detents that click, lit ticks and a rolling number. For intensity, volume, zoom: a value tuned by feel. `<Dial value={level} onValueChange={setLevel} label="Intensity" />`
+- **AccentForge**: An accent picker that derives every accent role from a hue and shows each pair's contrast in both modes. Purple hues are closed. `<AccentForge hue={hue} onHueChange={setHue} />`
+- **LightTable**: A file drop zone that backlights under the dragged file; dropped photos land as prints that develop. For uploads, avatars and imports. `<LightTable onFiles={upload} />`
 - **icons**: The system's glyphs: CheckIcon, PlayIcon, WrenchIcon, StopIcon, PencilIcon, InfoIcon, AlertIcon, ChevronIcon, CloseIcon. Use these or a real icon set, never emoji. `<icons.CheckIcon />`
 
 ## The ten text styles
