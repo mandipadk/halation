@@ -11,10 +11,10 @@ describe("help", () => {
   test("halation --help lists the commands", () => {
     const r = run("--help")
     assert.equal(r.status, 0)
-    for (const c of ["lint", "check", "rules", "skill", "init"]) assert.match(r.stdout, new RegExp(`^ {2}${c}\\b`, "m"))
+    for (const c of ["lint", "check", "rules", "skill", "init", "guard"]) assert.match(r.stdout, new RegExp(`^ {2}${c}\\b`, "m"))
   })
   test("no command shows help", () => assert.equal(run().status, 0))
-  for (const c of ["lint", "check", "rules", "skill", "init"]) {
+  for (const c of ["lint", "check", "rules", "skill", "init", "guard"]) {
     test(`halation ${c} --help`, () => {
       const r = run(c, "--help")
       assert.equal(r.status, 0)
@@ -25,6 +25,24 @@ describe("help", () => {
     const r = run("lnt")
     assert.equal(r.status, 1)
     assert.match(r.stderr, /There's no command called lnt\.\n\nHalation keeps/)
+  })
+  test("check refuses a width that isn't a phone-to-desktop pixel count", () => {
+    for (const w of ["wide", "12", "375.5"]) {
+      const r = run("check", "http://localhost:1", "--width", w)
+      assert.equal(r.status, 1, w)
+      assert.match(r.stderr, /--width is a whole number of pixels from 240 to 3840/)
+    }
+  })
+  test("check knows --allow-counterexamples", () => {
+    const r = run("check", "--help")
+    assert.match(r.stdout, /--allow-counterexamples/)
+    const bad = run("check", "http://localhost:1", "--allow-counterexample")
+    assert.match(bad.stderr, /has no --allow-counterexample option/)
+  })
+  test("lint takes --hook or --stop, not both", () => {
+    const r = run("lint", "--hook", "--stop")
+    assert.equal(r.status, 1)
+    assert.match(r.stderr, /halation lint takes --hook or --stop, not both\./)
   })
   test("an unknown option says how to find the right one", () => {
     const r = run("rules", "--yaml")
@@ -46,7 +64,7 @@ describe("halation rules", () => {
 })
 
 describe("the CLI's own words keep the rules", () => {
-  const outputs = [run("--help"), ...["lint", "check", "rules", "skill", "init"].map((c) => run(c, "--help")), run("rules"), run("lnt")]
+  const outputs = [run("--help"), ...["lint", "check", "rules", "skill", "init", "guard"].map((c) => run(c, "--help")), run("rules"), run("lnt")]
   const text = outputs.map((r) => r.stdout + r.stderr).join("\n")
   test("no dots or bullets joining facts", () => assert.doesNotMatch(text, /\s[\u00b7\u2022]\s/))
   test("no capitalized labels", () => {

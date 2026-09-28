@@ -17,7 +17,7 @@ test("creates a project from the template with the directory's name", () => {
   const dir = join(root, "acme-notes")
   const out = execFileSync(process.execPath, [BIN, dir], { encoding: "utf8", env: { ...process.env, npm_config_user_agent: "pnpm/11.0.0" } })
 
-  for (const file of ["package.json", "index.html", "tsconfig.json", "vite.config.ts", "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", "src/main.tsx", "src/App.tsx", "src/project.ts", "src/app.css", ".claude/settings.json", ".claude/skills/halation/SKILL.md"]) {
+  for (const file of ["package.json", "index.html", "tsconfig.json", "vite.config.ts", "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", "src/main.tsx", "src/App.tsx", "src/project.ts", "src/app.css", ".claude/settings.json", ".claude/skills/halation/SKILL.md", ".halation/hooks.sh"]) {
     assert.ok(existsSync(join(dir, file)), `${file} is missing`)
   }
   assert.ok(!existsSync(join(dir, "_gitignore")), "_gitignore should be renamed")
@@ -29,13 +29,27 @@ test("creates a project from the template with the directory's name", () => {
   assert.match(read(dir, "README.md"), /^# Acme Notes/)
   assert.equal(read(dir, "CLAUDE.md").trim(), "@AGENTS.md")
 
-  const hook = JSON.parse(read(dir, ".claude/settings.json")).hooks.PostToolUse[0]
-  assert.equal(hook.matcher, "Edit|Write|MultiEdit")
-  assert.equal(hook.hooks[0].command, "npx --no-install halation lint --hook")
+  const { hooks } = JSON.parse(read(dir, ".claude/settings.json"))
+  assert.equal(hooks.PreToolUse[0].matcher, "Edit|Write|MultiEdit|NotebookEdit|Bash")
+  assert.equal(hooks.PreToolUse[0].hooks[0].command, 'sh "${CLAUDE_PROJECT_DIR:-.}/.halation/hooks.sh" guard || exit 2')
+  assert.equal(hooks.PostToolUse[0].matcher, "Edit|Write|MultiEdit")
+  assert.equal(hooks.PostToolUse[0].hooks[0].command, 'sh "${CLAUDE_PROJECT_DIR:-.}/.halation/hooks.sh" lint || exit 2')
+  assert.equal(hooks.Stop[0].hooks[0].command, 'sh "${CLAUDE_PROJECT_DIR:-.}/.halation/hooks.sh" stop || exit 2')
+  assert.match(read(dir, ".halation/hooks.sh"), /^#!\/bin\/sh\n/)
 
   assert.match(out, /pnpm install/)
   assert.match(out, /pnpm dev/)
   assert.match(out, /Claude Code is already set up/)
+})
+
+test("halation init leaves the created project's hooks as they are", () => {
+  const dir = join(root, "init-again")
+  create(dir, { name: "Init again" })
+  const before = read(dir, ".claude/settings.json")
+  const cli = fileURLToPath(new URL("../../cli/bin/halation.js", import.meta.url))
+  const out = execFileSync(process.execPath, [cli, "init", dir], { encoding: "utf8" })
+  assert.match(out, /The Halation hooks are already in \.claude\/settings\.json\./)
+  assert.equal(read(dir, ".claude/settings.json"), before)
 })
 
 test("--name and --phenomenon are written into the app", () => {

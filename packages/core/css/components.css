@@ -105,14 +105,14 @@ button.hl-list-row, a.hl-list-row { border: 0; background: transparent; color: i
 /* Switch: the thumb springs across. */
 .hl-switch { position: relative; width: 34px; height: 20px; border-radius: var(--radius-full); border: 0; padding: 0; background: var(--color-fill-active); cursor: pointer; flex: none; transition: background-color var(--hl-d-hover) ease; }
 .hl-switch[data-checked] { background: var(--color-accent); }
-.hl-switch-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: oklch(100% 0 0); box-shadow: 0 1px 2px oklch(0% 0 0 / 30%), 0 2px 6px oklch(0% 0 0 / 15%); transition: translate var(--hl-d-dialog) var(--hl-spring); }
+.hl-switch-thumb { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: oklch(100% 0 0); box-shadow: 0 1px 2px color-mix(in oklab, var(--color-shadow) 30%, transparent), 0 2px 6px color-mix(in oklab, var(--color-shadow) 15%, transparent); transition: translate var(--hl-d-dialog) var(--hl-spring); }
 .hl-switch[data-checked] .hl-switch-thumb { translate: 14px 0; }
 
 /* Slider: a thin track that fills with ink. */
 .hl-slider { width: 100%; padding-block: 8px; touch-action: none; }
 .hl-slider-track { position: relative; height: 4px; border-radius: var(--radius-full); background: var(--color-fill-active); }
 .hl-slider-indicator { background: var(--color-fg); border-radius: inherit; height: 100%; }
-.hl-slider-thumb { width: 16px; height: 16px; border-radius: 50%; background: oklch(100% 0 0); box-shadow: 0 0 0 1px oklch(0% 0 0 / 12%), 0 1px 2px oklch(0% 0 0 / 30%), 0 2px 6px oklch(0% 0 0 / 15%); transition: scale var(--hl-d-press) var(--ease-out); }
+.hl-slider-thumb { width: 16px; height: 16px; border-radius: 50%; background: oklch(100% 0 0); box-shadow: 0 0 0 1px color-mix(in oklab, var(--color-shadow) 12%, transparent), 0 1px 2px color-mix(in oklab, var(--color-shadow) 30%, transparent), 0 2px 6px color-mix(in oklab, var(--color-shadow) 15%, transparent); transition: scale var(--hl-d-press) var(--ease-out); }
 .hl-slider-thumb[data-dragging] { scale: 1.12; }
 
 /* Segmented control */
@@ -272,9 +272,9 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 .hl-lens-foot span { display: inline-flex; gap: 6px; align-items: center; }
 
 /* Keycaps: a face, a skirt beneath it, and light that spills out when held. */
-.hl-cap { position: relative; display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 9px; border-radius: 10px; font: 500 15px/1 var(--font-mono); color: var(--color-fg); background: var(--color-raised); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 22%, transparent), 0 0 0 1px var(--color-line-strong), 0 3px 0 0 color-mix(in oklab, var(--color-fg) 16%, var(--color-fill-active)), 0 6px 12px -6px oklch(0% 0 0 / 50%); transform: translateY(-2px); transition: transform 110ms var(--ease-out), box-shadow 110ms var(--ease-out); animation: hl-cap-in 240ms var(--ease-spring) both; }
+.hl-cap { position: relative; display: inline-grid; place-items: center; min-width: 38px; height: 38px; padding: 0 9px; border-radius: 10px; font: 500 15px/1 var(--font-mono); color: var(--color-fg); background: var(--color-raised); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 22%, transparent), 0 0 0 1px var(--color-line-strong), 0 3px 0 0 color-mix(in oklab, var(--color-fg) 16%, var(--color-fill-active)), 0 6px 12px -6px color-mix(in oklab, var(--color-shadow) 50%, transparent); transform: translateY(-2px); transition: transform 110ms var(--ease-out), box-shadow 110ms var(--ease-out); animation: hl-cap-in 240ms var(--ease-spring) both; }
 .hl-cap::after { content: ""; position: absolute; left: 12%; right: 12%; bottom: -9px; height: 10px; border-radius: 50%; background: var(--color-light-core); filter: blur(7px); opacity: 0; transition: opacity 110ms ease; pointer-events: none; }
-.hl-cap[data-held] { transform: translateY(1px); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 30%, transparent), 0 0 0 1px var(--color-line-strong), 0 0 0 0 transparent, 0 2px 6px -3px oklch(0% 0 0 / 50%); }
+.hl-cap[data-held] { transform: translateY(1px); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 30%, transparent), 0 0 0 1px var(--color-line-strong), 0 0 0 0 transparent, 0 2px 6px -3px color-mix(in oklab, var(--color-shadow) 50%, transparent); }
 .hl-cap[data-held]::after { opacity: 0.75; }
 @keyframes hl-cap-in { from { transform: translateY(-10px); opacity: 0; } }
 .hl-recorder { position: relative; display: inline-flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 176px; min-height: 58px; padding: 8px 10px; border: 0; border-radius: 14px; background: var(--color-fill); color: var(--color-fg); cursor: pointer; transition: background-color var(--hl-d-hover) ease, box-shadow var(--hl-d-hover) ease; }
@@ -285,9 +285,9 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 @keyframes hl-shake { 25% { transform: translateX(-5px); } 55% { transform: translateX(4px); } 80% { transform: translateX(-2px); } }
 
 /* Sundial: a machined bezel around a recessed face that shows the real sky. */
-.hl-sundial { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 50%; touch-action: none; user-select: none; cursor: grab; background: var(--color-raised); box-shadow: inset 0 1.5px 0 color-mix(in oklab, var(--color-light-core) 26%, transparent), inset 0 -2px 4px oklch(0% 0 0 / 25%), 0 0 0 1px var(--color-line-strong), 0 24px 60px -24px oklch(0% 0 0 / 70%), 0 3px 8px oklch(0% 0 0 / 30%); }
+.hl-sundial { position: relative; width: 100%; max-width: 400px; aspect-ratio: 1; border-radius: 50%; touch-action: none; user-select: none; cursor: grab; background: var(--color-raised); box-shadow: inset 0 1.5px 0 color-mix(in oklab, var(--color-light-core) 26%, transparent), inset 0 -2px 4px color-mix(in oklab, var(--color-shadow) 25%, transparent), 0 0 0 1px var(--color-line-strong), 0 24px 60px -24px color-mix(in oklab, var(--color-shadow) 70%, transparent), 0 3px 8px color-mix(in oklab, var(--color-shadow) 30%, transparent); }
 .hl-sundial:active { cursor: grabbing; }
-.hl-sundial-face { position: absolute; inset: 6.5%; border-radius: 50%; overflow: hidden; background: oklch(14% 0.01 260); box-shadow: inset 0 3px 10px oklch(0% 0 0 / 55%), 0 0 0 1px oklch(0% 0 0 / 40%); }
+.hl-sundial-face { position: absolute; inset: 6.5%; border-radius: 50%; overflow: hidden; background: oklch(14% 0.01 260); box-shadow: inset 0 3px 10px color-mix(in oklab, var(--color-shadow) 55%, transparent), 0 0 0 1px color-mix(in oklab, var(--color-shadow) 40%, transparent); }
 .hl-sundial-face canvas { display: block; width: 100%; height: 100%; }
 .hl-sundial svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .hl-sundial-tick { stroke: var(--color-fg-subtle); stroke-width: 1; stroke-linecap: round; }
@@ -304,7 +304,7 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 .hl-lit::-webkit-scrollbar { display: none; }
 .hl-lit-tab { position: relative; z-index: 1; flex: none; border: 0; background: none; cursor: pointer; padding: 11px 20px; border-radius: var(--radius-full); font: 420 15px/1.2 var(--font-sans); letter-spacing: -0.005em; color: var(--color-fg-muted); text-align: center; outline: none; }
 .hl-lit-tab:focus-visible { box-shadow: 0 0 0 2px var(--color-ring); }
-.hl-lit-carriage { position: absolute; z-index: 0; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: var(--radius-full); background: var(--color-raised); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 26%, transparent), 0 0 0 1px var(--color-line), 0 4px 14px -6px oklch(0% 0 0 / 45%); pointer-events: none; }
+.hl-lit-carriage { position: absolute; z-index: 0; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: var(--radius-full); background: var(--color-raised); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-light-core) 26%, transparent), 0 0 0 1px var(--color-line), 0 4px 14px -6px color-mix(in oklab, var(--color-shadow) 45%, transparent); pointer-events: none; }
 .hl-lit-carriage::before { content: ""; position: absolute; left: 22%; right: 22%; top: -6px; height: 12px; border-radius: 50%; background: var(--color-light-core); filter: blur(8px); opacity: 0.22; }
 
 /* Dial: a machined knob with detents, lit ticks and rolling numerals. */
@@ -313,9 +313,9 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 .hl-dial-ticks line { stroke: var(--color-line-strong); stroke-width: 2; stroke-linecap: round; transition: stroke 120ms ease; }
 .hl-dial-ticks line[data-lit] { stroke: var(--color-fg); }
 .hl-dial-ticks line[data-major] { stroke-width: 2.5; }
-.hl-dial-knob { position: absolute; inset: 14.6%; border-radius: 50%; cursor: grab; background: var(--color-raised); box-shadow: inset 0 1.5px 0 color-mix(in oklab, var(--color-light-core) 30%, transparent), inset 0 -2px 3px oklch(0% 0 0 / 22%), 0 0 0 1px var(--color-line-strong), 0 10px 24px -8px oklch(0% 0 0 / 60%), 0 2px 4px oklch(0% 0 0 / 30%); display: grid; place-items: center; outline: none; }
+.hl-dial-knob { position: absolute; inset: 14.6%; border-radius: 50%; cursor: grab; background: var(--color-raised); box-shadow: inset 0 1.5px 0 color-mix(in oklab, var(--color-light-core) 30%, transparent), inset 0 -2px 3px color-mix(in oklab, var(--color-shadow) 22%, transparent), 0 0 0 1px var(--color-line-strong), 0 10px 24px -8px color-mix(in oklab, var(--color-shadow) 60%, transparent), 0 2px 4px color-mix(in oklab, var(--color-shadow) 30%, transparent); display: grid; place-items: center; outline: none; }
 .hl-dial-knob:active { cursor: grabbing; }
-.hl-dial-knob:focus-visible { box-shadow: 0 0 0 2px var(--color-ring), 0 10px 24px -8px oklch(0% 0 0 / 60%); }
+.hl-dial-knob:focus-visible { box-shadow: 0 0 0 2px var(--color-ring), 0 10px 24px -8px color-mix(in oklab, var(--color-shadow) 60%, transparent); }
 .hl-dial-face { position: absolute; inset: 0; border-radius: 50%; transform: rotate(var(--turn, 0deg)); transition: transform 90ms var(--ease-out); }
 .hl-dial-face::after { content: ""; position: absolute; left: 50%; top: 7%; width: 3px; height: 9%; margin-left: -1.5px; border-radius: 2px; background: var(--color-fg); }
 .hl-dial-read { position: relative; display: grid; justify-items: center; gap: 2px; pointer-events: none; }
@@ -329,7 +329,7 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 .hl-forge { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 28px 56px; }
 .hl-forge-ring { position: relative; width: 100%; max-width: 300px; aspect-ratio: 1; touch-action: none; cursor: crosshair; user-select: none; outline: none; }
 .hl-forge-ring canvas { width: 100%; height: 100%; display: block; }
-.hl-forge-handle { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 4px var(--color-line-strong), 0 4px 12px oklch(0% 0 0 / 40%); pointer-events: none; }
+.hl-forge-handle { position: absolute; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 4px var(--color-line-strong), 0 4px 12px color-mix(in oklab, var(--color-shadow) 40%, transparent); pointer-events: none; }
 .hl-forge-ring:focus-visible .hl-forge-handle { box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 5px var(--color-ring); }
 .hl-forge-center { position: absolute; inset: 24%; border-radius: 50%; display: grid; place-content: center; justify-items: center; gap: 2px; text-align: center; pointer-events: none; }
 .hl-forge-center b { font-size: var(--text-title-2); font-weight: 600; letter-spacing: -0.02em; }
@@ -357,7 +357,7 @@ body:has(.hl-lens[data-open]) [data-hl-root] { filter: blur(4px) saturate(0.85);
 .hl-lighttable[data-over] { background: color-mix(in oklab, var(--color-light-core) 8%, var(--color-surface)); }
 .hl-lighttable-say { position: absolute; left: 24px; right: 24px; bottom: 20px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0; font-size: var(--text-body-sm); color: var(--color-fg-muted); pointer-events: none; }
 .hl-lighttable-say b { color: var(--color-fg); font-weight: 550; }
-.hl-print { position: absolute; margin: 0; width: min(300px, 46%); padding: 12px 12px 40px; background: oklch(96% 0.006 80); border-radius: 3px; box-shadow: 0 1px 2px oklch(0% 0 0 / 30%), 0 18px 40px -16px oklch(0% 0 0 / 60%); rotate: var(--r, 0deg); translate: var(--dx, 0) var(--dy, 0); transition: translate 260ms var(--ease-spring), rotate 260ms var(--ease-spring); }
+.hl-print { position: absolute; margin: 0; width: min(300px, 46%); padding: 12px 12px 40px; background: oklch(96% 0.006 80); border-radius: 3px; box-shadow: 0 1px 2px color-mix(in oklab, var(--color-shadow) 30%, transparent), 0 18px 40px -16px color-mix(in oklab, var(--color-shadow) 60%, transparent); rotate: var(--r, 0deg); translate: var(--dx, 0) var(--dy, 0); transition: translate 260ms var(--ease-spring), rotate 260ms var(--ease-spring); }
 .hl-print img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: oklch(20% 0 0); }
 .hl-print canvas { position: absolute; inset: 12px 12px 40px; width: calc(100% - 24px); height: calc(100% - 52px); mix-blend-mode: overlay; opacity: 0.3; pointer-events: none; }
 .hl-print figcaption { position: absolute; left: 14px; right: 14px; bottom: 11px; display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: oklch(35% 0 0); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; }

@@ -3,7 +3,8 @@
 import { readFileSync } from "node:fs"
 import { checkUrl, formatCheck, toUrl } from "./check.js"
 import { init } from "./init.js"
-import { formatReport, lintFiles, lintHook, UsageError } from "./lint.js"
+import { guardHook } from "./guard.js"
+import { formatReport, lintFiles, lintHook, lintStop, UsageError } from "./lint.js"
 import { loadRules } from "./rules.js"
 import { renderSkill } from "./skill.js"
 
@@ -19,7 +20,8 @@ Commands
   check <url>       Check a rendered page in a headless browser
   rules             Print every rule with its reason
   skill             Print the Claude Code skill for this design system
-  init [dir]        Set a project up for agents: skill, lint hook, AGENTS.md
+  init [dir]        Set a project up for agents: skill, hooks, AGENTS.md
+  guard --hook      Keep agents from changing the rule files (a Claude Code hook)
 
 Options
   -h, --help        Show help for a command, as in halation lint --help
@@ -31,33 +33,43 @@ Run halation <command> --help for a command's options.
 
 Usage: halation lint [paths...] [--json]
        halation lint --hook
+       halation lint --stop
 
 Reads the files and folders given (the current folder by default), skipping
-node_modules, build output and hidden folders. Prints each problem as
-file:line:column, the rule and what it says, then why the rule exists and
-what to do instead.
+node_modules, .git, .claude, and build output at the top of a package. Prints
+each problem as file:line:column, the rule and what it says, then why the
+rule exists and what to do instead.
 
 Options
   --json    Print the findings as JSON
   --hook    Claude Code hook mode: read the hook's JSON on stdin, lint the
-            edited file, and exit 2 with the problems on stderr so the agent
-            fixes them
+            edited file, and exit 2 with the problems on stderr, warnings
+            included, so the agent fixes them
+  --stop    Claude Code Stop hook mode: lint the project (src, or the paths
+            in package.json under "halation": { "lint": [...] }) and exit 2
+            with the problems on stderr, so the agent can't finish with them
 
-A comment saying halation-ignore R9 on a line, or the line above it, skips
-that rule there. Exits 1 when there's an error; warnings don't fail.
+A comment saying halation-ignore R9 and why, on a line or the line above it,
+skips that rule there. An exception that names no rule skips nothing and is
+reported itself. Exits 1 when there's an error; warnings don't fail.
 `,
   check: `Check a rendered page against the rules a browser can measure.
 
-Usage: halation check <url> [--json] [--mode light|dark]
+Usage: halation check <url> [--json] [--mode light|dark] [--width <px>]
 
 Loads the page in headless Chrome (through playwright-core, which you
-install alongside the CLI) in light and dark mode, runs the checker, and
-reports each rule as kept or broken, with example elements, and the
-budgets. The url can be an address, a host and port, or a local HTML file.
+install alongside the CLI) in light and dark mode, at a desktop width
+(1280 px) and a phone width (375 px), runs the checker, and reports each
+rule as kept or broken, with example elements, and the budgets. The url can
+be an address, a host and port, or a local HTML file.
 
 Options
-  --json          Print the results as JSON
-  --mode <mode>   Check only light or only dark mode
+  --json                    Print the results as JSON
+  --mode <mode>             Check only light or only dark mode
+  --width <px>              Check only this width
+  --allow-counterexamples   Let elements inside [data-counterexample] break
+                            the rules, for docs that show what not to do.
+                            They're still counted in the report.
 
 Exits 1 when a rule is broken or a budget is over its limit.
 `,
@@ -80,17 +92,30 @@ Usage: halation init [dir]
 
 In the project folder (the current one by default) it:
   writes .claude/skills/halation/SKILL.md
-  adds a hook to .claude/settings.json that lints each file Claude Code edits
+  adds hooks to .claude/settings.json that keep Claude Code from changing
+    the rule files, lint each file it edits, and lint the project before it
+    finishes
   adds a Halation section to AGENTS.md, creating it if needed
   makes sure CLAUDE.md includes @AGENTS.md
 
 Running it again updates what it wrote and never adds anything twice.
 `,
+  guard: `Keep agents from changing the files that hold the project's rules.
+
+Usage: halation guard --hook
+
+A Claude Code PreToolUse hook. It reads the hook's JSON on stdin and exits 2,
+which blocks the tool, when an edit or a shell command would change
+.claude/settings.json, .claude/settings.local.json, Halation's packages in
+node_modules, an installed rulebook, the .halation folder, or the "halation"
+settings in package.json. halation init adds it.
+`,
 }
 
 const OPTIONS = {
-  lint: { json: false, hook: false },
-  check: { json: false, mode: "value" },
+  lint: { json: false, hook: false, stop: false },
+  guard: { hook: false },
+  check: { json: false, mode: "value", width: "value", "allow-counterexamples": false },
   rules: { json: false },
   skill: {},
   init: {},
@@ -147,6 +172,13 @@ export async function main(argv, io = { out: (s) => process.stdout.write(s), err
     }
     switch (command) {
       case "lint": {
+        if (flags.hook && flags.stop) throw new UsageError("halation lint takes --hook or --stop, not both.")
+        if (flags.stop) {
+          const { code, stdout, stderr } = lintStop(process.stdin.isTTY ? "" : await readStdin())
+          if (stdout) io.out(stdout)
+          if (stderr) io.err(stderr)
+          return code
+        }
         if (flags.hook) {
           if (process.stdin.isTTY) {
             io.err("halation lint --hook reads the JSON a Claude Code hook sends on stdin. Run halation init to add the hook, or run halation lint with a path instead.\n")
@@ -166,12 +198,28 @@ export async function main(argv, io = { out: (s) => process.stdout.write(s), err
         } else io.out(formatReport(result, loadRules()))
         return result.findings.some((f) => f.level === "error") ? 1 : 0
       }
+      case "guard": {
+        if (!flags.hook || positional.length) throw new UsageError("halation guard runs as a Claude Code hook, as halation guard --hook. Run halation init to add it.")
+        if (process.stdin.isTTY) {
+          io.err("halation guard --hook reads the JSON a Claude Code hook sends on stdin. Run halation init to add the hook.\n")
+          return 1
+        }
+        const { code, stderr } = guardHook(await readStdin())
+        if (stderr) io.err(stderr)
+        return code
+      }
       case "check": {
         if (positional.length !== 1) throw new UsageError(`halation check needs one address to load, as in halation check http://localhost:3000.`)
         if (flags.mode && !["light", "dark"].includes(flags.mode)) throw new UsageError(`--mode is light or dark, not ${flags.mode}.`)
+        const width = flags.width === undefined ? undefined : Number(flags.width)
+        if (width !== undefined && !(Number.isInteger(width) && width >= 240 && width <= 3840)) throw new UsageError(`--width is a whole number of pixels from 240 to 3840, not ${flags.width}.`)
         let result
         try {
-          result = await checkUrl(toUrl(positional[0]), { modes: flags.mode ? [flags.mode] : ["light", "dark"] })
+          result = await checkUrl(toUrl(positional[0]), {
+            modes: flags.mode ? [flags.mode] : ["light", "dark"],
+            widths: width ? [width] : undefined,
+            counterexamples: !!flags["allow-counterexamples"],
+          })
         } catch (e) {
           io.err(`${e.message}\n`)
           return 1

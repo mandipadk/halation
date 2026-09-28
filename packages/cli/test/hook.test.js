@@ -27,6 +27,12 @@ describe("halation lint --hook", () => {
   const clean = put("src/clean.tsx", `export const C = () => <p className="text-body-sm">Hi</p>\n`)
   const other = put("src/tool.py", `label = "text-sm uppercase"\n`)
   const hidden = put(".claude/skills/halation/SKILL.md", `Don't write A ${DOT} B\n`)
+  put("package.json", "{}\n")
+  const vendored = put("src/vendor/x.css", `.a { text-transform: uppercase; }\n`)
+  const dotted = put("src/.x/x.tsx", `export const D = () => <p className="text-sm">Hi</p>\n`)
+  const built = put("dist/x.tsx", `export const D = () => <p className="text-sm">Hi</p>\n`)
+  const dependency = put("node_modules/pkg/x.tsx", `export const D = () => <p className="text-sm">Hi</p>\n`)
+  const bare = put("src/bare.tsx", `// halation-ignore\nexport const E = () => <p className="text-body">Hi</p>\n`)
 
   test("exits 2 with the problems on stderr when the edited file breaks a rule", () => {
     const r = hook(edit(bad))
@@ -43,14 +49,35 @@ describe("halation lint --hook", () => {
     assert.equal(r.stderr, "")
   })
 
-  test("warnings don't block", () => {
+  test("warnings are reported too, labelled as warnings", () => {
     const r = hook(edit(warn))
-    assert.equal(r.status, 0)
-    assert.equal(r.stderr, "")
+    assert.equal(r.status, 2)
+    assert.match(r.stderr, /Halation lint found 1 warning with the design rules in src\/warn\.tsx\./)
+    assert.match(r.stderr, /Line 1, R10 \(warning\): No status dots/)
+  })
+
+  test("errors and warnings are counted apart", () => {
+    const both = put("src/both.tsx", `export const F = () => <p className="text-sm"><span className="size-2 rounded-full" /></p>\n`)
+    assert.match(hook(edit(both)).stderr, /found 1 problem and 1 warning with the design rules/)
+  })
+
+  test("an exception without a rule id is reported", () => {
+    const r = hook(edit(bare))
+    assert.equal(r.status, 2)
+    assert.match(r.stderr, /Line 1, R21: An exception names the rule it breaks\..*Instead: An exception needs the rule id it's for, like halation-ignore R9, and a reason\./)
+  })
+
+  test("files in src/vendor and dot-folders in src are linted", () => {
+    assert.equal(hook(edit(vendored)).status, 2)
+    assert.equal(hook(edit(dotted)).status, 2)
+  })
+  test("build output at the top and dependencies pass", () => {
+    assert.equal(hook(edit(built)).status, 0)
+    assert.equal(hook(edit(dependency)).status, 0)
   })
 
   test("files no detector covers pass", () => assert.equal(hook(edit(other)).status, 0))
-  test("files in hidden folders pass", () => assert.equal(hook(edit(hidden)).status, 0))
+  test("files in .claude pass", () => assert.equal(hook(edit(hidden)).status, 0))
   test("a path relative to the hook's cwd works", () => assert.equal(hook(edit("src/bad.tsx")).status, 2))
   test("Write and MultiEdit payloads work the same", () => {
     assert.equal(hook(edit(bad, { tool_name: "Write" })).status, 2)

@@ -69,16 +69,17 @@ export function Signed() {
           const s = e.currentTarget.style
           s.setProperty("--rx", `${((0.5 - y) * 7).toFixed(2)}deg`)
           s.setProperty("--ry", `${((x - 0.5) * 9).toFixed(2)}deg`)
-          s.setProperty("--sx", `${(x * 100).toFixed(1)}%`)
-          s.setProperty("--sy", `${(y * 100).toFixed(1)}%`)
+          s.setProperty("--hl-sheen-x", `${(x * 100).toFixed(1)}%`)
+          s.setProperty("--hl-sheen-y", `${(y * 100).toFixed(1)}%`)
         }}
         onPointerLeave={(e) => {
-          for (const p of ["--rx", "--ry", "--sx", "--sy"]) e.currentTarget.style.removeProperty(p)
+          for (const p of ["--rx", "--ry", "--hl-sheen-x", "--hl-sheen-y"]) e.currentTarget.style.removeProperty(p)
         }}
       >
         <div className="print" ref={print}>
           <ShareCard name={settled} line="Signed in light." className="print-card" />
           <canvas className="print-grain" ref={grain} width={600} height={315} aria-hidden />
+          <span className="hl-sheen" aria-hidden />
         </div>
       </div>
       <div className="print-strip">

@@ -7,6 +7,9 @@ export const fonts = {
   mono: '"Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace',
 }
 
+/** The serif phrase's own tracking: Instrument Serif is set a touch tighter than it's drawn. */
+export const serifTracking = "-0.01em"
+
 export type TextStyle = {
   name: string
   size: string

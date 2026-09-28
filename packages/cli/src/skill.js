@@ -27,6 +27,11 @@ const EXAMPLES = {
   R16: { dont: "`<kbd>⌘</kbd><kbd>K</kbd>` with no gap, or `⌘K` as one string.", do: "`<Keys keys={[\"⌘\", \"K\"]} />`" },
   R17: { dont: "`className=\"bg-[#7c3aed]\"`, `style={{ color: \"#333\" }}`.", do: "Color roles: `bg-surface`, `text-fg-muted`, `border-line`, `bg-accent`." },
   R18: { dont: "`font-family: Inter`, `font-['Roboto']`, a bare system stack.", do: "`var(--font-sans)`, `var(--font-serif)`, `var(--font-mono)` (`font-sans` in Tailwind)." },
+  R19: { dont: "`@import \"tailwindcss\"` in your CSS, which brings back Tailwind's whole palette and type scale.", do: "`@import \"@halation/core/tailwind.css\"`, which loads Tailwind with only the system's values." },
+  R20: { dont: "`if (navigator.webdriver)` or a user-agent test that shows a checker something different.", do: "One page for everyone. If a check fails, fix the page." },
+  R21: { dont: "A bare `halation-ignore` comment, or one that names no rule.", do: "`/* halation-ignore R9: a real product name uses the dot */`: the rule id, and why." },
+  R22: { dont: "`text-shadow: 0 0 24px var(--color-accent)` to make a headline glow.", do: "Light behind the text: a `<Stage>` phenomenon with the headline marked `data-quiet`." },
+  R23: { dont: "A fixed-width row, table or code line that makes a phone scroll sideways.", do: "Let rows wrap, give tables and code their own scroll container, and check at 375 px." },
 }
 
 const PRINCIPLES = [

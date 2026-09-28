@@ -36,10 +36,12 @@
   --color-light-core: light-dark(oklch(90% 0.012 37.47), oklch(97.5% 0.012 37.47));
   --color-light-edge: light-dark(oklch(83% 0.028 37.47), oklch(84% 0.085 37.47));
   --color-halation: light-dark(oklch(62% 0.16 37.47), oklch(66% 0.1907 37.47));
+  --color-shadow: light-dark(oklch(0% 0 0), oklch(0% 0 0));
 
   --font-sans: "Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
   --font-mono: "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif--letter-spacing: -0.01em;
 
   --text-display-xl: clamp(3.25rem, 1.9167rem + 5.9259vw, 7.25rem);
   --text-display-xl--line-height: 0.92;

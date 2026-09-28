@@ -206,6 +206,12 @@
         "usage": "The glow film gives bright things, in the accent's hue.",
         "light": "#d45c37",
         "dark": "#ef5c2d"
+      },
+      {
+        "name": "shadow",
+        "usage": "Cast shadows, mixed toward transparent for their strength. Never a fill.",
+        "light": "#000000",
+        "dark": "#000000"
       }
     ]
   },
@@ -416,6 +422,12 @@
         "usage": "The glow film gives bright things, in the accent's hue.",
         "light": "#4385e4",
         "dark": "#3e8fff"
+      },
+      {
+        "name": "shadow",
+        "usage": "Cast shadows, mixed toward transparent for their strength. Never a fill.",
+        "light": "#000000",
+        "dark": "#000000"
       }
     ]
   },
@@ -626,6 +638,12 @@
         "usage": "The glow film gives bright things, in the accent's hue.",
         "light": "#00a267",
         "dark": "#00ae75"
+      },
+      {
+        "name": "shadow",
+        "usage": "Cast shadows, mixed toward transparent for their strength. Never a fill.",
+        "light": "#000000",
+        "dark": "#000000"
       }
     ]
   },
@@ -836,6 +854,12 @@
         "usage": "The glow film gives bright things, in the accent's hue.",
         "light": "#b97600",
         "dark": "#c98000"
+      },
+      {
+        "name": "shadow",
+        "usage": "Cast shadows, mixed toward transparent for their strength. Never a fill.",
+        "light": "#000000",
+        "dark": "#000000"
       }
     ]
   }

@@ -81,7 +81,7 @@ export function App({ children }) {
 - Do: The text style alone; each one sets its own tracking.
 - Why: Tracking is tuned per size already; extra spacing is how eyebrows get made.
 - Instead: The text style for that size.
-- Caught by: Theme.
+- Caught by: Theme, lint.
 
 ### R7: Ten named text styles; no other sizes.
 
@@ -178,6 +178,46 @@ export function App({ children }) {
 - Why: Each key should read as its own key.
 - Instead: The Keys component.
 - Caught by: Lint.
+
+### R19: Tailwind comes through Halation's theme.
+
+- Don't: `@import "tailwindcss"` in your CSS, which brings back Tailwind's whole palette and type scale.
+- Do: `@import "@halation/core/tailwind.css"`, which loads Tailwind with only the system's values.
+- Why: Tailwind's own entry brings back its whole palette, type scale and radii, so off-system classes quietly work again.
+- Instead: @import "@halation/core/tailwind.css", which loads Tailwind with only the system's values.
+- Caught by: Lint.
+
+### R20: Pages look the same to the checker as to people.
+
+- Don't: `if (navigator.webdriver)` or a user-agent test that shows a checker something different.
+- Do: One page for everyone. If a check fails, fix the page.
+- Why: A page that spots the checker and shows it something else hides every problem the check would find.
+- Instead: One page for everyone; fix what the check reports.
+- Caught by: Lint.
+
+### R21: An exception names the rule it breaks.
+
+- Don't: A bare `halation-ignore` comment, or one that names no rule.
+- Do: `/* halation-ignore R9: a real product name uses the dot */`: the rule id, and why.
+- Why: A blanket exception silences every rule on its line, including the ones nobody meant to allow.
+- Instead: An exception needs the rule id it's for, like halation-ignore R9, and a reason.
+- Caught by: Lint.
+
+### R22: No glow on text.
+
+- Don't: `text-shadow: 0 0 24px var(--color-accent)` to make a headline glow.
+- Do: Light behind the text: a `<Stage>` phenomenon with the headline marked `data-quiet`.
+- Why: Glowing text is a generated-design cliché, and it hurts legibility.
+- Instead: Plain text. Light belongs to surfaces and phenomena.
+- Caught by: Lint, page check.
+
+### R23: Pages fit a phone: nothing scrolls sideways.
+
+- Don't: A fixed-width row, table or code line that makes a phone scroll sideways.
+- Do: Let rows wrap, give tables and code their own scroll container, and check at 375 px.
+- Why: Most visitors arrive on a phone, and a page that scrolls sideways there feels broken.
+- Instead: Widths that give way: rows that wrap, fluid text styles, a max-width instead of a width.
+- Caught by: Page check.
 
 ## What to use for what
 

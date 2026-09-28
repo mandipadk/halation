@@ -49,6 +49,7 @@ export function Worlds() {
             <div
               key={w.name}
               className="world"
+              data-content="sample"
               data-rank={rank}
               data-accent={w.accent}
               data-tempo={w.tempo}

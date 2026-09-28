@@ -55,7 +55,7 @@ body {
 .hl-text-micro { font-size: var(--text-micro); line-height: var(--text-micro--line-height); letter-spacing: var(--text-micro--letter-spacing); font-weight: var(--text-micro--font-weight); }
 
 /* One serif phrase in a headline. */
-.hl-serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; font-size: 1.06em; }
+.hl-serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: var(--font-serif--letter-spacing); font-size: 1.06em; }
 .hl-tone-muted { color: var(--color-fg-muted); }
 .hl-tone-subtle { color: var(--color-fg-subtle); }
 .hl-tone-accent { color: var(--color-accent-fg); }

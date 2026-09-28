@@ -10,7 +10,7 @@ const DOT = "\u00b7"
 const page = (body) => `<!doctype html><html><head><meta charset="utf-8"></head><body style="background:#fff;color:#111;font-family:Georgia">${body}</body></html>`
 const PAGES = {
   "/joined": page(`<p>A ${DOT} B</p>`),
-  "/clean": page(`<p>Size</p><p>412 MB</p>`),
+  "/clean": page(`<h1>Claude Work</h1><p>A copy of Claude with its own accounts.</p><dl><dt>Size</dt><dd>412 MB</dd><dt>Opened</dt><dd>Two hours ago</dd></dl>`),
 }
 
 let playwright = true
@@ -59,20 +59,22 @@ describe("halation check in a browser", { skip: !playwright && "playwright-core 
     const result = await run(t, `${base}/joined`)
     if (!result) return
     assert.equal(result.pass, false)
-    for (const mode of ["light", "dark"]) {
-      const r9 = result.modes[mode].rules.find((r) => r.id === "R9")
+    assert.equal(result.runs.length, 4)
+    for (const run of result.runs) {
+      const r9 = run.rules.find((r) => r.id === "R9")
       assert.equal(r9.pass, false)
       assert.deepEqual(r9.examples, ["p"])
     }
     const report = formatCheck(result)
-    assert.match(report, /Broken\n {2}R9 {3}No dots joining facts\n {7}In both modes, 1 element: p/)
-    assert.match(report, /Budgets\n {2}Ink buttons in view: 0, limit 1/)
+    assert.match(report, /Checked .* in light and dark mode, at 1280 px and 375 px\./)
+    assert.match(report, /Broken\n {2}R9 {3}No dots joining facts\n {7}Everywhere, 1 element: p/)
+    assert.match(report, /Budgets\n {2}Ink buttons in any one view: 0 at most, limit 1/)
   })
 
   test("a clean page passes", async (t) => {
     const result = await run(t, `${base}/clean`, { modes: ["light"] })
     if (!result) return
-    assert.equal(result.pass, true, JSON.stringify(result.modes.light.rules.filter((r) => !r.pass)))
+    assert.equal(result.pass, true, JSON.stringify(result.runs.flatMap((run) => run.rules.filter((r) => !r.pass))))
     assert.match(formatCheck(result), /Every rule the page check measures is kept\./)
   })
 

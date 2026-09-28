@@ -2,6 +2,9 @@
 .hl-lit-edge, .hl-lit-edge-glow { position: fixed; left: 0; right: 0; top: 0; pointer-events: none; z-index: 2147483000; background: radial-gradient(38% 100% at var(--hl-edge-x, 50%) 0%, var(--color-light-core), transparent 100%); }
 .hl-lit-edge { height: 1px; }
 .hl-lit-edge-glow { height: 10px; filter: blur(6px); opacity: 0.35; }
+/* A sheen: the light catching a surface where the pointer holds it. Place it last inside a
+   positioned surface, and move it with --hl-sheen-x and --hl-sheen-y. */
+.hl-sheen { position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at var(--hl-sheen-x, 30%) var(--hl-sheen-y, 20%), color-mix(in oklab, var(--color-light-core) 10%, transparent), transparent 42%); }
 /* The seal */
 .hl-seal { display: inline-flex; flex: none; line-height: 0; }
 .hl-seal svg { display: block; }

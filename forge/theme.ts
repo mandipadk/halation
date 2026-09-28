@@ -225,6 +225,8 @@ export function roles(seed: Seed): Role[] {
   // Film halation is red-orange; here it takes the accent's hue, so a page
   // still has one color.
   add("halation", toGamut({ l: 0.62, c: 0.16, h: seedColor.h }), toGamut({ l: 0.66, c: Math.max(0.12, seedColor.c), h: seedColor.h }), "The glow film gives bright things, in the accent's hue.")
+  // The dark that light leaves: mixed toward transparent for a shadow's strength, never a fill.
+  add("shadow", { l: 0, c: 0, h: 0 }, { l: 0, c: 0, h: 0 }, "Cast shadows, mixed toward transparent for their strength. Never a fill.")
   return out
 }
 

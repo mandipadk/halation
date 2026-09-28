@@ -1,14 +1,73 @@
 // `halation init`: sets a project up so agents working in it follow the
-// rules: the skill, a lint hook after every edit, and a note in AGENTS.md.
-// Safe to run again: it updates what it wrote and never duplicates.
+// rules: the skill, hooks that guard the rule files, lint every edit and lint
+// the project before the agent finishes, and a note in AGENTS.md. Safe to
+// run again: it updates what it wrote and never duplicates.
 
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { UsageError } from "./lint.js"
 import { renderSkill } from "./skill.js"
 
-export const HOOK_COMMAND = "npx --no-install halation lint --hook"
+/**
+ * The hooks run through one script in the project, so a hook that can't run
+ * blocks with a reason instead of passing. It tells "Halation said no" apart
+ * from "Halation isn't installed or couldn't run": then only an install is
+ * allowed, and the finish check lets the turn end on its second
+ * try with a note, rather than sending the agent back forever. The guard keeps
+ * agents from editing it.
+ */
+export const HOOK_SCRIPT = `#!/bin/sh
+# Halation's hooks for Claude Code, written by halation init. Takes guard, lint or stop.
+cd "\${CLAUDE_PROJECT_DIR:-.}" || exit 2
+input=$(cat)
+run() {
+  if [ -x node_modules/.bin/halation ]; then printf '%s' "$input" | node_modules/.bin/halation "$@"; return $?; fi
+  if npx --no-install halation --version </dev/null >/dev/null 2>&1; then printf '%s' "$input" | npx --no-install halation "$@"; return $?; fi
+  return 127
+}
+case "$1" in
+  guard) run guard --hook ;;
+  lint) run lint --hook ;;
+  stop) run lint --stop ;;
+  *) echo "hooks.sh takes guard, lint or stop." >&2; exit 2 ;;
+esac
+status=$?
+[ "$status" -eq 0 ] && exit 0
+[ "$status" -eq 2 ] && exit 2
+# Halation isn't installed, or couldn't run.
+case "$1" in
+  guard)
+    printf '%s' "$input" | grep -Eq '"command"[[:space:]]*:[[:space:]]*"(npm|pnpm|yarn|bun)[[:space:]]+(install|i|ci|add)([[:space:]"]|$)' && exit 0
+    echo "Halation isn't installed in this project, or couldn't run, so changes are blocked until it can. Install the project's dependencies first, with npm install or your package manager's install." >&2
+    exit 2 ;;
+  stop)
+    if printf '%s' "$input" | grep -Eq '"stop_hook_active"[[:space:]]*:[[:space:]]*true'; then
+      echo '{"systemMessage": "Halation is not installed or could not run, so the design rules were not checked before this turn ended."}'
+      exit 0
+    fi
+    echo "Halation isn't installed or couldn't run, so the design rules can't be checked. Install the project's dependencies, then finish." >&2
+    exit 2 ;;
+  *)
+    echo "Halation isn't installed or couldn't run, so this change wasn't linted. Install the project's dependencies." >&2
+    exit 2 ;;
+esac
+`
+export const HOOK_SCRIPT_PATH = ".halation/hooks.sh"
+const hook = (name) => `sh "\${CLAUDE_PROJECT_DIR:-.}/${HOOK_SCRIPT_PATH}" ${name} || exit 2`
+export const GUARD_COMMAND = hook("guard")
+export const HOOK_COMMAND = hook("lint")
+export const STOP_COMMAND = hook("stop")
+
+export const GUARD = { matcher: "Edit|Write|MultiEdit|NotebookEdit|Bash", hooks: [{ type: "command", command: GUARD_COMMAND }] }
 export const HOOK = { matcher: "Edit|Write|MultiEdit", hooks: [{ type: "command", command: HOOK_COMMAND }] }
+export const STOP = { hooks: [{ type: "command", command: STOP_COMMAND }] }
+
+/** Every hook init adds: the event, the entry, and how to recognize an earlier version of it. */
+export const HOOKS = [
+  { event: "PreToolUse", entry: GUARD, mark: /\bhalation guard --hook\b|\.halation\/hooks\.sh"? guard\b/ },
+  { event: "PostToolUse", entry: HOOK, mark: /\bhalation lint --hook\b|\.halation\/hooks\.sh"? lint\b/ },
+  { event: "Stop", entry: STOP, mark: /\bhalation lint --stop\b|\.halation\/hooks\.sh"? stop\b/ },
+]
 
 const START = "<!-- halation:start -->"
 const END = "<!-- halation:end -->"
@@ -32,21 +91,41 @@ function readJson(file) {
     const value = JSON.parse(text)
     if (value && typeof value === "object" && !Array.isArray(value)) return value
   } catch {}
-  throw new UsageError(`${file} isn't a valid JSON object, so the hook wasn't added. Fix the file (or remove it) and run halation init again.`)
+  throw new UsageError(`${file} isn't a valid JSON object, so the hooks weren't added. Fix the file (or remove it) and run halation init again.`)
 }
 
-const hasHook = (settings) =>
-  (settings.hooks?.PostToolUse ?? []).some((entry) => (entry?.hooks ?? []).some((h) => typeof h?.command === "string" && /\bhalation lint --hook\b/.test(h.command)))
-
-/** Adds the lint hook to a settings object in place. Returns true when it changed. */
+/**
+ * Adds Halation's hooks to a settings object in place, and brings an older
+ * version of one up to date where it stands. Returns "added", "updated", or
+ * false when everything was already there.
+ */
 export function mergeHook(settings) {
-  if (hasHook(settings)) return false
   settings.hooks ??= {}
   if (typeof settings.hooks !== "object" || Array.isArray(settings.hooks)) throw new UsageError(`The "hooks" entry in .claude/settings.json isn't an object. Fix it and run halation init again.`)
-  settings.hooks.PostToolUse ??= []
-  if (!Array.isArray(settings.hooks.PostToolUse)) throw new UsageError(`The "hooks.PostToolUse" entry in .claude/settings.json isn't a list. Fix it and run halation init again.`)
-  settings.hooks.PostToolUse.push(structuredClone(HOOK))
-  return true
+  let result = false
+  for (const { event, entry, mark } of HOOKS) {
+    settings.hooks[event] ??= []
+    const list = settings.hooks[event]
+    if (!Array.isArray(list)) throw new UsageError(`The "hooks.${event}" entry in .claude/settings.json isn't a list. Fix it and run halation init again.`)
+    const ours = list.flatMap((e) => (Array.isArray(e?.hooks) ? e.hooks.map((h) => [e, h]) : [])).filter(([, h]) => typeof h?.command === "string" && mark.test(h.command))
+    if (!ours.length) {
+      list.push(structuredClone(entry))
+      result = "added"
+      continue
+    }
+    for (const [e, h] of ours) {
+      const command = entry.hooks[0].command
+      if (h.command !== command) {
+        h.command = command
+        result ||= "updated"
+      }
+      if (e.hooks.length === 1 && entry.matcher && e.matcher !== entry.matcher) {
+        e.matcher = entry.matcher
+        result ||= "updated"
+      }
+    }
+  }
+  return result
 }
 
 /** Sets up `dir`. Returns the list of things it did, as sentences. */
@@ -70,14 +149,23 @@ export async function init(dir = ".", { cwd = process.cwd() } = {}) {
     done.push("Updated the skill in .claude/skills/halation/SKILL.md.")
   } else done.push("The skill in .claude/skills/halation/SKILL.md is already current.")
 
-  // The hook.
+  // The hooks, and the script they run.
+  const scriptFile = path.join(root, HOOK_SCRIPT_PATH)
+  if (!existsSync(scriptFile) || readFileSync(scriptFile, "utf8") !== HOOK_SCRIPT) {
+    const had = existsSync(scriptFile)
+    write(scriptFile, HOOK_SCRIPT)
+    done.push(`${had ? "Updated" : "Wrote"} the script the hooks run, ${HOOK_SCRIPT_PATH}.`)
+  }
   const settingsFile = path.join(root, ".claude/settings.json")
   const existed = existsSync(settingsFile)
   const settings = existed ? readJson(settingsFile) : {}
-  if (mergeHook(settings)) {
-    write(settingsFile, `${JSON.stringify(settings, null, 2)}\n`)
-    done.push(`${existed ? "Added" : "Created .claude/settings.json with"} a hook that lints each file Claude Code edits${existed ? " to .claude/settings.json" : ""}.`)
-  } else done.push("The lint hook is already in .claude/settings.json.")
+  const merged = mergeHook(settings)
+  const hooks = "hooks that keep Claude Code from changing the rule files, lint each file it edits, and lint the project before it finishes"
+  if (merged) write(settingsFile, `${JSON.stringify(settings, null, 2)}\n`)
+  if (!existed) done.push(`Created .claude/settings.json with ${hooks}.`)
+  else if (merged === "added") done.push(`Added ${hooks} to .claude/settings.json.`)
+  else if (merged === "updated") done.push("Updated the Halation hooks in .claude/settings.json.")
+  else done.push("The Halation hooks are already in .claude/settings.json.")
 
   // AGENTS.md.
   const agentsFile = path.join(root, "AGENTS.md")
