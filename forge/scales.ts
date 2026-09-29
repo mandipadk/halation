@@ -40,6 +40,7 @@ export const text: TextStyle[] = [
   { name: "title-3", size: "1.25rem", leading: "1.3", tracking: "-0.016em", weight: 600, usage: "Card and group titles." },
   { name: "body-lg", size: "1.125rem", leading: "1.6", tracking: "-0.011em", weight: 400, usage: "Lead paragraphs under a headline." },
   { name: "body", size: "1rem", leading: "1.6", tracking: "-0.006em", weight: 400, usage: "Reading text." },
+  { name: "control", size: "0.9375rem", leading: "1.2", tracking: "-0.005em", weight: 500, usage: "Labels on tabs, keycaps and segmented controls: a step above interface text, so a control reads as something to press." },
   { name: "body-sm", size: "0.875rem", leading: "1.5", tracking: "-0.003em", weight: 400, usage: "Interface text: controls, lists, tables." },
   { name: "caption", size: "0.8125rem", leading: "1.45", tracking: "0em", weight: 400, usage: "Metadata, helper text, footnotes." },
   { name: "micro", size: "0.75rem", leading: "1.35", tracking: "0.005em", weight: 500, usage: "Badges, keyboard keys, counters. Never sentences." },

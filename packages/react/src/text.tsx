@@ -1,12 +1,12 @@
 import type { ComponentProps, ElementType, ReactNode } from "react"
 import { cx } from "./cx.ts"
 
-export type TextStyle = "display-xl" | "display" | "title-1" | "title-2" | "title-3" | "body-lg" | "body" | "body-sm" | "caption" | "micro"
+export type TextStyle = "display-xl" | "display" | "title-1" | "title-2" | "title-3" | "body-lg" | "body" | "control" | "body-sm" | "caption" | "micro"
 export type Tone = "default" | "muted" | "subtle" | "accent" | "critical"
 
 type TextProps<T extends ElementType> = { as?: T; size?: TextStyle; tone?: Tone; className?: string; children?: ReactNode } & Omit<ComponentProps<T>, "as" | "size">
 
-/** Running text in one of the ten styles. */
+/** Running text in one of the eleven styles. */
 export function Text<T extends ElementType = "p">({ as, size = "body", tone = "default", className, ...rest }: TextProps<T>) {
   const Tag = (as ?? "p") as ElementType
   return <Tag className={cx(`hl-text-${size}`, tone !== "default" && `hl-tone-${tone}`, className)} {...rest} />

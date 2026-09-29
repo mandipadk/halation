@@ -160,6 +160,53 @@ function covered(areas, top, bottom) {
 /** Seconds or milliseconds from a CSS time list, in ms. */
 const times = (list) => list.split(",").map((d) => parseFloat(d) * (d.includes("ms") ? 1 : 1000))
 
+/**
+ * The halation phenomenon's own filter, verified by what it is: its id, its
+ * primitives in order, its two blurs, and floods in the system's halation color.
+ */
+const HALATION_STEPS = "feColorMatrix feGaussianBlur feGaussianBlur feFlood feComposite feFlood feComposite feMerge"
+function isHalation(f) {
+  if (f.id !== "hl-halation" || [...f.children].map((c) => c.tagName).join(" ") !== HALATION_STEPS) return false
+  const blurs = [...f.querySelectorAll("feGaussianBlur")].map((b) => b.getAttribute("stdDeviation"))
+  if (blurs.join(" ") !== "2.4 18") return false
+  const glow = tokenColor(document.documentElement, "halation")
+  return [...f.querySelectorAll("feFlood")].every((fl) => {
+    const c = parseColor(getComputedStyle(fl).floodColor)
+    return Math.abs(c[0] - glow[0]) + Math.abs(c[1] - glow[1]) + Math.abs(c[2] - glow[2]) < 0.09
+  })
+}
+
+/**
+ * Glow reaching text from an SVG filter or a drop-shadow, on the element or
+ * any ancestor. Returns "glow", the element carrying the halation filter, or null.
+ */
+function filterGlow(el) {
+  for (let n = el; n && n.nodeType === 1; n = n.parentElement ?? n.getRootNode()?.host) {
+    const f = getComputedStyle(n).filter
+    if (!f || f === "none") continue
+    if (n !== el && litShadow(f)) return "glow"
+    for (const m of f.matchAll(/url\(\s*["']?#([^"')\s]+)["']?\s*\)/g)) {
+      const def = document.getElementById(m[1])
+      if (!def) continue
+      if (isHalation(def)) return n
+      if (def.querySelector("feGaussianBlur, feMorphology, feDropShadow")) return "glow"
+    }
+  }
+  return null
+}
+
+/** A blurred drop-shadow that's light or colored: a glow, where a dark one is only a shadow. */
+function litShadow(filter) {
+  for (const m of filter.matchAll(/drop-shadow\((.*?\))?[^)]*\)/g)) {
+    const color = m[0].match(/(?:rgba?|oklch|oklab|lab|lch|color|hsla?)\([^)]*\)|#[0-9a-f]{3,8}\b/i)
+    const blur = [...m[0].replace(color?.[0] ?? "", "").matchAll(/(-?[\d.]+)px/g)].map((x) => parseFloat(x[1]))[2] ?? 0
+    if (!color || blur <= 0) continue
+    const c = parseColor(color[0])
+    if (c[3] > 0.1 && (luminance(c) > 0.2 || lch(c).C > 0.08)) return true
+  }
+  return false
+}
+
 /** The largest blur radius in a text-shadow or a drop-shadow filter. */
 function glowOf(cs) {
   const blur = (s) => [...s.matchAll(/(-?[\d.]+)px/g)].map((m) => parseFloat(m[1]))
@@ -188,6 +235,7 @@ export function check(root = document.body, { counterexamples = false } = {}) {
   const layer = root.querySelector(".hl-dialog[data-open], .hl-sheet[data-open], .hl-lens[data-open]")
   const ink = []
   const accentAreas = []
+  const halated = new Set()
   let elements = 0
 
   for (const el of everything(root)) {
@@ -246,6 +294,18 @@ export function check(root = document.body, { counterexamples = false } = {}) {
       const tint = parseColor(cs.backgroundColor), words = parseColor(cs.color)
       const f = lch(tint), t = lch(words)
       if (tint[3] > 0.1 && f.C > 0.02 && t.C > 0.07 && hueGap(f.H, t.H) < 25) note("R10", el)
+    }
+
+    // R22, through filters: an SVG glow or a drop-shadow reaching the text. The halation
+    // phenomenon's bloom is the one allowed, on a dark ground, once per page.
+    if (hasText && !drawing) {
+      const glow = filterGlow(el)
+      if (glow === "glow") note("R22", el)
+      else if (glow) {
+        const ground = backgroundOf(el)
+        if (ground && luminance(ground) > 0.2) note("R22", el)
+        else halated.add(glow)
+      }
     }
 
     // R11: monospace loose on the page rather than inside a surface.
@@ -323,6 +383,8 @@ export function check(root = document.body, { counterexamples = false } = {}) {
       accentAreas.push([top, top + r.height, Math.max(0, r.left), Math.min(r.right, innerWidth)])
     }
   }
+
+  if (halated.size > 1) for (const el of halated) note("R22", el)
 
   // R23: the page fits the width it's shown at.
   if (document.documentElement.scrollWidth > innerWidth + 1) {

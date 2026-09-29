@@ -99,6 +99,10 @@
   --text-body--line-height: var(--text-body--line-height);
   --text-body--letter-spacing: var(--text-body--letter-spacing);
   --text-body--font-weight: var(--text-body--font-weight);
+  --text-control: var(--text-control);
+  --text-control--line-height: var(--text-control--line-height);
+  --text-control--letter-spacing: var(--text-control--letter-spacing);
+  --text-control--font-weight: var(--text-control--font-weight);
   --text-body-sm: var(--text-body-sm);
   --text-body-sm--line-height: var(--text-body-sm--line-height);
   --text-body-sm--letter-spacing: var(--text-body-sm--letter-spacing);

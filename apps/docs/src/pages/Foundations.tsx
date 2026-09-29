@@ -19,6 +19,7 @@ const TYPE: [string, string, string][] = [
   ["title-3", "Separate library", ""],
   ["body-lg", "Run separate copies of any Mac app, each with its own accounts.", ""],
   ["body", "A copy with its own identity, so macOS treats it as a different app.", ""],
+  ["control", "Overview", ""],
   ["body-sm", "Opens at login and quits after 30 minutes unused", ""],
   ["caption", "Last opened 2 minutes ago", ""],
   ["micro", "New", ""],
@@ -75,7 +76,7 @@ export function Foundations() {
       <section className="section">
         <div className="section-head">
           <Heading level={2} size="title-1">
-            Ten text styles
+            Eleven text styles
           </Heading>
           <Text tone="muted">Geist for everything, Instrument Serif for one italic phrase at display sizes, Geist Mono for code on its own surface. Tracking tightens as type grows.</Text>
         </div>

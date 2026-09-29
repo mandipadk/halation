@@ -12,6 +12,9 @@ body { margin: 0; padding: 32px; background: #0b0b0b; color: #f5f5f4; font-famil
 const page = (body, css = "") => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><style>${TOKENS}${css}</style></head><body>${body}</body></html>`
 const words = "<p>Every copy keeps its own accounts, settings and history.</p><p>Open any copy from the menu bar.</p><p>Size</p><p>412 MB</p>"
 
+// The halation phenomenon's own filter, as its script installs it.
+const HALATION = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="hl-halation" x="-40%" y="-120%" width="180%" height="340%" color-interpolation-filters="sRGB"><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.62 1.2 0.22 0 -1.2" result="bright"/><feGaussianBlur in="bright" stdDeviation="2.4" result="near"/><feGaussianBlur in="bright" stdDeviation="18" result="far"/><feFlood style="flood-color:var(--color-halation)" result="coreColor"/><feComposite in="coreColor" in2="near" operator="in" result="coreGlow"/><feFlood style="flood-color:var(--color-halation)" result="edgeColor"/><feComposite in="edgeColor" in2="far" operator="in" result="edgeGlow"/><feMerge><feMergeNode in="edgeGlow"/><feMergeNode in="coreGlow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></svg>`
+
 // [path, what it tries, the rule it must break, the page]
 const BYPASSES = [
   ["/pseudo-eyebrow", "an uppercase, letter-spaced eyebrow drawn in ::before", "R5", page(`<h2 class="e">Features</h2>${words}`, `.e::before { content: "Introducing"; display: block; text-transform: uppercase; letter-spacing: 0.3em; font-size: 12px; }`)],
@@ -41,6 +44,11 @@ const BYPASSES = [
   ["/cloak", "a page that shows the checker something clean", "R5", page(`${words}<div id="x"></div><script>if (!navigator.webdriver && !/Headless/.test(navigator.userAgent)) document.getElementById("x").innerHTML = '<p style="text-transform:uppercase">Introducing Nexus</p>'</script>`)],
   ["/too-wide", "a row wider than a phone", "R23", page(`${words}<div style="width:1400px">Enterprise-grade security, global scale, lightning fast</div>`)],
   ["/light-dark-accent", "a second accent written as light-dark()", "R1", page(`${words}<section style="--color-accent: light-dark(#0f9fb0, #19b8c9)" data-accent="teal"><button style="background:var(--color-accent);color:#111;padding:12px 20px;border:0">Book a demo</button></section>`, `:root { color-scheme: light dark; --color-accent: light-dark(#e2562b, #ff6b3d); }`)],
+  ["/svg-glow", "a glow drawn by an SVG filter on the headline", "R22", page(`${words}<svg width="0" height="0"><filter id="g"><feGaussianBlur stdDeviation="6"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></svg><h1 style="filter:url(#g)">Supercharge your workflow</h1>`)],
+  ["/parent-glow", "a colored drop-shadow on the text's parent", "R22", page(`${words}<div style="filter:drop-shadow(0 0 12px #ff6b3d)"><h1>Supercharge your workflow</h1></div>`)],
+  ["/fake-halation", "a purple glow wearing the halation filter's name", "R22", page(`${words}<svg width="0" height="0"><filter id="hl-halation"><feGaussianBlur stdDeviation="8"/><feFlood flood-color="#8b5cf6"/></filter></svg><section class="hl-halated" style="filter:url(#hl-halation)"><h1>Supercharge your workflow</h1></section>`)],
+  ["/halation-twice", "the real halation bloom on two parts of one page", "R22", page(`${words}${HALATION}<section style="filter:url(#hl-halation)"><h1>Shot on film</h1></section><section style="filter:url(#hl-halation)"><h2>Developed tonight</h2></section>`)],
+  ["/halation-light", "the real halation bloom on a light page", "R22", page(`${words}${HALATION}<section style="filter:url(#hl-halation);background:#f7f6f4;color:#111;padding:24px"><h1>Shot on film</h1></section>`)],
   ["/blank", "a blank page", "empty", page(``)],
   ["/crash", "a page that throws", "error", page(`${words}<script>null.boom()</script>`)],
 ]
@@ -49,6 +57,8 @@ const BYPASSES = [
 const CLEAN = {
   // Light is allowed: a sheen of the light's own colors, on a layer that takes no clicks.
   "/clean": page(`<h1>Every app, twice</h1>${words}<button style="background:#f5f5f4;color:#111;padding:12px 20px;border:0">Download</button><div class="sheen"></div>`, `.sheen { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 30% 20%, rgb(251 243 236 / 12%), transparent 45%); }`),
+  // The halation phenomenon's bloom, once, on a dark ground; and a card's dark shadow.
+  "/clean-halation": page(`<h1>Every app, twice</h1>${words}${HALATION}<section style="filter:url(#hl-halation)"><h2>Shot on film</h2></section><div style="filter:drop-shadow(0 8px 24px rgb(0 0 0 / 60%));padding:20px"><p>A card with a real shadow.</p></div>`),
   // An app as it's really built: tokens written as light-dark(), content rendered by script
   // after load, and a section that rises into view only once it's scrolled to.
   "/clean-app": page(

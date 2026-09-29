@@ -7,6 +7,7 @@
     { "name": "title-3", "size": "20 px", "usage": "Card and group titles." },
     { "name": "body-lg", "size": "18 px", "usage": "Lead paragraphs under a headline." },
     { "name": "body", "size": "16 px", "usage": "Reading text." },
+    { "name": "control", "size": "15 px", "usage": "Labels on tabs, keycaps and segmented controls." },
     { "name": "body-sm", "size": "14 px", "usage": "Interface text: controls, lists, tables." },
     { "name": "caption", "size": "13 px", "usage": "Metadata, helper text, footnotes." },
     { "name": "micro", "size": "12 px", "usage": "Badges, keyboard keys, counters. Never sentences." }

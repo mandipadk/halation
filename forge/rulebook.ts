@@ -98,7 +98,7 @@ export const rules: Rule[] = [
       lint(re`(?<![\w-])tracking-[\w\[\].()%/-]+`, [...UI, ...STYLES, ...SCRIPTS], "error", CORE),
     ],
   },
-  { id: "R7", slug: "ten-styles", says: "Ten named text styles; no other sizes.", why: "A small scale is what makes pages feel composed.", instead: "The nearest style.", caught: ["Theme", "Lint"], lint: [lint(re`\btext-(xs|sm|base|lg|xl|[2-9]xl)\b|\btext-\[[\d.]+(px|rem|em)\]`, UI)] },
+  { id: "R7", slug: "named-styles", says: "Eleven named text styles; no other sizes.", why: "A small scale is what makes pages feel composed.", instead: "The nearest style.", caught: ["Theme", "Lint"], lint: [lint(re`\btext-(xs|sm|base|lg|xl|[2-9]xl)\b|\btext-\[[\d.]+(px|rem|em)\]`, UI)] },
   { id: "R8", slug: "one-serif-phrase", says: "At most one serif phrase in a headline, and only at title sizes and up.", why: "It's an accent in the voice; twice is a costume.", instead: "Plain type for everything else.", caught: ["Page check"] },
   {
     id: "R9", slug: "no-dot-separators", says: "Facts are never joined with dots or bars.", why: "A joined string has to be parsed; structure can be scanned.", instead: "The Facts component, or separate lines with their own weight.", caught: ["Lint", "Page check"],
@@ -162,7 +162,7 @@ export const rules: Rule[] = [
   },
   { id: "R21", slug: "named-exceptions", says: "An exception names the rule it breaks.", why: "A blanket exception silences every rule on its line, including the ones nobody meant to allow.", instead: "An exception needs the rule id it's for, like halation-ignore R9, and a reason.", caught: ["Lint"] },
   {
-    id: "R22", slug: "no-text-glow", says: "No glow on text.", why: "Glowing text is a generated-design cliché, and it hurts legibility.", instead: "Plain text. Light belongs to surfaces and phenomena.", caught: ["Lint", "Page check"],
+    id: "R22", slug: "no-text-glow", says: "No glow on text.", why: "Glowing text is a generated-design cliché, and it hurts legibility.", instead: "Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.", caught: ["Lint", "Page check"],
     lint: [
       lint(re`(?<![\w-])text-shadow\s*:(?!\s*(?:none|inherit|initial|unset|revert|revert-layer)\s*(?:!important\s*)?(?:[;}"'\`\])\n]|$))[^;{}"'\`\n\]]*`, [...UI, ...STYLES, ...SCRIPTS, "svg"], "error", CORE),
       lint(re`(?<![\w$-])textShadow\s*:(?!\s*["'\`]\s*(?:none|inherit|initial|unset)\s*["'\`])[^,}\n]*`, [...UI, ...SCRIPTS], "error", CORE),

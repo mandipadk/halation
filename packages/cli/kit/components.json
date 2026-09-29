@@ -8,7 +8,7 @@
     },
     {
       "name": "Text",
-      "use": "Any running text, in one of the ten styles (size) with an optional tone: muted, subtle, accent or critical.",
+      "use": "Any running text, in one of the eleven styles (size) with an optional tone: muted, subtle, accent or critical.",
       "example": "<Text size=\"body-sm\" tone=\"muted\">Synced a minute ago</Text>"
     },
     {

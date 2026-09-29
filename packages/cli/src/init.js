@@ -78,7 +78,7 @@ export const AGENTS_SECTION = `${START}
 This project's UI follows Halation. Before building or changing any interface, read \`.claude/skills/halation/SKILL.md\`: the rules, the components and what to use for what.
 
 - Reach for \`@halation/react\` before writing markup: \`Facts\` for metadata, \`State\` for status, \`Keys\` for shortcuts, \`Stage\` for a hero atmosphere, one ink \`Button\` for the main action.
-- Use the ten text styles and the color roles. No other font sizes, no literal colors, gradients, uppercase labels or added letter-spacing.
+- Use the eleven text styles and the color roles. No other font sizes, no literal colors, gradients, uppercase labels or added letter-spacing.
 - Run \`npx halation lint\` before you finish; it exits 1 when a rule is broken. With the app running, \`npx halation check <url>\` measures the rendered page.
 - \`npx halation rules\` prints every rule with its reason. A deliberate exception gets a comment saying \`halation-ignore\` and the rule id on that line or the line above.
 ${END}

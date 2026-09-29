@@ -21,7 +21,7 @@ Run `pnpm build` before you call a change done. TypeScript must pass with no err
 - Sentence case everywhere. No uppercase labels and no letter-spaced eyebrows.
 - Facts go in `Facts` or on separate lines. Never join them with `·`, `•` or a bar.
 - Show a state with `State`, never a colored dot.
-- Text comes in ten styles: `display-xl`, `display`, `title-1`, `title-2`, `title-3`, `body-lg`, `body`, `body-sm`, `caption` and `micro`. Use `Text`, `Heading` or the `hl-text-*` classes, not other sizes.
+- Text comes in eleven styles: `display-xl`, `display`, `title-1`, `title-2`, `title-3`, `body-lg`, `body`, `control`, `body-sm`, `caption` and `micro`. `control` is for labels on tabs, keycaps and segmented controls. Use `Text`, `Heading` or the `hl-text-*` classes, not other sizes.
 - Colors come from the tokens (`var(--color-fg)`, `var(--color-accent)` and the rest), never from literal values.
 - No gradients as decoration. Depth comes from the phenomenon on the `Stage`, lit edges and shadows.
 - One ink button per view: the main action. Everything else is secondary or ghost.

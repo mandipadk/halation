@@ -496,7 +496,7 @@ describe("halation lint on disk", () => {
   test("reports file:line:col, the rule and what it says, then why and instead once", () => {
     const r = run("src/bad.tsx", "src/warn.tsx", "src/fine.tsx")
     assert.equal(r.status, 1)
-    assert.match(r.stdout, /^src\/bad\.tsx:1:38 {2}R7 {2}Ten named text styles; no other sizes\./m)
+    assert.match(r.stdout, /^src\/bad\.tsx:1:38 {2}R7 {2}Eleven named text styles; no other sizes\./m)
     assert.match(r.stdout, /src\/warn\.tsx:1:\d+ {2}R10 .*\(warning\)/)
     assert.equal(r.stdout.match(/^ {2}Why:/gm).length, 2)
     assert.match(r.stdout, /Found 1 error and 1 warning in 2 files, out of 3 files linted\./)

@@ -2,8 +2,8 @@
 // bleeds back through the emulsion and bright things get a halo. Here the
 // brightest parts of an element glow in the accent's hue. It's an SVG
 // filter, so it costs no script per frame and can sit over any other
-// phenomenon. On light grounds it steps aside (there is nothing bright
-// enough to bloom) and a faint warm bleed around ink takes its place.
+// phenomenon. On light grounds it steps aside: there is nothing bright
+// enough to bloom. It's the one glow text may take (R22), once per page.
 
 const FILTER_ID = "hl-halation"
 

@@ -5,7 +5,7 @@ description: The Halation design system's rules and React components for this pr
 
 # Halation
 
-This project's look is a set of rules, enforced in code. Build with the components, the ten text styles and the color roles, and the result stays on brand without guessing. `halation lint` and a hook check source as you edit; `halation check` measures the rendered page.
+This project's look is a set of rules, enforced in code. Build with the components, the eleven text styles and the color roles, and the result stays on brand without guessing. `halation lint` and a hook check source as you edit; `halation check` measures the rendered page.
 
 ## Set up
 
@@ -28,7 +28,7 @@ export function App({ children }) {
 - Ink, not color. One accent, spent only where it means something; the main action is ink (R1, R2).
 - Light, not paint. Depth comes from an atmosphere, lit edges and shadows, never decorative gradients (R3, R15).
 - Structure, not strings. Facts get their own lines, states get a word and a shape (R9, R10).
-- Few sizes, plain case. Ten text styles, sentence case, no added tracking (R5, R6, R7).
+- Few sizes, plain case. Eleven text styles, sentence case, no added tracking (R5, R6, R7).
 - Lines before boxes. A hairline or space first; a box only for an object, never a box in a box (R13).
 - Motion explains a change. Under 300 ms, exits faster than enters, nothing moving while idle (R14).
 - Plain words. Sentence case, short labels; errors say what's wrong and how to fix it.
@@ -83,9 +83,9 @@ export function App({ children }) {
 - Instead: The text style for that size.
 - Caught by: Theme, lint.
 
-### R7: Ten named text styles; no other sizes.
+### R7: Eleven named text styles; no other sizes.
 
-- Don't: `text-sm`, `text-2xl`, `text-[13px]`, `font-size: 15px`.
+- Don't: `text-sm`, `text-2xl`, `text-[13px]`, `font-size: 17px`.
 - Do: `<Text size="body-sm">`, `className="text-body-sm"` (Tailwind) or `hl-text-body-sm`.
 - Why: A small scale is what makes pages feel composed.
 - Instead: The nearest style.
@@ -208,7 +208,7 @@ export function App({ children }) {
 - Don't: `text-shadow: 0 0 24px var(--color-accent)` to make a headline glow.
 - Do: Light behind the text: a `<Stage>` phenomenon with the headline marked `data-quiet`.
 - Why: Glowing text is a generated-design cliché, and it hurts legibility.
-- Instead: Plain text. Light belongs to surfaces and phenomena.
+- Instead: Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.
 - Caught by: Lint, page check.
 
 ### R23: Pages fit a phone: nothing scrolls sideways.
@@ -263,7 +263,7 @@ export function App({ children }) {
 All from `@halation/react`.
 
 - **HalationProvider**: Wrap the app once. Sets accent, tempo and theme, hosts tooltips and toasts, and puts on the project's signature. `<HalationProvider name="Lumen" accent="vermilion">{children}</HalationProvider>`
-- **Text**: Any running text, in one of the ten styles (size) with an optional tone: muted, subtle, accent or critical. `<Text size="body-sm" tone="muted">Synced a minute ago</Text>`
+- **Text**: Any running text, in one of the eleven styles (size) with an optional tone: muted, subtle, accent or critical. `<Text size="body-sm" tone="muted">Synced a minute ago</Text>`
 - **Heading**: Headlines. level sets the element and its default style (1 is display-xl, 3 is title-1); size overrides the style. `<Heading level={3}>Storage</Heading>`
 - **Serif**: The one italic serif phrase inside a headline, at title sizes and up (R8). `<Heading level={1}>Every app, <Serif>twice</Serif></Heading>`
 - **Value**: A number with tabular figures and a quieter unit. `<Value unit="MB">412</Value>`
@@ -319,7 +319,7 @@ All from `@halation/react`.
 - **LightTable**: A file drop zone that backlights under the dragged file; dropped photos land as prints that develop. For uploads, avatars and imports. `<LightTable onFiles={upload} />`
 - **icons**: The system's glyphs: CheckIcon, PlayIcon, WrenchIcon, StopIcon, PencilIcon, InfoIcon, AlertIcon, ChevronIcon, CloseIcon. Use these or a real icon set, never emoji. `<icons.CheckIcon />`
 
-## The ten text styles
+## The eleven text styles
 
 Use `<Text size>`, `<Heading size>`, `hl-text-<name>`, or `text-<name>` in Tailwind. No other sizes.
 
@@ -332,6 +332,7 @@ Use `<Text size>`, `<Heading size>`, `hl-text-<name>`, or `text-<name>` in Tailw
 | title-3 | 20 px | Card and group titles. |
 | body-lg | 18 px | Lead paragraphs under a headline. |
 | body | 16 px | Reading text. |
+| control | 15 px | Labels on tabs, keycaps and segmented controls. |
 | body-sm | 14 px | Interface text: controls, lists, tables. |
 | caption | 13 px | Metadata, helper text, footnotes. |
 | micro | 12 px | Badges, keyboard keys, counters. Never sentences. |

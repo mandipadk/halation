@@ -1,4 +1,4 @@
-/* Halation base: element defaults, the ten text styles, tempo. Works with
+/* Halation base: element defaults, the eleven text styles, tempo. Works with
    or without Tailwind; everything reads the generated tokens. */
 
 :root {
@@ -40,9 +40,9 @@ body {
 ::selection { background: color-mix(in oklab, var(--color-accent) 38%, transparent); color: var(--color-fg); }
 :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
 
-/* The ten text styles */
+/* The eleven text styles */
 .hl-text-display-xl, .hl-text-display, .hl-text-title-1, .hl-text-title-2, .hl-text-title-3,
-.hl-text-body-lg, .hl-text-body, .hl-text-body-sm, .hl-text-caption, .hl-text-micro { margin: 0; }
+.hl-text-body-lg, .hl-text-body, .hl-text-control, .hl-text-body-sm, .hl-text-caption, .hl-text-micro { margin: 0; }
 .hl-text-display-xl { font-size: var(--text-display-xl); line-height: var(--text-display-xl--line-height); letter-spacing: var(--text-display-xl--letter-spacing); font-weight: var(--text-display-xl--font-weight); }
 .hl-text-display { font-size: var(--text-display); line-height: var(--text-display--line-height); letter-spacing: var(--text-display--letter-spacing); font-weight: var(--text-display--font-weight); }
 .hl-text-title-1 { font-size: var(--text-title-1); line-height: var(--text-title-1--line-height); letter-spacing: var(--text-title-1--letter-spacing); font-weight: var(--text-title-1--font-weight); }
@@ -50,6 +50,7 @@ body {
 .hl-text-title-3 { font-size: var(--text-title-3); line-height: var(--text-title-3--line-height); letter-spacing: var(--text-title-3--letter-spacing); font-weight: var(--text-title-3--font-weight); }
 .hl-text-body-lg { font-size: var(--text-body-lg); line-height: var(--text-body-lg--line-height); letter-spacing: var(--text-body-lg--letter-spacing); font-weight: var(--text-body-lg--font-weight); }
 .hl-text-body { font-size: var(--text-body); line-height: var(--text-body--line-height); letter-spacing: var(--text-body--letter-spacing); font-weight: var(--text-body--font-weight); }
+.hl-text-control { font-size: var(--text-control); line-height: var(--text-control--line-height); letter-spacing: var(--text-control--letter-spacing); font-weight: var(--text-control--font-weight); }
 .hl-text-body-sm { font-size: var(--text-body-sm); line-height: var(--text-body-sm--line-height); letter-spacing: var(--text-body-sm--letter-spacing); font-weight: var(--text-body-sm--font-weight); }
 .hl-text-caption { font-size: var(--text-caption); line-height: var(--text-caption--line-height); letter-spacing: var(--text-caption--letter-spacing); font-weight: var(--text-caption--font-weight); }
 .hl-text-micro { font-size: var(--text-micro); line-height: var(--text-micro--line-height); letter-spacing: var(--text-micro--letter-spacing); font-weight: var(--text-micro--font-weight); }

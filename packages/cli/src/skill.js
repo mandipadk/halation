@@ -15,7 +15,7 @@ const EXAMPLES = {
   R4: { dont: "Gray text on a tinted panel, checked in light mode only.", do: "The text roles (`text-fg`, `text-fg-muted`, `text-fg-subtle`) on the surface roles." },
   R5: { dont: "`className=\"uppercase\"`, `text-transform: uppercase`, or typing a label in capitals.", do: "`<Text size=\"caption\" tone=\"muted\">Recent projects</Text>`" },
   R6: { dont: "`tracking-widest`, `tracking-[0.2em]`, `letter-spacing: 0.1em`.", do: "The text style alone; each one sets its own tracking." },
-  R7: { dont: "`text-sm`, `text-2xl`, `text-[13px]`, `font-size: 15px`.", do: "`<Text size=\"body-sm\">`, `className=\"text-body-sm\"` (Tailwind) or `hl-text-body-sm`." },
+  R7: { dont: "`text-sm`, `text-2xl`, `text-[13px]`, `font-size: 17px`.", do: "`<Text size=\"body-sm\">`, `className=\"text-body-sm\"` (Tailwind) or `hl-text-body-sm`." },
   R8: { dont: "Two serif phrases in a headline, or a serif word in body text.", do: "`<Heading level={1}>Every app, <Serif>twice</Serif></Heading>`" },
   R9: { dont: "`<p>Copy of Claude · 412 MB</p>` or `{name} | {size}` in text. <!-- halation-ignore R9 -->", do: "`<Facts items={[[\"Name\", \"Copy of Claude\"], [\"Size\", \"412 MB\"]]} />`" },
   R10: { dont: "`<span className=\"size-2 rounded-full bg-green-500\" />` before a word, or a tinted pill with a dot.", do: "`<State kind=\"done\">Synced</State>`" },
@@ -38,7 +38,7 @@ const PRINCIPLES = [
   "Ink, not color. One accent, spent only where it means something; the main action is ink (R1, R2).",
   "Light, not paint. Depth comes from an atmosphere, lit edges and shadows, never decorative gradients (R3, R15).",
   "Structure, not strings. Facts get their own lines, states get a word and a shape (R9, R10).",
-  "Few sizes, plain case. Ten text styles, sentence case, no added tracking (R5, R6, R7).",
+  "Few sizes, plain case. Eleven text styles, sentence case, no added tracking (R5, R6, R7).",
   "Lines before boxes. A hairline or space first; a box only for an object, never a box in a box (R13).",
   "Motion explains a change. Under 300 ms, exits faster than enters, nothing moving while idle (R14).",
   "Plain words. Sentence case, short labels; errors say what's wrong and how to fix it.",
@@ -85,7 +85,7 @@ export async function renderSkill({ rules = loadRules() } = {}) {
     "",
     "# Halation",
     "",
-    "This project's look is a set of rules, enforced in code. Build with the components, the ten text styles and the color roles, and the result stays on brand without guessing. `halation lint` and a hook check source as you edit; `halation check` measures the rendered page.",
+    "This project's look is a set of rules, enforced in code. Build with the components, the eleven text styles and the color roles, and the result stays on brand without guessing. `halation lint` and a hook check source as you edit; `halation check` measures the rendered page.",
     "",
     "## Set up",
     "",
@@ -123,7 +123,7 @@ export async function renderSkill({ rules = loadRules() } = {}) {
   for (const n of needs) out.push(`| ${cell(n.need)} | ${cell(n.use)} |`)
   out.push("", "## Components", "", "All from `@halation/react`.", "")
   for (const c of components) out.push(`- **${c.name}**: ${c.use} \`${c.example}\``)
-  out.push("", "## The ten text styles", "", "Use `<Text size>`, `<Heading size>`, `hl-text-<name>`, or `text-<name>` in Tailwind. No other sizes.", "", "| Style | Size | For |", "| --- | --- | --- |")
+  out.push("", "## The eleven text styles", "", "Use `<Text size>`, `<Heading size>`, `hl-text-<name>`, or `text-<name>` in Tailwind. No other sizes.", "", "| Style | Size | For |", "| --- | --- | --- |")
   for (const t of textStyles) out.push(`| ${t.name} | ${t.size} | ${t.usage} |`)
   out.push(
     "",

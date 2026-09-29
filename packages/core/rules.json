@@ -194,8 +194,8 @@
   },
   {
     "id": "R7",
-    "slug": "ten-styles",
-    "says": "Ten named text styles; no other sizes.",
+    "slug": "named-styles",
+    "says": "Eleven named text styles; no other sizes.",
     "why": "A small scale is what makes pages feel composed.",
     "instead": "The nearest style.",
     "caught": [
@@ -670,7 +670,7 @@
     "slug": "no-text-glow",
     "says": "No glow on text.",
     "why": "Glowing text is a generated-design cliché, and it hurts legibility.",
-    "instead": "Plain text. Light belongs to surfaces and phenomena.",
+    "instead": "Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.",
     "caught": [
       "Lint",
       "Page check"

@@ -39,7 +39,7 @@ describe("halation lint --hook", () => {
     assert.equal(r.status, 2)
     assert.equal(r.stdout, "")
     assert.match(r.stderr, /in src\/bad\.tsx/)
-    assert.match(r.stderr, /Line 2, R7: Ten named text styles; no other sizes\. Found "text-sm"\. Instead: The nearest style\./)
+    assert.match(r.stderr, /Line 2, R7: Eleven named text styles; no other sizes\. Found "text-sm"\. Instead: The nearest style\./)
     assert.match(r.stderr, /Line 2, R9: Facts are never joined with dots or bars\..*Instead: The Facts component/)
   })
 
