@@ -1165,9 +1165,29 @@ function lineCol(text, offset) {
  * are the custom properties defined alongside (by default, the sheet's own).
  * Returns findings sorted by position.
  */
+/** Cascade layers in the order a stylesheet first names them, each with where it's first named. */
+export function layerOrder(text) {
+  const bare = text.replace(/\/\*[\s\S]*?\*\//g, (m) => " ".repeat(m.length))
+  const seen = new Map()
+  for (const m of bare.matchAll(/@layer\s+([\w.-]+(?:\s*,\s*[\w.-]+)*)\s*[;{]|@import[^;]*?\blayer\(\s*([\w.-]+)\s*\)/g)) {
+    for (const name of (m[1] ?? m[2]).split(",").map((n) => n.trim())) if (!seen.has(name)) seen.set(name, m.index)
+  }
+  return [...seen].map(([name, offset]) => ({ name, offset }))
+}
+
 export function gateCss(text, { file = "styles.css", own = null, rules = loadRules(), decls = null, where = null, defs = null, counterexamples = false, exempted = { counterexamples: 0 }, inCounterexample = false } = {}) {
   const byId = new Map(rules.map((r) => [r.id, r]))
   const findings = []
+  // R27: where Halation's lock is in a stylesheet, it has to be the first layer named.
+  if (!where) {
+    const order = layerOrder(text)
+    const lock = order.findIndex((l) => l.name === "halation-lock")
+    if (lock > 0) {
+      const { line, column } = lineCol(text, order[0].offset)
+      const before = order.slice(0, lock).map((l) => l.name).join(", ")
+      findings.push({ file, line, column, rule: "R27", says: byId.get("R27")?.says ?? "", selector: `@layer ${order[0].name}`, property: "", value: "", found: clip(`@layer ${before} comes before halation-lock`) })
+    }
+  }
   decls ??= parseCss(text)
   defs ??= definitions(decls, own)
   for (const d of decls) {

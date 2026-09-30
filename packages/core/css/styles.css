@@ -1,4 +1,7 @@
-/* Everything Halation styles, in order. Import once, near the top of your app. */
+/* Everything Halation styles, in order. Import once, near the top of your app,
+   before any stylesheet that declares its own layers, so the lock comes first. */
+@layer halation-lock;
+@import "./lock.css" layer(halation-lock);
 @import "./tokens.css";
 @import "./base.css";
 @import "./components.css";

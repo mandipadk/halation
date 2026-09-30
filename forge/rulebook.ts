@@ -179,4 +179,5 @@ export const rules: Rule[] = [
       lint(re`["'\`]--m-[\w-]+["'\`]\s*[:,]|--m-[\w-]+\s*:[^;"'\`]*;?\s*["'\`}]`, [...UI, ...SCRIPTS], "error"),
     ],
   },
+  { id: "R27", slug: "lock-first", says: "Halation's lock layer comes before any other layer.", why: "The lock holds a few rules in the browser itself, and it only outranks everything when it's declared first.", instead: "Import Halation's styles (or its Tailwind entry) before any stylesheet that declares its own layers.", caught: ["Build gate"] },
 ]

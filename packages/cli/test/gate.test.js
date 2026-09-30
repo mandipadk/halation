@@ -494,3 +494,24 @@ describe("halation gate", () => {
     assert.match(out, /^a\.css\n {2}1:2 {2}R7 {2}x Found "font-size: 1px" in \.a\.\n {2}1:9 {2}R17 {2}y Found "color: red" in \.b\.\n\nb\.html\n {2}3:1/)
   })
 })
+
+describe("the lock comes first (R27)", () => {
+  test("a stylesheet whose first layer is the lock passes", () => {
+    const text = "@layer halation-lock;\n@layer theme, base, components, utilities;\n@layer halation-lock { .x { text-transform: none !important; } }"
+    assert.deepEqual(gateCss(text).filter((f) => f.rule === "R27"), [])
+  })
+  test("a layer declared before the lock is refused, where it's declared", () => {
+    const text = "/* a reset */\n@layer reset, base;\n@layer halation-lock;\n@layer halation-lock { .x { text-transform: none !important; } }"
+    const found = gateCss(text).filter((f) => f.rule === "R27")
+    assert.equal(found.length, 1)
+    assert.equal(found[0].line, 2)
+    assert.match(found[0].found, /reset, base comes before halation-lock/)
+  })
+  test("a layer from an import counts too", () => {
+    const text = '@import "./reset.css" layer(reset);\n@layer halation-lock;'
+    assert.equal(gateCss(text).filter((f) => f.rule === "R27").length, 1)
+  })
+  test("a stylesheet without the lock isn't judged on order", () => {
+    assert.deepEqual(gateCss("@layer reset;\n.a { color: var(--color-fg); }").filter((f) => f.rule === "R27"), [])
+  })
+})

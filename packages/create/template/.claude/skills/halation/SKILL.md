@@ -244,6 +244,14 @@ export function App({ children }) {
 - Instead: Declare it in the component's stylesheet as --m-name, with a comment on the same line saying why: --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */. Not in a style attribute or script.
 - Caught by: Lint.
 
+### R27: Halation's lock layer comes before any other layer.
+
+- Don't: Halation's lock layer comes before any other layer.
+- Do: Import Halation's styles (or its Tailwind entry) before any stylesheet that declares its own layers.
+- Why: The lock holds a few rules in the browser itself, and it only outranks everything when it's declared first.
+- Instead: Import Halation's styles (or its Tailwind entry) before any stylesheet that declares its own layers.
+- Caught by: Build gate.
+
 ## What to use for what
 
 | Need | Use |

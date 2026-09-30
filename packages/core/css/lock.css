@@ -1,0 +1,13 @@
+/* The lock: the rules the browser can hold by itself. It's imported into the
+   halation-lock layer, which is declared before any other, and for !important
+   declarations the earliest layer wins. So nothing a page adds turns these off,
+   not even Tailwind's !uppercase. Only an !important in a style attribute gets
+   past it, and the page check reports that. A design system's own deliberate
+   counterexamples are left alone. */
+:not([data-counterexample], [data-counterexample] *),
+:not([data-counterexample], [data-counterexample] *)::before,
+:not([data-counterexample], [data-counterexample] *)::after {
+  text-transform: none !important;
+  font-variant-caps: normal !important;
+  text-shadow: none !important;
+}

@@ -17,6 +17,9 @@ const words = "<p>Every copy keeps its own accounts, settings and history.</p><p
 // The halation phenomenon's own filter, as its script installs it.
 const HALATION = `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="hl-halation" x="-40%" y="-120%" width="180%" height="340%" color-interpolation-filters="sRGB"><feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.62 1.2 0.22 0 -1.2" result="bright"/><feGaussianBlur in="bright" stdDeviation="2.4" result="near"/><feGaussianBlur in="bright" stdDeviation="18" result="far"/><feFlood style="flood-color:var(--color-halation)" result="coreColor"/><feComposite in="coreColor" in2="near" operator="in" result="coreGlow"/><feFlood style="flood-color:var(--color-halation)" result="edgeColor"/><feComposite in="edgeColor" in2="far" operator="in" result="edgeGlow"/><feMerge><feMergeNode in="edgeGlow"/><feMergeNode in="coreGlow"/><feMergeNode in="SourceGraphic"/></feMerge></filter></svg>`
 
+// Halation's lock, as core ships it: declared first, so its !important wins.
+const LOCK = `@layer halation-lock;\n@layer halation-lock { ${readFileSync(new URL("../../core/css/lock.css", import.meta.url), "utf8")} }`
+
 // [path, what it tries, the rule it must break, the page]
 const BYPASSES = [
   ["/pseudo-eyebrow", "an uppercase, letter-spaced eyebrow drawn in ::before", "R5", page(`<h2 class="e">Features</h2>${words}`, `.e::before { content: "Introducing"; display: block; text-transform: uppercase; letter-spacing: 0.3em; font-size: 12px; }`)],
@@ -56,6 +59,7 @@ const BYPASSES = [
   ["/off-grid", "padding nudged off the grid", "R24", page(`${words}<div style="padding:13px">Enterprise ready</div>`)],
   ["/odd-corner", "a corner that isn't on the scale", "R25", page(`${words}<div style="border-radius:7px;background:#1a1a1a;padding:16px;width:200px">Enterprise ready</div>`)],
   ["/fake-nest", "an odd corner inside a rounded parent that doesn't nest", "R25", page(`${words}<div style="border-radius:20px;padding:4px;background:#151515"><div style="border-radius:7px;background:#222;padding:16px">Enterprise ready</div></div>`)],
+  ["/past-the-lock", "uppercase forced with !important in a style attribute, past the lock", "R5", page(`${words}<p style="text-transform:uppercase !important">Limited offer</p>`, LOCK)],
   ["/blank", "a blank page", "empty", page(``)],
   ["/crash", "a page that throws", "error", page(`${words}<script>null.boom()</script>`)],
 ]
@@ -75,6 +79,13 @@ const CLEAN = {
     .outer { border-radius: 18px; padding: 6px; background: #151515; }
     .inner { border-radius: 12px; padding: 12px; background: #222; }
     .section { padding-block: var(--space-section); }`,
+  ),
+  // The lock holds: uppercase and glow forced with !important, unlayered or in a later layer, don't render.
+  "/clean-lock": page(
+    `<h1 class="shout">Every app, twice</h1>${words}<p class="uppercase">Open any copy from the menu bar</p>`,
+    `${LOCK}
+    @layer utilities { .uppercase { text-transform: uppercase !important; } }
+    .shout { text-transform: uppercase !important; font-variant-caps: all-small-caps !important; text-shadow: 0 0 24px #ff6b3d !important; }`,
   ),
   // An app as it's really built: tokens written as light-dark(), content rendered by script
   // after load, and a section that rises into view only once it's scrolled to.
