@@ -192,6 +192,11 @@ describe("halation init", () => {
       assert.equal(hook(dir, GUARD_COMMAND, { tool_name: "Write", tool_input: { file_path: path.join(dir, HOOK_SCRIPT_PATH), content: "exit 0" } }).status, 2)
     })
 
+    test("the starter ships the current script", () => {
+      const shipped = readFileSync(fileURLToPath(new URL("../../create/template/.halation/hooks.sh", import.meta.url)), "utf8")
+      assert.equal(shipped, HOOK_SCRIPT)
+    })
+
     test("without the script, every hook blocks", () => {
       const dir = project(real)
       rmSync(path.join(dir, HOOK_SCRIPT_PATH))

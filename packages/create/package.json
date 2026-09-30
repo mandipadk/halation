@@ -1,6 +1,6 @@
 {
   "name": "create-halation",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Start a new React project with Halation: the styles, the components, and an agent kit that keeps every page on-brand.",
   "license": "MIT",
   "type": "module",
@@ -15,7 +15,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "node ../cli/bin/halation.js skill > template/.claude/skills/halation/SKILL.md",
+    "build": "node ../cli/bin/halation.js skill > template/.claude/skills/halation/SKILL.md && node -e \"import('../cli/src/init.js').then((m) => require('node:fs').writeFileSync('template/.halation/hooks.sh', m.HOOK_SCRIPT))\"",
     "test": "node --test \"test/*.test.js\""
   },
   "repository": {

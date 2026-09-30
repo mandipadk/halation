@@ -15,20 +15,21 @@ case "$1" in
 esac
 status=$?
 [ "$status" -eq 0 ] && exit 0
-[ "$status" -ne 127 ] && exit 2
+[ "$status" -eq 2 ] && exit 2
+# Halation isn't installed, or couldn't run.
 case "$1" in
   guard)
     printf '%s' "$input" | grep -Eq '"command"[[:space:]]*:[[:space:]]*"(npm|pnpm|yarn|bun)[[:space:]]+(install|i|ci|add)([[:space:]"]|$)' && exit 0
-    echo "Halation isn't installed in this project yet, so changes are blocked until it is. Install the project's dependencies first, with npm install or your package manager's install." >&2
+    echo "Halation isn't installed in this project, or couldn't run, so changes are blocked until it can. Install the project's dependencies first, with npm install or your package manager's install." >&2
     exit 2 ;;
   stop)
     if printf '%s' "$input" | grep -Eq '"stop_hook_active"[[:space:]]*:[[:space:]]*true'; then
-      echo '{"systemMessage": "Halation is not installed, so the design rules were not checked before this turn ended."}'
+      echo '{"systemMessage": "Halation is not installed or could not run, so the design rules were not checked before this turn ended."}'
       exit 0
     fi
-    echo "Halation isn't installed, so the design rules can't be checked. Install the project's dependencies, then finish." >&2
+    echo "Halation isn't installed or couldn't run, so the design rules can't be checked. Install the project's dependencies, then finish." >&2
     exit 2 ;;
   *)
-    echo "Halation isn't installed, so this change wasn't linted. Install the project's dependencies." >&2
+    echo "Halation isn't installed or couldn't run, so this change wasn't linted. Install the project's dependencies." >&2
     exit 2 ;;
 esac
