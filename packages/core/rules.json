@@ -388,7 +388,8 @@
     "caught": [
       "Theme",
       "Lint",
-      "Build gate"
+      "Build gate",
+      "Page check"
     ],
     "lint": [
       {

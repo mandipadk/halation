@@ -9,7 +9,7 @@ import { checkerSource, checkUrl, formatCheck, toUrl } from "../src/check.js"
 const BIN = fileURLToPath(new URL("../bin/halation.js", import.meta.url))
 const DOT = "\u00b7"
 // The shipped scale: text sizes, radii and named spaces, so sizes on these pages are measured against it.
-const SCALE = `:root {${readFileSync(new URL("../../core/css/tokens.css", import.meta.url), "utf8").split("\n").filter((l) => /^\s*--(text|radius|space|spacing)[\w-]*:/.test(l)).join("\n")}}\n${readFileSync(new URL("../../core/css/base.css", import.meta.url), "utf8").split("\n").filter((l) => /^:where\((h1|h2|h3|h4|button)/.test(l)).join("\n")}`
+const SCALE = `:root { --color-canvas: #ffffff; --color-fg: #111111;${readFileSync(new URL("../../core/css/tokens.css", import.meta.url), "utf8").split("\n").filter((l) => /^\s*--(text|radius|space|spacing)[\w-]*:/.test(l)).join("\n")}}\n${readFileSync(new URL("../../core/css/base.css", import.meta.url), "utf8").split("\n").filter((l) => /^:where\((h1|h2|h3|h4|button)/.test(l)).join("\n")}`
 const page = (body) => `<!doctype html><html><head><meta charset="utf-8"><style>${SCALE}</style></head><body style="background:#fff;color:#111;font-family:Georgia">${body}</body></html>`
 const PAGES = {
   "/joined": page(`<p>A ${DOT} B</p>`),

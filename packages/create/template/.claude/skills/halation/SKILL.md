@@ -162,7 +162,7 @@ export function App({ children }) {
 - Do: Color roles: `bg-surface`, `text-fg-muted`, `border-line`, `bg-accent`.
 - Why: A literal color is a color the system can't check, theme or keep in contrast.
 - Instead: A color role: bg-surface, text-fg-muted, border-line and so on.
-- Caught by: Theme, lint, build gate.
+- Caught by: Theme, lint, build gate, page check.
 
 ### R18: Type comes from the project's lens: its display, text and code faces.
 

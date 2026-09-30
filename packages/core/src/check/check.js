@@ -286,6 +286,65 @@ function radiiAt(cs) {
   return out
 }
 
+/** sRGB to OKLab. */
+function oklab([r, g, b]) {
+  const [R, G, B] = [lin(r), lin(g), lin(b)]
+  const l = Math.cbrt(0.4122214708 * R + 0.5363325363 * G + 0.0514459929 * B)
+  const m = Math.cbrt(0.2119034982 * R + 0.6806995451 * G + 0.1073969566 * B)
+  const s = Math.cbrt(0.0883024619 * R + 0.2817188376 * G + 0.6299787005 * B)
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s]
+}
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2])
+/** Distance from a point to the segment between two others, all in OKLab. */
+function toSegment(p, a, b) {
+  const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]]
+  const len = ab[0] ** 2 + ab[1] ** 2 + ab[2] ** 2
+  const t = len ? Math.max(0, Math.min(1, ((p[0] - a[0]) * ab[0] + (p[1] - a[1]) * ab[1] + (p[2] - a[2]) * ab[2]) / len)) : 0
+  return dist(p, [a[0] + t * ab[0], a[1] + t * ab[1], a[2] + t * ab[2]])
+}
+
+/**
+ * The color roles in scope at an element, as OKLab points: every --color-*
+ * it inherits (a data-accent preset retints some), and any color a component
+ * metric (--m-*) declares. Cached by what the element actually sees.
+ */
+function paletteAt(el, cs) {
+  let key = cs.colorScheme
+  const names = []
+  for (let i = 0; i < cs.length; i++) if (cs[i].startsWith("--color-") || cs[i].startsWith("--m-")) names.push(cs[i])
+  const raws = names.map((n) => cs.getPropertyValue(n).trim())
+  key += raws.join("|")
+  const cache = (paletteAt.cache ??= new Map())
+  if (cache.has(key)) return cache.get(key)
+  const probe = (paletteAt.probe ??= document.createElement("i"))
+  if (!probe.isConnected) document.documentElement.append(probe)
+  const points = []
+  raws.forEach((raw, i) => {
+    if (names[i].startsWith("--m-") && !/^(#|rgb|hsl|hwb|lab|lch|oklab|oklch|color|light-dark|color-mix|var)\b|^#/i.test(raw)) return
+    probe.style.cssText = ""
+    probe.style.cssText = `display: none; color-scheme: ${cs.colorScheme}; color: ${raw}`
+    if (!probe.style.color) return
+    const c = parseColor(getComputedStyle(probe).color)
+    if (c[3] > 0) points.push(oklab(c))
+  })
+  const palette = { points }
+  cache.set(key, palette)
+  return palette
+}
+
+/** Whether a color is a role (at any strength) or a mix of two roles. */
+function inPalette(c, palette) {
+  const key = c.slice(0, 3).join(",")
+  const seen = (palette.seen ??= new Map())
+  if (!seen.has(key)) seen.set(key, onPalette(oklab(c), palette.points))
+  return seen.get(key)
+}
+function onPalette(p, pts) {
+  if (pts.some((q) => dist(p, q) < 0.02)) return true
+  return false
+}
+const hex = (c) => "#" + c.slice(0, 3).map((v) => Math.round(v * 255).toString(16).padStart(2, "0")).join("")
+
 const near = (v, list, tolerance = 0.5) => list.some((x) => Math.abs(x - v) <= tolerance)
 /** The spacing grid: 2 px steps up to 24, then 4 px steps. A 1 px hairline is fine too. */
 const onGrid = (v) => v <= 1.5 || (v <= 24.5 ? Math.abs(v / 2 - Math.round(v / 2)) * 2 <= 0.5 : Math.abs(v / 4 - Math.round(v / 4)) * 4 <= 0.5)
@@ -408,7 +467,9 @@ export function check(root = document.body, { counterexamples = false, examples:
 
     // R7, R24 and R25: sizes, spacing and corners are members of the scale, follow a
     // declared relation, or are a metric their component declares. Samples keep their own.
-    if (!drawing && !sample) {
+    // A visually hidden element (a clipped 1 px input a library keeps for forms) isn't seen, so it isn't measured.
+    const unseen = r.width <= 1 || r.height <= 1 || (cs.clip && cs.clip !== "auto") || /inset\(\s*50%/.test(cs.clipPath)
+    if (!drawing && !sample && !unseen) {
       const metrics = metricsAt(el, cs)
       let byMetric = false
       if (hasText) {
@@ -443,6 +504,19 @@ export function check(root = document.body, { counterexamples = false, examples:
         }
       }
       if (byMetric) exempted.metrics++
+
+      // R17: every color drawn is a role in scope, a mix of two roles, or a component's declared color.
+      const palette = paletteAt(el, cs)
+      const drawn = []
+      if (hasText) drawn.push(["color", cs.color])
+      drawn.push(["background", cs.backgroundColor])
+      for (const side of ["Top", "Right", "Bottom", "Left"]) if (parseFloat(cs[`border${side}Width`]) > 0) drawn.push(["border", cs[`border${side}Color`]])
+      for (const [what, css] of drawn) {
+        const c = parseColor(css)
+        if (c[3] < 0.02 || inPalette(c, palette)) continue
+        note("R17", el, "", `${what} ${hex(c)}`)
+        break
+      }
     }
 
     // R11: monospace loose on the page rather than inside a surface.
@@ -541,6 +615,7 @@ export function check(root = document.body, { counterexamples = false, examples:
   }
   tokenColor.probe?.remove()
   metricsAt.probe?.remove()
+  paletteAt.probe?.remove()
 
   const RULES = [
     ["R1", "One accent, used as a signal"],
@@ -554,6 +629,7 @@ export function check(root = document.body, { counterexamples = false, examples:
     ["R10", "No status dots"],
     ["R11", "Monospace only inside a surface"],
     ["R14", "Interface motion is quick, and nothing loops"],
+    ["R17", "Colors come from the roles"],
     ["R22", "No glow on text"],
     ["R23", "Pages fit a phone: nothing scrolls sideways"],
     ["R24", "Spacing sits on the grid"],

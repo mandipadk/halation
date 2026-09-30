@@ -8,7 +8,7 @@ import { after, before, describe, test } from "node:test"
 import { checkUrl } from "../src/check.js"
 
 const DOT = "·"
-const TOKENS = `:root { --color-accent: #ff6b3d; --color-ink: #f5f5f4; --color-positive: #3fbf7f; --color-warning: #e0a13a; --color-critical: #e5484d; --color-light-core: #fbf3ec; --color-light-edge: #f0b89a; --color-halation: #f06a3c; }
+const TOKENS = `:root { --color-canvas: #0b0b0b; --color-fg: #f5f5f4; --color-on-ink: #111111; --color-surface: #151515; --color-raised: #222222; --color-line-strong: #444444; --color-accent: #ff6b3d; --color-ink: #f5f5f4; --color-positive: #3fbf7f; --color-warning: #e0a13a; --color-critical: #e5484d; --color-light-core: #fbf3ec; --color-light-edge: #f0b89a; --color-halation: #f06a3c; }
 body { margin: 0; padding: 32px; background: #0b0b0b; color: #f5f5f4; font-family: Georgia, serif; font-size: 16px; }
 :root {${readFileSync(new URL("../../core/css/tokens.css", import.meta.url), "utf8").split("\n").filter((l) => /^\s*--(text|radius|space|spacing)[\w-]*:/.test(l)).join("\n")}}\n${readFileSync(new URL("../../core/css/base.css", import.meta.url), "utf8").split("\n").filter((l) => /^:where\((h1|h2|h3|h4|button)/.test(l)).join("\n")}`
 const page = (body, css = "") => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><style>${TOKENS}${css}</style></head><body>${body}</body></html>`
@@ -60,6 +60,8 @@ const BYPASSES = [
   ["/odd-corner", "a corner that isn't on the scale", "R25", page(`${words}<div style="border-radius:7px;background:#1a1a1a;padding:16px;width:200px">Enterprise ready</div>`)],
   ["/fake-nest", "an odd corner inside a rounded parent that doesn't nest", "R25", page(`${words}<div style="border-radius:20px;padding:4px;background:#151515"><div style="border-radius:7px;background:#222;padding:16px">Enterprise ready</div></div>`)],
   ["/past-the-lock", "uppercase forced with !important in a style attribute, past the lock", "R5", page(`${words}<p style="text-transform:uppercase !important">Limited offer</p>`, LOCK)],
+  ["/stray-grey", "a grey that isn't one of the roles", "R17", page(`${words}<p style="color:#9a9a9a">Trusted by 10,000 teams</p>`)],
+  ["/runtime-color", "a color set by script after the build", "R17", page(`${words}<div id="c" style="padding:16px">Now with insights</div><script>document.getElementById("c").style.background = "#0f766e"</script>`)],
   ["/blank", "a blank page", "empty", page(``)],
   ["/crash", "a page that throws", "error", page(`${words}<script>null.boom()</script>`)],
 ]
@@ -86,6 +88,12 @@ const CLEAN = {
     `${LOCK}
     @layer utilities { .uppercase { text-transform: uppercase !important; } }
     .shout { text-transform: uppercase !important; font-variant-caps: all-small-caps !important; text-shadow: 0 0 24px #ff6b3d !important; }`,
+  ),
+  // Colors that are allowed: a role at partial strength, and a color a component declares with its reason.
+  "/clean-colors": page(
+    `<h1>Every app, twice</h1>${words}<p class="soft">Opened two hours ago</p><figure class="print"><figcaption>Shot on film</figcaption></figure>`,
+    `.soft { color: color-mix(in oklab, var(--color-fg) 70%, transparent); }
+    .print { --m-paper: #f4efe6; /* photographic paper, a warm white in either mode */ background: var(--m-paper); color: var(--color-on-ink); padding: 16px; margin: 0; }`,
   ),
   // An app as it's really built: tokens written as light-dark(), content rendered by script
   // after load, and a section that rises into view only once it's scrolled to.

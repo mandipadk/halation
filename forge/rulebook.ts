@@ -125,7 +125,7 @@ export const rules: Rule[] = [
   { id: "R14", slug: "motion-laws", says: "Interface motion stays under 300 ms, exits take 70% of the enter, nothing loops while idle.", why: "Motion should explain a change, never make anyone wait.", instead: "The moves and their durations.", caught: ["Theme", "Page check"] },
   { id: "R15", slug: "one-atmosphere", says: "One atmosphere per page, and it dims behind content.", why: "An atmosphere is a place, not a decoration.", instead: "The page's one light, with its quiet zone.", caught: ["Page check"] },
   {
-    id: "R17", slug: "raw-colors", says: "Colors come from tokens, never from literal values in markup.", why: "A literal color is a color the system can't check, theme or keep in contrast.", instead: "A color role: bg-surface, text-fg-muted, border-line and so on.", caught: ["Theme", "Lint", "Build gate"],
+    id: "R17", slug: "raw-colors", says: "Colors come from tokens, never from literal values in markup.", why: "A literal color is a color the system can't check, theme or keep in contrast.", instead: "A color role: bg-surface, text-fg-muted, border-line and so on.", caught: ["Theme", "Lint", "Build gate", "Page check"],
     lint: [
       // Style sheets: a literal anywhere in a declaration or custom property, but not in a selector,
       // and not in a mask, where black and white only mean opaque and clear.
