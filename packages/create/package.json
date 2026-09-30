@@ -1,6 +1,6 @@
 {
   "name": "create-halation",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Start a new React project with Halation: the styles, the components, and an agent kit that keeps every page on-brand.",
   "license": "MIT",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "@halation/react",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Halation for React: components on Base UI, phenomena, motion and the signature.",
   "license": "MIT",
   "type": "module",
