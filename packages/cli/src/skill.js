@@ -101,6 +101,7 @@ export async function renderSkill({ rules = loadRules() } = {}) {
     "- The name seeds the project's seal, grain, share card and greeting. Optional: `accent` (vermilion, cobalt, jade, amber), `tempo` (calm, crisp, lively), `theme` (system, light, dark).",
     "- With Tailwind v4, import `@halation/core/tailwind.css` instead of the styles: only the system's values exist, so `text-sm` or `bg-purple-500` don't generate. Use `text-body-sm`, `bg-surface`, `text-fg-muted`, `border-line`.",
     "- Before you finish: `npx halation lint` (exits 1 on an error) and, with the app running, `npx halation check http://localhost:3000`.",
+    "- After a build: `npx halation gate dist` (or the build's folder) reads the CSS and HTML it emitted and exits 1 on anything off the system, such as a Tailwind arbitrary value.",
     "- A deliberate exception gets a comment saying `halation-ignore R9` (the rule id) on that line or the line above.",
     "",
     "## Principles",

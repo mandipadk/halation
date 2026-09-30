@@ -3,7 +3,7 @@
 // meant to be generated from this one list, so guidance and enforcement
 // can't drift apart.
 
-export type Catcher = "Theme" | "Forge" | "Lint" | "Page check" | "Critic"
+export type Catcher = "Theme" | "Forge" | "Lint" | "Build gate" | "Page check" | "Critic"
 
 /** A source-level detector: a pattern, the files it applies to, and how bad a match is. */
 export type Lint = { pattern: string; flags?: string; files: string[]; level: "error" | "warn"; skip?: string }
@@ -75,7 +75,7 @@ export const rules: Rule[] = [
   { id: "R1", slug: "one-accent", says: "One accent, used as a signal: identity, focus, selection, live state.", why: "Color that means something is only noticed when it's rare.", instead: "Neutral surfaces and ink; the accent only where it carries meaning.", caught: ["Theme", "Page check"] },
   { id: "R2", slug: "primary-is-ink", says: "The one main action is ink: white on dark, black on light.", why: "Keeps the accent free to mean something, and the main action obvious in both modes.", instead: "An ink button; accent fills only for identity moments.", caught: ["Page check"] },
   {
-    id: "R3", slug: "light-not-paint", says: "No gradients as decoration. Depth comes from light: atmospheres, lit edges, shadows.", why: "Decorative gradients are the most common sign of generated design.", instead: "An atmosphere behind the page, or a raised surface.", caught: ["Theme", "Lint"],
+    id: "R3", slug: "light-not-paint", says: "No gradients as decoration. Depth comes from light: atmospheres, lit edges, shadows.", why: "Decorative gradients are the most common sign of generated design.", instead: "An atmosphere behind the page, or a raised surface.", caught: ["Theme", "Lint", "Build gate"],
     lint: [
       // A gradient that only masks is fine, but the mask property has to start the declaration.
       lint(re`\b(?:bg-gradient-|bg-linear-|bg-radial-|bg-conic-|from-[a-z]+-\d{2,3}(?![\w-]))|(?:linear|radial|conic)-gradient\((?<!(?:^|[{;\[,\n])\s*(?:-webkit-|webkit)?mask(?:-image|image)?\s*:\s*["'\`]?[^;{}\]]*)`, [...UI, ...STYLES, ...SCRIPTS, "svg"], "error", `phenomena|${CORE}`),
@@ -83,14 +83,14 @@ export const rules: Rule[] = [
   },
   { id: "R4", slug: "contrast", says: "Every text and background pair passes WCAG 2 in both modes.", why: "Legibility isn't a style choice.", instead: "Use the text roles; the forge solves their contrast.", caught: ["Forge", "Page check"] },
   {
-    id: "R5", slug: "sentence-case", says: "Sentence case everywhere. No uppercase labels.", why: "Capitals shout, and spaced-out capitals are a generated-design cliché.", instead: "A smaller or lighter text style.", caught: ["Lint", "Page check"],
+    id: "R5", slug: "sentence-case", says: "Sentence case everywhere. No uppercase labels.", why: "Capitals shout, and spaced-out capitals are a generated-design cliché.", instead: "A smaller or lighter text style.", caught: ["Lint", "Build gate", "Page check"],
     lint: [
       lint(re`\buppercase\b|font-variant(?:-caps)?\s*:[^;{}"'\`]*small-caps|fontVariant(?:Caps)?\s*:\s*["'\`][^"'\`]*small-caps`, [...UI, ...STYLES, "svg"]),
       lint(re`text-transform\s*:\s*["'\`]?\s*uppercase|textTransform\s*:\s*["'\`]\s*uppercase|font-variant(?:-caps)?\s*:[^;{}"'\`]*small-caps|fontVariant(?:Caps)?\s*:\s*["'\`][^"'\`]*small-caps`, SCRIPTS),
     ],
   },
   {
-    id: "R6", slug: "no-tracking", says: "No letter-spacing beyond what the text styles set.", why: "Tracking is tuned per size already; extra spacing is how eyebrows get made.", instead: "The text style for that size.", caught: ["Theme", "Lint"],
+    id: "R6", slug: "no-tracking", says: "No letter-spacing beyond what the text styles set.", why: "Tracking is tuned per size already; extra spacing is how eyebrows get made.", instead: "The text style for that size.", caught: ["Theme", "Lint", "Build gate"],
     lint: [
       lint(re`letter-spacing\s*:(?!\s*${NO_TRACKING}\s*(?:!important\s*)?(?:[;}"'\`\])\n]|$))[^;{}"'\`\n\]]+`, [...UI, ...STYLES, ...SCRIPTS, "svg"], "error", CORE),
       lint(re`(?<![\w$-])letterSpacing\s*:(?!\s*(?:["'\`]\s*)?${NO_TRACKING}\s*["'\`]?\s*(?:[,}\n)]|$))[^,}\n]+`, [...UI, ...SCRIPTS], "error", CORE),
@@ -98,7 +98,7 @@ export const rules: Rule[] = [
       lint(re`(?<![\w-])tracking-[\w\[\].()%/-]+`, [...UI, ...STYLES, ...SCRIPTS], "error", CORE),
     ],
   },
-  { id: "R7", slug: "named-styles", says: "Eleven named text styles; no other sizes.", why: "A small scale is what makes pages feel composed.", instead: "The nearest style.", caught: ["Theme", "Lint"], lint: [lint(re`\btext-(xs|sm|base|lg|xl|[2-9]xl)\b|\btext-\[[\d.]+(px|rem|em)\]`, UI)] },
+  { id: "R7", slug: "named-styles", says: "Eleven named text styles; no other sizes.", why: "A small scale is what makes pages feel composed.", instead: "The nearest style.", caught: ["Theme", "Lint", "Build gate", "Page check"], lint: [lint(re`\btext-(xs|sm|base|lg|xl|[2-9]xl)\b|\btext-\[[\d.]+(px|rem|em)\]`, UI)] },
   { id: "R8", slug: "one-serif-phrase", says: "At most one serif phrase in a headline, and only at title sizes and up.", why: "It's an accent in the voice; twice is a costume.", instead: "Plain type for everything else.", caught: ["Page check"] },
   {
     id: "R9", slug: "no-dot-separators", says: "Facts are never joined with dots or bars.", why: "A joined string has to be parsed; structure can be scanned.", instead: "The Facts component, or separate lines with their own weight.", caught: ["Lint", "Page check"],
@@ -125,7 +125,7 @@ export const rules: Rule[] = [
   { id: "R14", slug: "motion-laws", says: "Interface motion stays under 300 ms, exits take 70% of the enter, nothing loops while idle.", why: "Motion should explain a change, never make anyone wait.", instead: "The moves and their durations.", caught: ["Theme", "Page check"] },
   { id: "R15", slug: "one-atmosphere", says: "One atmosphere per page, and it dims behind content.", why: "An atmosphere is a place, not a decoration.", instead: "The page's one light, with its quiet zone.", caught: ["Page check"] },
   {
-    id: "R17", slug: "raw-colors", says: "Colors come from tokens, never from literal values in markup.", why: "A literal color is a color the system can't check, theme or keep in contrast.", instead: "A color role: bg-surface, text-fg-muted, border-line and so on.", caught: ["Theme", "Lint"],
+    id: "R17", slug: "raw-colors", says: "Colors come from tokens, never from literal values in markup.", why: "A literal color is a color the system can't check, theme or keep in contrast.", instead: "A color role: bg-surface, text-fg-muted, border-line and so on.", caught: ["Theme", "Lint", "Build gate"],
     lint: [
       // Style sheets: a literal anywhere in a declaration or custom property, but not in a selector,
       // and not in a mask, where black and white only mean opaque and clear.
@@ -143,7 +143,7 @@ export const rules: Rule[] = [
     ],
   },
   {
-    id: "R18", slug: "lens-fonts", says: "Type comes from the project's lens: its display, text and code faces.", why: "Inter, Roboto and system stacks are the default look of generated design.", instead: "The --font-sans, --font-serif and --font-mono tokens.", caught: ["Theme", "Lint"],
+    id: "R18", slug: "lens-fonts", says: "Type comes from the project's lens: its display, text and code faces.", why: "Inter, Roboto and system stacks are the default look of generated design.", instead: "The --font-sans, --font-serif and --font-mono tokens.", caught: ["Theme", "Lint", "Build gate"],
     lint: [
       // An @font-face rule has to name its family; everywhere else the family comes from a token.
       lint(re`font-family(?<!@font-face\s*\{[^}]*font-family)\s*:(?!\s*(?:var\(\s*--font-[\w-]+\s*\)|inherit|initial|unset|revert|revert-layer)\s*(?:!important\s*)?(?:[;}"'\`\]\n]|$))[^;{}\n]*`, [...UI, ...STYLES, ...SCRIPTS, "svg"], "error", CORE),
@@ -162,7 +162,7 @@ export const rules: Rule[] = [
   },
   { id: "R21", slug: "named-exceptions", says: "An exception names the rule it breaks.", why: "A blanket exception silences every rule on its line, including the ones nobody meant to allow.", instead: "An exception needs the rule id it's for, like halation-ignore R9, and a reason.", caught: ["Lint"] },
   {
-    id: "R22", slug: "no-text-glow", says: "No glow on text.", why: "Glowing text is a generated-design cliché, and it hurts legibility.", instead: "Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.", caught: ["Lint", "Page check"],
+    id: "R22", slug: "no-text-glow", says: "No glow on text.", why: "Glowing text is a generated-design cliché, and it hurts legibility.", instead: "Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.", caught: ["Lint", "Build gate", "Page check"],
     lint: [
       lint(re`(?<![\w-])text-shadow\s*:(?!\s*(?:none|inherit|initial|unset|revert|revert-layer)\s*(?:!important\s*)?(?:[;}"'\`\])\n]|$))[^;{}"'\`\n\]]*`, [...UI, ...STYLES, ...SCRIPTS, "svg"], "error", CORE),
       lint(re`(?<![\w$-])textShadow\s*:(?!\s*["'\`]\s*(?:none|inherit|initial|unset)\s*["'\`])[^,}\n]*`, [...UI, ...SCRIPTS], "error", CORE),
@@ -170,4 +170,13 @@ export const rules: Rule[] = [
     ],
   },
   { id: "R23", slug: "fits-a-phone", says: "Pages fit a phone: nothing scrolls sideways.", why: "Most visitors arrive on a phone, and a page that scrolls sideways there feels broken.", instead: "Widths that give way: rows that wrap, fluid text styles, a max-width instead of a width.", caught: ["Page check"] },
+  { id: "R24", slug: "on-the-grid", says: "Spacing sits on the grid: 2 px steps up to 24, then 4 px steps, or a named space.", why: "Consistent steps are what make a layout feel built rather than nudged.", instead: "The spacing scale (p-3, gap-1.5), a named space like --space-section, or a component metric with its reason.", caught: ["Build gate", "Page check"] },
+  { id: "R25", slug: "named-radii", says: "Corners come from the radius scale, a full pill, or nest inside their parent's.", why: "A few radii, used everywhere, are what make shapes feel related.", instead: "The radius scale (rounded-lg), rounded-full, or the parent's radius minus its padding.", caught: ["Build gate", "Page check"] },
+  {
+    id: "R26", slug: "metrics-have-reasons", says: "A component metric states its reason.", why: "A value off the scale is fine when a component needs it, and the reason is what lets the next person keep it or retire it.", instead: "Declare it in the component's stylesheet as --m-name, with a comment on the same line saying why: --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */. Not in a style attribute or script.", caught: ["Lint"],
+    lint: [
+      lint(re`(?<![\w-])--m-[\w-]+\s*:[^;{}]*;(?![^\n]*\/\*)`, STYLES, "error"),
+      lint(re`["'\`]--m-[\w-]+["'\`]\s*[:,]|--m-[\w-]+\s*:[^;"'\`]*;?\s*["'\`}]`, [...UI, ...SCRIPTS], "error"),
+    ],
+  },
 ]

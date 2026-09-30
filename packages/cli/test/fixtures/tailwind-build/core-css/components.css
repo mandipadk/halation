@@ -42,7 +42,7 @@
 [data-finished] .hl-check path { stroke-dashoffset: 0; }
 
 /* Keys: a combination keeps a gap between its keys. */
-.hl-kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; --m-key-x: 5px; /* a one-character key stays square at 20 px */ padding: 0 var(--m-key-x); border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: var(--text-micro); line-height: 1; color: var(--color-fg-muted); background: var(--color-fill); box-shadow: inset 0 -1px 0 var(--color-line-strong), 0 0 0 1px var(--color-line); }
+.hl-kbd { display: inline-grid; place-items: center; min-width: 20px; height: 20px; --m-key-x: 5px; /* a one-character key stays square at 20 px */ padding: 0 var(--m-key-x); border-radius: var(--radius-xs); font-family: var(--font-mono); font-size: 11.5px; line-height: 1; color: var(--color-fg-muted); background: var(--color-fill); box-shadow: inset 0 -1px 0 var(--color-line-strong), 0 0 0 1px var(--color-line); }
 .hl-keys { display: inline-flex; gap: 4px; vertical-align: middle; }
 
 /* State: a word and a glyph on the key material; only the glyph is colored. */

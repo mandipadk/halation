@@ -217,19 +217,117 @@ function glowOf(cs) {
 }
 
 /**
+ * The system's scale as the page resolves it right now, in px: the text
+ * styles (fluid ones at this width), the radii and the named spaces. Read
+ * from the page's own tokens, so a project's retuned scale is the scale.
+ */
+function scaleOf() {
+  const root = getComputedStyle(document.documentElement)
+  const names = []
+  for (let i = 0; i < root.length; i++) if (root[i].startsWith("--")) names.push(root[i])
+  const probe = document.createElement("i")
+  probe.style.cssText = "position: absolute; visibility: hidden; pointer-events: none"
+  document.documentElement.append(probe)
+  const px = (prop, name) => {
+    probe.style[prop] = ""
+    probe.style[prop] = `var(${name})`
+    return parseFloat(getComputedStyle(probe)[prop])
+  }
+  const own = (prefix) => names.filter((n) => n.startsWith(prefix) && n.indexOf("--", 2) === -1)
+  const text = own("--text-").map((n) => px("fontSize", n)).filter((v) => v > 0)
+  const radii = own("--radius-").map((n) => px("borderTopLeftRadius", n)).filter((v) => v > 0 && v < 999)
+  const spaces = own("--space-").map((n) => px("paddingLeft", n)).filter((v) => v > 0)
+  probe.remove()
+  return { text, radii, spaces }
+}
+
+/**
+ * The component metrics in scope at an element: every --m-* custom property
+ * it inherits or sets, as lengths in px and as unitless ratios. A component
+ * declares them on its own root, each with its reason (lint keeps the reason).
+ */
+function metricsAt(el, cs) {
+  const lengths = [], ratios = []
+  const fs = parseFloat(cs.fontSize), rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize)
+  // A metric set in a style attribute isn't a component's declaration, and has no reason: it doesn't count.
+  const inline = new Set()
+  for (let n = el; n && n.nodeType === 1; n = n.parentElement) for (let i = 0; i < n.style.length; i++) if (n.style[i].startsWith("--m-")) inline.add(n.style[i])
+  for (let i = 0; i < cs.length; i++) {
+    const name = cs[i]
+    if (!name.startsWith("--m-") || inline.has(name)) continue
+    const raw = cs.getPropertyValue(name).trim()
+    const n = parseFloat(raw)
+    if (/^-?[\d.]+$/.test(raw)) ratios.push(n)
+    else if (/^-?[\d.]+px$/.test(raw)) lengths.push(n)
+    else if (/^-?[\d.]+rem$/.test(raw)) lengths.push(n * rootFs)
+    else if (/^-?[\d.]+em$/.test(raw)) lengths.push(n * fs)
+    else {
+      const probe = (metricsAt.probe ??= document.createElement("i"))
+      if (!probe.isConnected) document.documentElement.append(probe)
+      probe.style.cssText = `position: absolute; visibility: hidden; font-size: ${cs.fontSize}; padding-left: ${raw}`
+      const v = parseFloat(getComputedStyle(probe).paddingLeft)
+      if (Number.isFinite(v)) lengths.push(v)
+    }
+  }
+  return { lengths, ratios }
+}
+
+/** The radius scale in scope at an element, which a form preset (data-form) may have retuned. */
+function radiiAt(cs) {
+  const rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize)
+  const out = []
+  for (let i = 0; i < cs.length; i++) {
+    if (!cs[i].startsWith("--radius-")) continue
+    const raw = cs.getPropertyValue(cs[i]).trim()
+    const n = parseFloat(raw)
+    if (/^[\d.]+rem$/.test(raw)) out.push(n * rootFs)
+    else if (/^[\d.]+px$/.test(raw)) out.push(n)
+  }
+  return out
+}
+
+const near = (v, list, tolerance = 0.5) => list.some((x) => Math.abs(x - v) <= tolerance)
+/** The spacing grid: 2 px steps up to 24, then 4 px steps. A 1 px hairline is fine too. */
+const onGrid = (v) => v <= 1.5 || (v <= 24.5 ? Math.abs(v / 2 - Math.round(v / 2)) * 2 <= 0.5 : Math.abs(v / 4 - Math.round(v / 4)) * 4 <= 0.5)
+const px = (v) => `${Math.round(v * 100) / 100}px`
+
+/** The nearest size above an element that isn't its own: what a relation like 1.06em is measured against. */
+function baseSize(el, fs) {
+  for (let n = el.parentElement; n; n = n.parentElement) {
+    const v = parseFloat(getComputedStyle(n).fontSize)
+    if (Math.abs(v - fs) > 0.25) return v
+  }
+  return null
+}
+
+/** Whether a corner nests inside its nearest rounded ancestor: that radius less the inset between them. */
+function nests(el, r, rect) {
+  for (let a = el.parentElement; a; a = a.parentElement) {
+    const ar = parseFloat(getComputedStyle(a).borderTopLeftRadius)
+    if (!(ar > 0)) continue
+    const box = a.getBoundingClientRect()
+    const inset = Math.min(rect.left - box.left, rect.top - box.top)
+    return inset >= 0 && Math.abs(ar - inset - r) <= 1
+  }
+  return false
+}
+
+/**
  * Checks `root` against the rules the browser can see. Options:
  *   counterexamples: true lets elements inside [data-counterexample] break the
  *     rules, for a design system's own docs showing what not to do. Off by default.
+ *   examples: how many example elements to list per rule (5).
  * Returns { rules, budgets, exempted, elements }.
  */
-export function check(root = document.body, { counterexamples = false } = {}) {
+export function check(root = document.body, { counterexamples = false, examples: shown = 5 } = {}) {
   const found = new Map()
-  const note = (id, el, pseudo = "") => {
+  const note = (id, el, pseudo = "", detail = "") => {
     const list = found.get(id) ?? []
-    list.push(selector(el, pseudo))
+    list.push(`${selector(el, pseudo)}${detail ? ` (${detail})` : ""}`)
     found.set(id, list)
   }
-  const exempted = { counterexamples: 0, samples: 0, decorative: 0 }
+  const exempted = { counterexamples: 0, samples: 0, decorative: 0, metrics: 0 }
+  const scale = scaleOf()
   const semantic = ["positive", "warning", "critical"].map((k) => lch(tokenColor(document.documentElement, k)).H)
   const rootAccent = lch(tokenColor(document.documentElement, "accent"))
   const layer = root.querySelector(".hl-dialog[data-open], .hl-sheet[data-open], .hl-lens[data-open]")
@@ -306,6 +404,45 @@ export function check(root = document.body, { counterexamples = false } = {}) {
         if (ground && luminance(ground) > 0.2) note("R22", el)
         else halated.add(glow)
       }
+    }
+
+    // R7, R24 and R25: sizes, spacing and corners are members of the scale, follow a
+    // declared relation, or are a metric their component declares. Samples keep their own.
+    if (!drawing && !sample) {
+      const metrics = metricsAt(el, cs)
+      let byMetric = false
+      if (hasText) {
+        const fs = parseFloat(cs.fontSize)
+        if (!near(fs, scale.text, 0.25)) {
+          const base = baseSize(el, fs)
+          if (near(fs, metrics.lengths) || (base && metrics.ratios.some((k) => Math.abs(base * k - fs) <= 0.5))) byMetric = true
+          else note("R7", el, "", `font-size ${px(fs)}`)
+        }
+      }
+      const layout = /flex|grid/.test(cs.display)
+      for (const [prop, label] of [["paddingTop", "padding"], ["paddingRight", "padding"], ["paddingBottom", "padding"], ["paddingLeft", "padding"], ["rowGap", "gap"], ["columnGap", "gap"]]) {
+        if (label === "gap" && !layout) continue
+        const v = parseFloat(cs[prop])
+        // Padding counts from the box's outside edge, so a 1 px border and 13 px of padding is 14.
+        const border = label === "padding" ? parseFloat(cs[prop.replace("padding", "border") + "Width"]) || 0 : 0
+        if (!(v > 0) || onGrid(v) || (border > 0 && onGrid(v + border)) || near(v, scale.spaces)) continue
+        if (near(v, metrics.lengths)) byMetric = true
+        else {
+          note("R24", el, "", `${label} ${px(v)}`)
+          break
+        }
+      }
+      for (const corner of ["borderTopLeftRadius", "borderTopRightRadius", "borderBottomRightRadius", "borderBottomLeftRadius"]) {
+        const raw = cs[corner]
+        const v = parseFloat(raw)
+        if (!(v > 0) || raw.includes("%") || near(v, scale.radii) || near(v, radiiAt(cs)) || v >= Math.min(r.width, r.height) / 2 - 0.5 || nests(el, v, r)) continue
+        if (near(v, metrics.lengths)) byMetric = true
+        else {
+          note("R25", el, "", `radius ${px(v)}`)
+          break
+        }
+      }
+      if (byMetric) exempted.metrics++
     }
 
     // R11: monospace loose on the page rather than inside a surface.
@@ -403,6 +540,7 @@ export function check(root = document.body, { counterexamples = false } = {}) {
     shareMax = Math.max(shareMax, covered(accentAreas, y, bottom))
   }
   tokenColor.probe?.remove()
+  metricsAt.probe?.remove()
 
   const RULES = [
     ["R1", "One accent, used as a signal"],
@@ -410,6 +548,7 @@ export function check(root = document.body, { counterexamples = false } = {}) {
     ["R4", "Text passes contrast against what's behind it"],
     ["R5", "Sentence case, no uppercase labels"],
     ["R6", "No added letter-spacing"],
+    ["R7", "Text comes in the named styles"],
     ["R8", "One serif phrase in a headline, at title sizes"],
     ["R9", "No dots joining facts"],
     ["R10", "No status dots"],
@@ -417,11 +556,13 @@ export function check(root = document.body, { counterexamples = false } = {}) {
     ["R14", "Interface motion is quick, and nothing loops"],
     ["R22", "No glow on text"],
     ["R23", "Pages fit a phone: nothing scrolls sideways"],
+    ["R24", "Spacing sits on the grid"],
+    ["R25", "Corners come from the radius scale"],
   ]
   return {
     rules: RULES.map(([id, says]) => {
       const examples = [...new Set(found.get(id) ?? [])]
-      return { id, says, pass: examples.length === 0, count: examples.length, examples: examples.slice(0, 5) }
+      return { id, says, pass: examples.length === 0, count: examples.length, examples: examples.slice(0, shown) }
     }),
     budgets: [
       { name: "Ink buttons in any one view", value: inkMax, limit: 1, pass: inkMax <= 1 },

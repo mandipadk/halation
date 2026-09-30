@@ -21,6 +21,7 @@ export function App({ children }) {
 - The name seeds the project's seal, grain, share card and greeting. Optional: `accent` (vermilion, cobalt, jade, amber), `tempo` (calm, crisp, lively), `theme` (system, light, dark).
 - With Tailwind v4, import `@halation/core/tailwind.css` instead of the styles: only the system's values exist, so `text-sm` or `bg-purple-500` don't generate. Use `text-body-sm`, `bg-surface`, `text-fg-muted`, `border-line`.
 - Before you finish: `npx halation lint` (exits 1 on an error) and, with the app running, `npx halation check http://localhost:3000`.
+- After a build: `npx halation gate dist` (or the build's folder) reads the CSS and HTML it emitted and exits 1 on anything off the system, such as a Tailwind arbitrary value.
 - A deliberate exception gets a comment saying `halation-ignore R9` (the rule id) on that line or the line above.
 
 ## Principles
@@ -57,7 +58,7 @@ export function App({ children }) {
 - Do: `<Stage phenomenon="rays">` behind the page, or `<Surface elevation="raised">`.
 - Why: Decorative gradients are the most common sign of generated design.
 - Instead: An atmosphere behind the page, or a raised surface.
-- Caught by: Theme, lint.
+- Caught by: Theme, lint, build gate.
 
 ### R4: Every text and background pair passes WCAG 2 in both modes.
 
@@ -73,7 +74,7 @@ export function App({ children }) {
 - Do: `<Text size="caption" tone="muted">Recent projects</Text>`
 - Why: Capitals shout, and spaced-out capitals are a generated-design cliché.
 - Instead: A smaller or lighter text style.
-- Caught by: Lint, page check.
+- Caught by: Lint, build gate, page check.
 
 ### R6: No letter-spacing beyond what the text styles set.
 
@@ -81,7 +82,7 @@ export function App({ children }) {
 - Do: The text style alone; each one sets its own tracking.
 - Why: Tracking is tuned per size already; extra spacing is how eyebrows get made.
 - Instead: The text style for that size.
-- Caught by: Theme, lint.
+- Caught by: Theme, lint, build gate.
 
 ### R7: Eleven named text styles; no other sizes.
 
@@ -89,7 +90,7 @@ export function App({ children }) {
 - Do: `<Text size="body-sm">`, `className="text-body-sm"` (Tailwind) or `hl-text-body-sm`.
 - Why: A small scale is what makes pages feel composed.
 - Instead: The nearest style.
-- Caught by: Theme, lint.
+- Caught by: Theme, lint, build gate, page check.
 
 ### R8: At most one serif phrase in a headline, and only at title sizes and up.
 
@@ -161,7 +162,7 @@ export function App({ children }) {
 - Do: Color roles: `bg-surface`, `text-fg-muted`, `border-line`, `bg-accent`.
 - Why: A literal color is a color the system can't check, theme or keep in contrast.
 - Instead: A color role: bg-surface, text-fg-muted, border-line and so on.
-- Caught by: Theme, lint.
+- Caught by: Theme, lint, build gate.
 
 ### R18: Type comes from the project's lens: its display, text and code faces.
 
@@ -169,7 +170,7 @@ export function App({ children }) {
 - Do: `var(--font-sans)`, `var(--font-serif)`, `var(--font-mono)` (`font-sans` in Tailwind).
 - Why: Inter, Roboto and system stacks are the default look of generated design.
 - Instead: The --font-sans, --font-serif and --font-mono tokens.
-- Caught by: Theme, lint.
+- Caught by: Theme, lint, build gate.
 
 ### R16: Keys in a combination keep a visible gap.
 
@@ -209,7 +210,7 @@ export function App({ children }) {
 - Do: Light behind the text: a `<Stage>` phenomenon with the headline marked `data-quiet`.
 - Why: Glowing text is a generated-design cliché, and it hurts legibility.
 - Instead: Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.
-- Caught by: Lint, page check.
+- Caught by: Lint, build gate, page check.
 
 ### R23: Pages fit a phone: nothing scrolls sideways.
 
@@ -218,6 +219,30 @@ export function App({ children }) {
 - Why: Most visitors arrive on a phone, and a page that scrolls sideways there feels broken.
 - Instead: Widths that give way: rows that wrap, fluid text styles, a max-width instead of a width.
 - Caught by: Page check.
+
+### R24: Spacing sits on the grid: 2 px steps up to 24, then 4 px steps, or a named space.
+
+- Don't: Spacing sits on the grid: 2 px steps up to 24, then 4 px steps, or a named space.
+- Do: The spacing scale (p-3, gap-1.5), a named space like --space-section, or a component metric with its reason.
+- Why: Consistent steps are what make a layout feel built rather than nudged.
+- Instead: The spacing scale (p-3, gap-1.5), a named space like --space-section, or a component metric with its reason.
+- Caught by: Build gate, page check.
+
+### R25: Corners come from the radius scale, a full pill, or nest inside their parent's.
+
+- Don't: Corners come from the radius scale, a full pill, or nest inside their parent's.
+- Do: The radius scale (rounded-lg), rounded-full, or the parent's radius minus its padding.
+- Why: A few radii, used everywhere, are what make shapes feel related.
+- Instead: The radius scale (rounded-lg), rounded-full, or the parent's radius minus its padding.
+- Caught by: Build gate, page check.
+
+### R26: A component metric states its reason.
+
+- Don't: A component metric states its reason.
+- Do: Declare it in the component's stylesheet as --m-name, with a comment on the same line saying why: --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */. Not in a style attribute or script.
+- Why: A value off the scale is fine when a component needs it, and the reason is what lets the next person keep it or retire it.
+- Instead: Declare it in the component's stylesheet as --m-name, with a comment on the same line saying why: --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */. Not in a style attribute or script.
+- Caught by: Lint.
 
 ## What to use for what
 

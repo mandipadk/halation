@@ -167,6 +167,21 @@ const CASES = {
       ["a.ts", `const agent = navigator.userAgent`],
     ],
   },
+  R26: {
+    flag: [
+      ["a.css", `.cap { --m-cap-x: 9px; padding: 0 var(--m-cap-x); }`],
+      ["a.scss", `.cap {\n  --m-cap-x: 9px;\n  padding: 0 var(--m-cap-x);\n}`],
+      ["a.tsx", `<div style={{ "--m-x": "13px" }} />`],
+      ["a.ts", `el.style.setProperty("--m-x", "13px")`],
+      ["a.html", `<div style="--m-x: 13px">x</div>`],
+    ],
+    keep: [
+      ["a.css", `.cap { --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */ padding: 0 var(--m-cap-x); }`],
+      ["a.css", `.cap { padding: 0 var(--m-cap-x); }`],
+      ["a.tsx", `<div className="px-[var(--m-inset-x)]" />`],
+      ["a.ts", `const inset = "var(--m-inset-x)"`],
+    ],
+  },
   R22: {
     flag: [
       ["a.css", `h1 { text-shadow: 0 0 24px var(--color-accent); }`],

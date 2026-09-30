@@ -9,7 +9,7 @@ import { mkdirSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { fromHex, toCss, toHex } from "./color.ts"
-import { duration, ease, fonts, radius, serifTracking, shadow, shadowCss, stagger, text } from "./scales.ts"
+import { duration, ease, fonts, forms, radius, serifTracking, shadow, shadowCss, space, stagger, text } from "./scales.ts"
 import { seeds } from "./seeds.ts"
 import { rules } from "./rulebook.ts"
 import { audit, roles, type Role } from "./theme.ts"
@@ -44,6 +44,7 @@ function tokensCss(): string {
     ]),
     "",
     "  --spacing: 0.25rem;",
+    ...space.map((s) => `  --space-${s.name}: ${s.value};`),
     ...radius.map((r) => `  --radius-${r.name}: ${r.value};`),
     ...shadow.map((s) => `  --shadow-${s.name}: ${shadowCss(s.layers)};`),
     "",
@@ -61,6 +62,9 @@ function tokensCss(): string {
       ...roles(seed).filter((r) => ACCENT_ROLES.test(r.name)).map(decl),
       "}",
     ]),
+    "",
+    "/* Form presets: set data-form on any element to make the corners inside it sharper or rounder. */",
+    ...forms.map((f) => `[data-form="${f.name}"] { ${Object.entries(f.radius).map(([k, v]) => `--radius-${k}: ${v};`).join(" ")} }`),
     "",
   ]
   return lines.join("\n")
@@ -96,6 +100,7 @@ function tailwindCss(): string {
     "  --shadow-*: initial;",
     "  --inset-shadow-*: initial;",
     "  --drop-shadow-*: initial;",
+    "  --text-shadow-*: initial;",
     "  --ease-*: initial;",
     "  --font-*: initial;",
     "  --font-weight-*: initial;",
@@ -115,6 +120,7 @@ function tailwindCss(): string {
       `  --text-${t.name}--letter-spacing: var(--text-${t.name}--letter-spacing);`,
       `  --text-${t.name}--font-weight: var(--text-${t.name}--font-weight);`,
     ]),
+    ...space.map((s) => `  --spacing-${s.name}: var(--space-${s.name});`),
     ...names("radius", radius),
     ...names("shadow", shadow),
     ...names("ease", ease),

@@ -47,6 +47,25 @@ export const text: TextStyle[] = [
 ]
 
 /** Radius steps; `lg` is the base a project may retune. */
+/**
+ * Named spaces for layout, fluid between a phone and a wide screen. Inside
+ * components, spacing uses the grid (2 px steps to 24, then 4 px steps).
+ */
+export const space: { name: string; value: string; usage: string }[] = [
+  { name: "gutter", value: "clamp(16px, 4vw, 48px)", usage: "The page's side margin." },
+  { name: "stage", value: "clamp(20px, 4vw, 36px)", usage: "Padding inside a stage, a demo or a large card." },
+  { name: "group", value: "clamp(28px, 4vw, 44px)", usage: "Between groups inside a section." },
+  { name: "split", value: "clamp(40px, 6vw, 72px)", usage: "Between the two sides of a split: a demo and its text." },
+  { name: "section", value: "clamp(64px, 8vw, 112px)", usage: "Between sections of a page." },
+  { name: "scene", value: "clamp(96px, 12vw, 160px)", usage: "Between full scenes of a landing page." },
+]
+
+/** Form: the radius scale retuned sharper or rounder, for a project or any part of one. */
+export const forms: { name: string; usage: string; radius: Record<string, string> }[] = [
+  { name: "sharp", usage: "Tools and dense data: corners cut close.", radius: { xs: "0.125rem", sm: "0.15rem", md: "0.2rem", lg: "0.25rem", xl: "0.3rem", "2xl": "0.35rem", "3xl": "0.5rem" } },
+  { name: "round", usage: "Soft, friendly products: corners opened up.", radius: { xs: "0.375rem", sm: "0.5rem", md: "0.75rem", lg: "1rem", xl: "1.25rem", "2xl": "1.75rem", "3xl": "2.25rem" } },
+]
+
 export const radius = [
   { name: "xs", value: "0.25rem", usage: "Keyboard keys, tiny tags." },
   { name: "sm", value: "0.375rem", usage: "Checkboxes, small chips." },

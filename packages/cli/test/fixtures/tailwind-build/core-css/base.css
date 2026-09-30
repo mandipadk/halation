@@ -34,13 +34,6 @@ body {
 }
 :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd) { margin: 0; }
 :where(h1, h2, h3, h4, h5, h6) { font-weight: 600; text-wrap: balance; }
-/* A bare heading lands in the scale; a text style class or Tailwind's text-* overrides it. */
-:where(h1) { font-size: var(--text-title-1); line-height: var(--text-title-1--line-height); letter-spacing: var(--text-title-1--letter-spacing); }
-:where(h2) { font-size: var(--text-title-2); line-height: var(--text-title-2--line-height); letter-spacing: var(--text-title-2--letter-spacing); }
-:where(h3) { font-size: var(--text-title-3); line-height: var(--text-title-3--line-height); letter-spacing: var(--text-title-3--letter-spacing); }
-:where(h4, h5, h6) { font-size: var(--text-body); line-height: var(--text-body--line-height); }
-/* Form controls take the page's type instead of the browser's own 13.33 px. */
-:where(button, input, select, textarea) { font: inherit; letter-spacing: inherit; }
 :where(p) { text-wrap: pretty; }
 :where(a) { color: inherit; text-decoration-color: var(--color-line-strong); text-underline-offset: 3px; }
 :where(a):hover { text-decoration-color: currentColor; }

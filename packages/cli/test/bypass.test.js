@@ -2,13 +2,15 @@
 // must fail. A newly found bypass gets a page here too.
 
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
 import { createServer } from "node:http"
 import { after, before, describe, test } from "node:test"
 import { checkUrl } from "../src/check.js"
 
 const DOT = "·"
 const TOKENS = `:root { --color-accent: #ff6b3d; --color-ink: #f5f5f4; --color-positive: #3fbf7f; --color-warning: #e0a13a; --color-critical: #e5484d; --color-light-core: #fbf3ec; --color-light-edge: #f0b89a; --color-halation: #f06a3c; }
-body { margin: 0; padding: 32px; background: #0b0b0b; color: #f5f5f4; font-family: Georgia, serif; font-size: 16px; }`
+body { margin: 0; padding: 32px; background: #0b0b0b; color: #f5f5f4; font-family: Georgia, serif; font-size: 16px; }
+:root {${readFileSync(new URL("../../core/css/tokens.css", import.meta.url), "utf8").split("\n").filter((l) => /^\s*--(text|radius|space|spacing)[\w-]*:/.test(l)).join("\n")}}\n${readFileSync(new URL("../../core/css/base.css", import.meta.url), "utf8").split("\n").filter((l) => /^:where\((h1|h2|h3|h4|button)/.test(l)).join("\n")}`
 const page = (body, css = "") => `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><style>${TOKENS}${css}</style></head><body>${body}</body></html>`
 const words = "<p>Every copy keeps its own accounts, settings and history.</p><p>Open any copy from the menu bar.</p><p>Size</p><p>412 MB</p>"
 
@@ -49,6 +51,11 @@ const BYPASSES = [
   ["/fake-halation", "a purple glow wearing the halation filter's name", "R22", page(`${words}<svg width="0" height="0"><filter id="hl-halation"><feGaussianBlur stdDeviation="8"/><feFlood flood-color="#8b5cf6"/></filter></svg><section class="hl-halated" style="filter:url(#hl-halation)"><h1>Supercharge your workflow</h1></section>`)],
   ["/halation-twice", "the real halation bloom on two parts of one page", "R22", page(`${words}${HALATION}<section style="filter:url(#hl-halation)"><h1>Shot on film</h1></section><section style="filter:url(#hl-halation)"><h2>Developed tonight</h2></section>`)],
   ["/halation-light", "the real halation bloom on a light page", "R22", page(`${words}${HALATION}<section style="filter:url(#hl-halation);background:#f7f6f4;color:#111;padding:24px"><h1>Shot on film</h1></section>`)],
+  ["/off-scale-type", "text at a size that isn't one of the styles", "R7", page(`${words}<p style="font-size:17px">Pricing that scales with you</p>`)],
+  ["/inline-metric", "a metric set in a style attribute to excuse an odd size", "R7", page(`${words}<p style="--m-size:17px;font-size:var(--m-size)">Pricing that scales with you</p>`)],
+  ["/off-grid", "padding nudged off the grid", "R24", page(`${words}<div style="padding:13px">Enterprise ready</div>`)],
+  ["/odd-corner", "a corner that isn't on the scale", "R25", page(`${words}<div style="border-radius:7px;background:#1a1a1a;padding:16px;width:200px">Enterprise ready</div>`)],
+  ["/fake-nest", "an odd corner inside a rounded parent that doesn't nest", "R25", page(`${words}<div style="border-radius:20px;padding:4px;background:#151515"><div style="border-radius:7px;background:#222;padding:16px">Enterprise ready</div></div>`)],
   ["/blank", "a blank page", "empty", page(``)],
   ["/crash", "a page that throws", "error", page(`${words}<script>null.boom()</script>`)],
 ]
@@ -59,6 +66,16 @@ const CLEAN = {
   "/clean": page(`<h1>Every app, twice</h1>${words}<button style="background:#f5f5f4;color:#111;padding:12px 20px;border:0">Download</button><div class="sheen"></div>`, `.sheen { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 30% 20%, rgb(251 243 236 / 12%), transparent 45%); }`),
   // The halation phenomenon's bloom, once, on a dark ground; and a card's dark shadow.
   "/clean-halation": page(`<h1>Every app, twice</h1>${words}${HALATION}<section style="filter:url(#hl-halation)"><h2>Shot on film</h2></section><div style="filter:drop-shadow(0 8px 24px rgb(0 0 0 / 60%));padding:20px"><p>A card with a real shadow.</p></div>`),
+  // Values off the scale that are allowed: a component metric with its reason, padding that's
+  // on the grid from the border's outside, a corner that nests, and a named space.
+  "/clean-metrics": page(
+    `<h1>Every app, twice</h1>${words}<div class="card">A card with a metric</div><div class="bordered">A bordered box</div><div class="outer"><div class="inner">A nested corner</div></div><div class="section"><p>A section</p></div>`,
+    `.card { --m-inset: 13px; /* the card's text lines up with a 13 px icon above it */ padding: var(--m-inset); border-radius: var(--radius-2xl); background: #151515; }
+    .bordered { border: 1px solid #444; padding: 13px; }
+    .outer { border-radius: 18px; padding: 6px; background: #151515; }
+    .inner { border-radius: 12px; padding: 12px; background: #222; }
+    .section { padding-block: var(--space-section); }`,
+  ),
   // An app as it's really built: tokens written as light-dark(), content rendered by script
   // after load, and a section that rises into view only once it's scrolled to.
   "/clean-app": page(

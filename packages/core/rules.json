@@ -28,7 +28,8 @@
     "instead": "An atmosphere behind the page, or a raised surface.",
     "caught": [
       "Theme",
-      "Lint"
+      "Lint",
+      "Build gate"
     ],
     "lint": [
       {
@@ -77,6 +78,7 @@
     "instead": "A smaller or lighter text style.",
     "caught": [
       "Lint",
+      "Build gate",
       "Page check"
     ],
     "lint": [
@@ -121,7 +123,8 @@
     "instead": "The text style for that size.",
     "caught": [
       "Theme",
-      "Lint"
+      "Lint",
+      "Build gate"
     ],
     "lint": [
       {
@@ -200,7 +203,9 @@
     "instead": "The nearest style.",
     "caught": [
       "Theme",
-      "Lint"
+      "Lint",
+      "Build gate",
+      "Page check"
     ],
     "lint": [
       {
@@ -382,7 +387,8 @@
     "instead": "A color role: bg-surface, text-fg-muted, border-line and so on.",
     "caught": [
       "Theme",
-      "Lint"
+      "Lint",
+      "Build gate"
     ],
     "lint": [
       {
@@ -502,7 +508,8 @@
     "instead": "The --font-sans, --font-serif and --font-mono tokens.",
     "caught": [
       "Theme",
-      "Lint"
+      "Lint",
+      "Build gate"
     ],
     "lint": [
       {
@@ -673,6 +680,7 @@
     "instead": "Plain text. Light belongs to surfaces and phenomena. The one bloom text may take is the halation phenomenon's, in dark mode, once per page.",
     "caught": [
       "Lint",
+      "Build gate",
       "Page check"
     ],
     "lint": [
@@ -752,6 +760,70 @@
     "instead": "Widths that give way: rows that wrap, fluid text styles, a max-width instead of a width.",
     "caught": [
       "Page check"
+    ]
+  },
+  {
+    "id": "R24",
+    "slug": "on-the-grid",
+    "says": "Spacing sits on the grid: 2 px steps up to 24, then 4 px steps, or a named space.",
+    "why": "Consistent steps are what make a layout feel built rather than nudged.",
+    "instead": "The spacing scale (p-3, gap-1.5), a named space like --space-section, or a component metric with its reason.",
+    "caught": [
+      "Build gate",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R25",
+    "slug": "named-radii",
+    "says": "Corners come from the radius scale, a full pill, or nest inside their parent's.",
+    "why": "A few radii, used everywhere, are what make shapes feel related.",
+    "instead": "The radius scale (rounded-lg), rounded-full, or the parent's radius minus its padding.",
+    "caught": [
+      "Build gate",
+      "Page check"
+    ]
+  },
+  {
+    "id": "R26",
+    "slug": "metrics-have-reasons",
+    "says": "A component metric states its reason.",
+    "why": "A value off the scale is fine when a component needs it, and the reason is what lets the next person keep it or retire it.",
+    "instead": "Declare it in the component's stylesheet as --m-name, with a comment on the same line saying why: --m-cap-x: 9px; /* a one-letter cap stays square at 38 px */. Not in a style attribute or script.",
+    "caught": [
+      "Lint"
+    ],
+    "lint": [
+      {
+        "pattern": "(?<![\\w-])--m-[\\w-]+\\s*:[^;{}]*;(?![^\\n]*\\/\\*)",
+        "flags": "i",
+        "files": [
+          "css",
+          "scss",
+          "pcss",
+          "postcss",
+          "less",
+          "sass",
+          "styl"
+        ],
+        "level": "error"
+      },
+      {
+        "pattern": "[\"'\\`]--m-[\\w-]+[\"'\\`]\\s*[:,]|--m-[\\w-]+\\s*:[^;\"'\\`]*;?\\s*[\"'\\`}]",
+        "flags": "i",
+        "files": [
+          "tsx",
+          "jsx",
+          "html",
+          "vue",
+          "svelte",
+          "astro",
+          "mdx",
+          "ts",
+          "js"
+        ],
+        "level": "error"
+      }
     ]
   }
 ]

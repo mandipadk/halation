@@ -58,7 +58,7 @@ export function Phenomena() {
         <Near key={e.name} id={e.name} height="640px">
           <Stage phenomenon={e.name} daylight={daylight ? moment : false} speed={{ still: 0, slow: 0.45, live: 1 }[speed]} className="stage-card">
             <div className="stage-sample" data-quiet="">
-              <Heading level={2} size="display-xl" data-press={e.name === "foil" ? "" : undefined} style={e.name === "foil" ? { whiteSpace: "nowrap", fontSize: "min(var(--text-display-xl), 11vw)" } : undefined}>
+              <Heading level={2} size="display-xl" data-press={e.name === "foil" ? "" : undefined}>
                 {e.headline}
               </Heading>
               <Text size="body-lg">{e.sub}</Text>

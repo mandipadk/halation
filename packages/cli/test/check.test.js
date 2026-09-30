@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs"
 import assert from "node:assert/strict"
 import { spawn, spawnSync } from "node:child_process"
 import { createServer } from "node:http"
@@ -7,7 +8,9 @@ import { checkerSource, checkUrl, formatCheck, toUrl } from "../src/check.js"
 
 const BIN = fileURLToPath(new URL("../bin/halation.js", import.meta.url))
 const DOT = "\u00b7"
-const page = (body) => `<!doctype html><html><head><meta charset="utf-8"></head><body style="background:#fff;color:#111;font-family:Georgia">${body}</body></html>`
+// The shipped scale: text sizes, radii and named spaces, so sizes on these pages are measured against it.
+const SCALE = `:root {${readFileSync(new URL("../../core/css/tokens.css", import.meta.url), "utf8").split("\n").filter((l) => /^\s*--(text|radius|space|spacing)[\w-]*:/.test(l)).join("\n")}}\n${readFileSync(new URL("../../core/css/base.css", import.meta.url), "utf8").split("\n").filter((l) => /^:where\((h1|h2|h3|h4|button)/.test(l)).join("\n")}`
+const page = (body) => `<!doctype html><html><head><meta charset="utf-8"><style>${SCALE}</style></head><body style="background:#fff;color:#111;font-family:Georgia">${body}</body></html>`
 const PAGES = {
   "/joined": page(`<p>A ${DOT} B</p>`),
   "/clean": page(`<h1>Claude Work</h1><p>A copy of Claude with its own accounts.</p><dl><dt>Size</dt><dd>412 MB</dd><dt>Opened</dt><dd>Two hours ago</dd></dl>`),

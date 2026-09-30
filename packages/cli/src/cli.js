@@ -3,6 +3,7 @@
 import { readFileSync } from "node:fs"
 import { checkUrl, formatCheck, toUrl } from "./check.js"
 import { init } from "./init.js"
+import { formatGate, gate } from "./gate.js"
 import { guardHook } from "./guard.js"
 import { formatReport, lintFiles, lintHook, lintStop, UsageError } from "./lint.js"
 import { loadRules } from "./rules.js"
@@ -18,6 +19,7 @@ Usage: halation <command> [options]
 Commands
   lint [paths...]   Check source files against the rulebook
   check <url>       Check a rendered page in a headless browser
+  gate [dirs...]    Check what a build emitted: its CSS and the styles in its HTML
   rules             Print every rule with its reason
   skill             Print the Claude Code skill for this design system
   init [dir]        Set a project up for agents: skill, hooks, AGENTS.md
@@ -73,6 +75,34 @@ Options
 
 Exits 1 when a rule is broken or a budget is over its limit.
 `,
+  gate: `Check what a build emitted against the rules a style sheet can show.
+
+Usage: halation gate [dirs...] [--json]
+
+Run it after the project builds. It reads every .css file in the folders
+given, and the <style> blocks and style attributes of every .html file, and
+checks each declaration: literal colors, sizes outside the text styles,
+added letter-spacing, uppercase, gradients, glowing text, fonts outside the
+lens, spacing off the grid and radii off the scale. Whatever wrote the style
+(a Tailwind arbitrary value like text-[13px], a library, a template), this
+is where it shows up.
+
+Without a folder it reads the first of dist, build, out, .next/static and
+.output/public that exists.
+
+Halation's own styles pass because they match @halation/core's CSS
+declaration for declaration, not because of their class names: a new rule
+for an hl- class is checked like any other.
+
+Options
+  --json                    Print the findings as JSON
+  --allow-counterexamples   Skip rules whose selectors are all inside, or on,
+                            a [data-counterexample] element, for docs that
+                            show what not to do. They're still counted in
+                            the report.
+
+Exits 1 when a declaration breaks a rule, or when there's nothing to read.
+`,
   rules: `Print every rule: what it says, why, what to do instead, and what catches it.
 
 Usage: halation rules [--json]
@@ -116,6 +146,7 @@ const OPTIONS = {
   lint: { json: false, hook: false, stop: false },
   guard: { hook: false },
   check: { json: false, mode: "value", width: "value", "allow-counterexamples": false },
+  gate: { json: false, "allow-counterexamples": false },
   rules: { json: false },
   skill: {},
   init: {},
@@ -226,6 +257,20 @@ export async function main(argv, io = { out: (s) => process.stdout.write(s), err
         }
         io.out(flags.json ? `${JSON.stringify(result, null, 2)}\n` : formatCheck(result))
         return result.pass ? 0 : 1
+      }
+      case "gate": {
+        const result = gate(positional, { counterexamples: !!flags["allow-counterexamples"] })
+        if (!result.files) {
+          io.err(formatGate(result))
+          return 1
+        }
+        if (flags.json) {
+          const rules = loadRules()
+          const used = new Set(result.findings.map((f) => f.rule))
+          const why = Object.fromEntries(rules.filter((r) => used.has(r.id)).map((r) => [r.id, { slug: r.slug, says: r.says, why: r.why, instead: r.instead }]))
+          io.out(`${JSON.stringify({ dirs: result.dirs, files: result.files, errors: result.findings.length, exempted: result.exempted, findings: result.findings, rules: why }, null, 2)}\n`)
+        } else io.out(formatGate(result, loadRules()))
+        return result.findings.length ? 1 : 0
       }
       case "rules": {
         const rules = loadRules()

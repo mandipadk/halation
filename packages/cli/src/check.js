@@ -192,11 +192,12 @@ export function formatCheck({ url, runs, pass }) {
   }
   out.push("")
   const most = (k) => Math.max(...runs.map((run) => run.exempted[k] ?? 0))
-  const exempt = { counterexamples: most("counterexamples"), samples: most("samples"), decorative: most("decorative") }
-  if (exempt.counterexamples || exempt.samples || exempt.decorative) {
+  const exempt = { counterexamples: most("counterexamples"), samples: most("samples"), decorative: most("decorative"), metrics: most("metrics") }
+  if (exempt.counterexamples || exempt.samples || exempt.decorative || exempt.metrics) {
     out.push("Exempted, and counted")
-    if (exempt.samples) out.push(`  ${plural(exempt.samples, "element")} in declared samples may use their own colors.`)
+    if (exempt.samples) out.push(`  ${plural(exempt.samples, "element")} in declared samples may use their own colors and sizes.`)
     if (exempt.decorative) out.push(`  ${plural(exempt.decorative, "text element")} in samples hidden from assistive technology are pictures of an interface, so their contrast isn't measured.`)
+    if (exempt.metrics) out.push(`  ${plural(exempt.metrics, "element")} take a value from a component metric, declared on the component with its reason.`)
     if (exempt.counterexamples) out.push(`  ${plural(exempt.counterexamples, "element")} in counterexamples, allowed by --allow-counterexamples.`)
     out.push("")
   }

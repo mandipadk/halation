@@ -1,5 +1,5 @@
 /* The docs site's own layout. Everything visual comes from Halation's tokens. */
-:root { --gutter: clamp(16px, 4vw, 40px); --page: 1180px; --section-y: clamp(64px, 8vw, 112px); }
+:root { --gutter: var(--space-gutter); --page: 1180px; --section-y: var(--space-section); }
 body { overflow-x: clip; font-variant-numeric: tabular-nums; }
 main { min-height: 70svh; }
 .wrap { max-width: var(--page); margin-inline: auto; padding-inline: var(--gutter); }
@@ -17,11 +17,11 @@ main:focus { outline: none; }
 @media (max-width: 560px) { .appearance .swatches { display: none; } }
 
 /* Page heads and sections */
-.page-head { display: grid; gap: 14px; max-width: 48rem; padding-block: clamp(64px, 9vw, 120px) clamp(32px, 5vw, 56px); }
+.page-head { display: grid; gap: 14px; max-width: 48rem; padding-block: var(--space-section) var(--space-group); }
 .page-head .lead, .section-head .lead { max-width: 44rem; }
 .kicker { font-size: var(--text-body-sm); font-weight: 500; color: var(--color-accent-fg); }
 .section { padding-block: var(--section-y); border-top: 1px solid var(--color-line); }
-.section-head { display: grid; gap: 12px; max-width: 46rem; margin-bottom: clamp(28px, 4vw, 44px); }
+.section-head { display: grid; gap: 12px; max-width: 46rem; margin-bottom: var(--space-group); }
 .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 16px; }
 .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0 40px; }
 .point { padding-block: 18px; border-top: 1px solid var(--color-line); display: grid; gap: 6px; align-content: start; }
@@ -31,21 +31,21 @@ main:focus { outline: none; }
 .stack { display: grid; gap: 12px; }
 
 /* Demos */
-.demos { display: grid; gap: clamp(40px, 6vw, 72px); }
+.demos { display: grid; gap: var(--space-split); }
 .demo { display: grid; gap: 14px; }
 .demo-head { display: grid; gap: 4px; max-width: 44rem; }
-.demo-stage { border-radius: var(--radius-2xl); box-shadow: inset 0 0 0 1px var(--color-line); padding: clamp(20px, 4vw, 36px); display: grid; gap: 14px; background: var(--color-canvas); }
+.demo-stage { border-radius: var(--radius-2xl); box-shadow: inset 0 0 0 1px var(--color-line); padding: var(--space-stage); display: grid; gap: 14px; background: var(--color-canvas); }
 .demo-stage[data-center] { place-items: center; min-height: 140px; }
 
 /* Code on its own surface (monospace lives only on surfaces, rule R11). */
 .code-block { border-radius: var(--radius-xl); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-line); overflow: hidden; }
 .code-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 10px 8px 14px; font-size: var(--text-caption); color: var(--color-fg-muted); box-shadow: inset 0 -1px 0 var(--color-line); }
-.code-copy { border: 0; background: var(--color-fill); color: var(--color-fg); font: 500 var(--text-caption)/1 var(--font-sans); padding: 6px 9px; border-radius: var(--radius-md); cursor: pointer; }
-.code-block pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--color-fg); }
+.code-copy { border: 0; background: var(--color-fill); color: var(--color-fg); font: 500 var(--text-caption)/1 var(--font-sans); padding: 6px 10px; border-radius: var(--radius-md); cursor: pointer; }
+.code-block pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-family: var(--font-mono); font-size: var(--text-caption); line-height: 1.7; color: var(--color-fg); }
 
 /* Hero */
 .hero { min-height: min(88svh, 780px); display: grid; place-items: center; text-align: center; }
-.hero-inner { display: grid; justify-items: center; gap: 22px; padding: clamp(96px, 12vw, 140px) var(--gutter) 64px; max-width: 900px; }
+.hero-inner { display: grid; justify-items: center; gap: 22px; padding: var(--space-scene) var(--gutter) 64px; max-width: 900px; }
 .hero-inner .lead { max-width: 36rem; color: var(--color-fg-muted); }
 .hero > .hl-phenomenon { -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent); mask-image: linear-gradient(to bottom, #000 45%, transparent); }
 
@@ -53,6 +53,7 @@ main:focus { outline: none; }
 .stage-card { min-height: min(78svh, 640px); border-top: 1px solid var(--color-line); display: grid; grid-template-rows: 1fr auto; }
 .stage-card .stage-sample { align-self: center; justify-self: center; text-align: center; display: grid; justify-items: center; gap: 16px; padding: 72px var(--gutter) 32px; max-width: 900px; }
 .stage-card .stage-sample p { color: var(--color-fg-muted); max-width: 30rem; }
+.stage-card .stage-sample [data-press] { white-space: nowrap; --m-fit: 11vw; /* foil presses the word on one line, even on a phone */ font-size: min(var(--text-display-xl), var(--m-fit)); }
 .stage-info { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: end; padding-bottom: 24px; }
 .glass { background: color-mix(in oklab, var(--color-raised) 82%, transparent); backdrop-filter: blur(14px) saturate(1.3); -webkit-backdrop-filter: blur(14px) saturate(1.3); border-radius: var(--radius-2xl); box-shadow: var(--shadow-overlay); padding: 16px 18px; }
 @media (max-width: 760px) { .stage-info { grid-template-columns: 1fr; } }
@@ -68,7 +69,7 @@ td:first-child { white-space: nowrap; font-weight: 500; }
 .roles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 10px; }
 .role { display: grid; grid-template-columns: 40px 1fr; gap: 4px 12px; align-items: start; padding: 12px; border-radius: var(--radius-xl); background: var(--color-surface); box-shadow: inset 0 0 0 1px var(--color-line); }
 .role-chip { grid-row: span 2; width: 40px; height: 40px; border-radius: var(--radius-lg); box-shadow: inset 0 0 0 1px var(--color-line); }
-.role code { font-family: var(--font-mono); font-size: 12.5px; }
+.role code { font-family: var(--font-mono); font-size: var(--text-caption); }
 .type-row { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 24px; align-items: center; padding-block: 16px; border-top: 1px solid var(--color-line); }
 @media (max-width: 720px) { .type-row { grid-template-columns: 1fr; gap: 6px; } }
 
@@ -76,17 +77,17 @@ td:first-child { white-space: nowrap; font-weight: 500; }
 
 /* Demos for the instruments */
 .recorder-demo { width: 100%; max-width: 620px; display: grid; gap: 14px; }
-.recorder-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 20px; border-radius: 20px; background: var(--color-raised); box-shadow: var(--shadow-overlay); }
+.recorder-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 18px 20px; border-radius: var(--radius-2xl); background: var(--color-raised); box-shadow: var(--shadow-overlay); }
 .recorder-row p { margin: 0; }
 .recorder-note { margin: 0; min-height: 1.5em; text-align: center; font-size: var(--text-body-sm); color: var(--color-fg-muted); }
 .recorder-note[data-tone="problem"] { color: var(--color-warning-fg); }
 .recorder-note[data-tone="done"] { color: var(--color-fg); }
-.sundial-demo, .dial-demo { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: clamp(28px, 6vw, 80px); width: 100%; padding-block: 12px; }
+.sundial-demo, .dial-demo { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-split); width: 100%; padding-block: 12px; }
 .sundial-demo .hl-sundial { max-width: 380px; }
 .sundial-read { display: grid; gap: 8px; min-width: 240px; max-width: 300px; }
 .sundial-read p { margin: 0; }
-.sundial-time { font-size: clamp(3rem, 2rem + 3vw, 4.4rem); font-weight: 300; letter-spacing: var(--text-display-xl--letter-spacing); line-height: 1; font-variant-numeric: tabular-nums; }
-.sundial-time small { font-size: 0.4em; letter-spacing: 0; margin-left: 6px; color: var(--color-fg-muted); font-weight: 400; }
+.sundial-time { --m-readout: clamp(3rem, 2rem + 3vw, 4.4rem); /* the chosen time, read at a glance beside the dial */ --m-unit: 0.4; /* am or pm, set well under the time */ font-size: var(--m-readout); font-weight: 300; letter-spacing: var(--text-display-xl--letter-spacing); line-height: 1; font-variant-numeric: tabular-nums; }
+.sundial-time small { font-size: calc(var(--m-unit) * 1em); letter-spacing: 0; margin-left: 6px; color: var(--color-fg-muted); font-weight: 400; }
 .sundial-facts { display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; margin: 10px 0 0; padding-top: 12px; font-size: var(--text-body-sm); box-shadow: inset 0 1px 0 var(--color-line); }
 .sundial-facts dt { color: var(--color-fg-muted); }
 .sundial-facts dd { margin: 0; font-variant-numeric: tabular-nums; }
@@ -94,9 +95,9 @@ td:first-child { white-space: nowrap; font-weight: 500; }
 .lit-panel p { margin: 0; }
 .lamp-col { display: grid; gap: 4px; width: 100%; max-width: 280px; }
 .lamp-col p { margin: 0; }
-.lamp { width: 100%; aspect-ratio: 4 / 5; border-radius: 22px; position: relative; overflow: hidden; background: var(--color-canvas); box-shadow: inset 0 0 0 1px var(--color-line); margin-bottom: 8px; }
+.lamp { width: 100%; aspect-ratio: 4 / 5; border-radius: var(--radius-3xl); position: relative; overflow: hidden; background: var(--color-canvas); box-shadow: inset 0 0 0 1px var(--color-line); margin-bottom: 8px; }
 /* The beam: clipped to a cone inside, softened outside, so its edges fall off like real light. */
 .lamp-beam { position: absolute; inset: -6% 0 0; filter: blur(18px); opacity: var(--level, 0.6); transition: opacity 120ms linear; }
 .lamp-beam::before { content: ""; position: absolute; inset: 0; background: var(--color-light-core); clip-path: polygon(42% 0, 58% 0, 96% 100%, 4% 100%); -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 105%); mask-image: linear-gradient(to bottom, black 30%, transparent 105%); }
-.lamp-fixture { position: absolute; left: 50%; top: 0; width: 64px; height: 10px; translate: -50% 0; border-radius: 0 0 8px 8px; background: var(--color-fill-active); }
+.lamp-fixture { position: absolute; left: 50%; top: 0; width: 64px; height: 10px; translate: -50% 0; border-radius: 0 0 var(--radius-md) var(--radius-md); background: var(--color-fill-active); }
 .lit-wrap { width: 100%; }
