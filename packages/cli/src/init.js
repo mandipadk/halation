@@ -1,7 +1,8 @@
 // `halation init`: sets a project up so agents working in it follow the
 // rules: the skill, hooks that guard the rule files, lint every edit and lint
-// the project before the agent finishes, and a note in AGENTS.md. Safe to
-// run again: it updates what it wrote and never duplicates.
+// the project before the agent finishes, the MCP server in .mcp.json, and a
+// note in AGENTS.md. Safe to run again: it updates what it wrote and never
+// duplicates.
 
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
@@ -81,18 +82,36 @@ This project's UI follows Halation. Before building or changing any interface, r
 - Use the eleven text styles and the color roles. No other font sizes, no literal colors, gradients, uppercase labels or added letter-spacing.
 - Run \`npx halation lint\` before you finish; it exits 1 when a rule is broken. With the app running, \`npx halation check <url>\` measures the rendered page.
 - After building, run \`npx halation gate dist\` (or the build's folder); it reads what the build emitted and exits 1 when a style is off the system.
+- The \`halation\` MCP server in \`.mcp.json\` gives you tools for the rules, the scale and the components, and to lint a draft, declare a component metric and check a page; the \`new-component\` prompt walks through building one.
 - \`npx halation rules\` prints every rule with its reason. A deliberate exception gets a comment saying \`halation-ignore\` and the rule id on that line or the line above.
 ${END}
 `
 
-function readJson(file) {
+function readJson(file, what = "the hooks weren't added") {
   const text = readFileSync(file, "utf8")
   if (!text.trim()) return {}
   try {
     const value = JSON.parse(text)
     if (value && typeof value === "object" && !Array.isArray(value)) return value
   } catch {}
-  throw new UsageError(`${file} isn't a valid JSON object, so the hooks weren't added. Fix the file (or remove it) and run halation init again.`)
+  throw new UsageError(`${file} isn't a valid JSON object, so ${what}. Fix the file (or remove it) and run halation init again.`)
+}
+
+/** The MCP server entry init registers: the project's own CLI, never a download. */
+export const MCP_SERVER = { command: "npx", args: ["--no-install", "halation", "mcp"] }
+
+/**
+ * Adds Halation's MCP server to a .mcp.json object in place, keeping every
+ * other server. Returns "added", "updated", or false when it was already there.
+ */
+export function mergeMcp(config) {
+  config.mcpServers ??= {}
+  const servers = config.mcpServers
+  if (typeof servers !== "object" || Array.isArray(servers)) throw new UsageError(`The "mcpServers" entry in .mcp.json isn't an object. Fix it and run halation init again.`)
+  const had = servers.halation
+  if (had && JSON.stringify(had) === JSON.stringify(MCP_SERVER)) return false
+  servers.halation = structuredClone(MCP_SERVER)
+  return had ? "updated" : "added"
 }
 
 /**
@@ -167,6 +186,18 @@ export async function init(dir = ".", { cwd = process.cwd() } = {}) {
   else if (merged === "added") done.push(`Added ${hooks} to .claude/settings.json.`)
   else if (merged === "updated") done.push("Updated the Halation hooks in .claude/settings.json.")
   else done.push("The Halation hooks are already in .claude/settings.json.")
+
+  // The MCP server.
+  const mcpFile = path.join(root, ".mcp.json")
+  const mcpExisted = existsSync(mcpFile)
+  const mcp = mcpExisted ? readJson(mcpFile, "the MCP server wasn't added") : {}
+  const mcpMerged = mergeMcp(mcp)
+  const tools = "the Halation MCP server, which gives agents the rules, the scale and checks for their own work"
+  if (mcpMerged) write(mcpFile, `${JSON.stringify(mcp, null, 2)}\n`)
+  if (!mcpExisted) done.push(`Created .mcp.json with ${tools}.`)
+  else if (mcpMerged === "added") done.push("Added the Halation MCP server to .mcp.json. It gives agents the rules, the scale and checks for their own work.")
+  else if (mcpMerged === "updated") done.push("Updated the Halation MCP server in .mcp.json.")
+  else done.push("The Halation MCP server is already in .mcp.json.")
 
   // AGENTS.md.
   const agentsFile = path.join(root, "AGENTS.md")

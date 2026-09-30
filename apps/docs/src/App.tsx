@@ -17,6 +17,7 @@ const Phenomena = page(() => import("./pages/Phenomena.tsx"), "Phenomena")
 const Motion = page(() => import("./pages/Motion.tsx"), "Motion")
 const Signature = page(() => import("./pages/Signature.tsx"), "Signature")
 const Rules = page(() => import("./pages/Rules.tsx"), "Rules")
+const Specimens = page(() => import("./pages/Specimens.tsx"), "Specimens")
 const NotFound = page(() => import("./pages/NotFound.tsx"), "NotFound")
 
 const ROUTES: Record<string, ComponentType> = {
@@ -28,6 +29,7 @@ const ROUTES: Record<string, ComponentType> = {
   "/motion": Motion,
   "/signature": Signature,
   "/rules": Rules,
+  "/specimens": Specimens,
 }
 
 export function App() {

@@ -869,7 +869,8 @@ export function definitions(decls, own = null) {
  */
 function colorThroughAlias(value, seen = new Set()) {
   for (const name of varsIn(blankRaw(value))) {
-    if (/^--(color|tw|lightningcss)-/.test(name) || seen.has(name)) continue
+    // A component metric may hold its own material color (a print's paper); its reason is required where it's declared.
+    if (/^--(color|tw|lightningcss|m)-/.test(name) || seen.has(name)) continue
     seen.add(name)
     for (const d of aliases?.get(name) ?? []) {
       if (d.own) continue
@@ -883,9 +884,10 @@ function colorThroughAlias(value, seen = new Set()) {
 
 const near = (x, step) => Math.abs(x / step - Math.round(x / step)) < 1e-6
 /** On the grid: 2 px steps up to 24 px, then 4 px steps. */
+/** The spacing grid: 2 px steps up to 24, then 4 px steps, and a 1 px hairline. */
 const onGrid = (px) => {
   const n = Math.abs(px)
-  return n < 1e-6 || (n <= 24 + 1e-6 ? near(n, 2) : near(n, 4))
+  return n < 1e-6 || near(n, 1) && n <= 1 + 1e-6 || (n <= 24 + 1e-6 ? near(n, 2) : near(n, 4))
 }
 
 /** Whether a spacing value (padding, margin, gap) sits on the grid. */
@@ -912,7 +914,7 @@ function spacingOk(value, { margin = false } = {}) {
           const b = run(8, reverse)
           const steps = (b - a) / 4
           const rest = a - 4 * steps
-          if (!near(steps, 0.5) || !onGrid(rest)) return false
+          if (!near(steps, 0.5) || !onGrid(rest) || !onGrid(a) || !onGrid(b)) return false
         } else if (!onGrid(run(4, reverse))) return false
       }
       return true

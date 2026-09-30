@@ -129,7 +129,7 @@ export const rules: Rule[] = [
     lint: [
       // Style sheets: a literal anywhere in a declaration or custom property, but not in a selector,
       // and not in a mask, where black and white only mean opaque and clear.
-      lint(re`(?:(?<![\w&]|url\(\s*)${HEX}|${FUNC}|${NAME}(?<!["'][^"'\n;{}]*))(?<=[\w-]\s*:[^;{}]*)(?<!(?:^|[{;\n])\s*(?:-webkit-)?mask(?:-image)?\s*:[^;{}]*)(?=[^{};]*(?:[;}]|$))`, STYLES, "error", CORE),
+      lint(re`(?:(?<![\w&]|url\(\s*)${HEX}|${FUNC}|${NAME}(?<!["'][^"'\n;{}]*))(?<=[\w-]\s*:[^;{}]*)(?<!(?:^|[{;\n])\s*(?:-webkit-)?mask(?:-image)?\s*:[^;{}]*)(?<!(?:^|[{;\n])\s*--m-[\w-]+\s*:[^;{}]*)(?=[^{};]*(?:[;}]|$))`, STYLES, "error", CORE),
       // CSS in strings, style attributes and component style blocks.
       lint(re`(?<![\w$-])(?:--[\w-]+|${COLOR_KEY})\s*:\s*[^;{}"'\`\n]*?(?:${HEX}|${FUNC}|${NAME}(?=\s*(?:[;"'\`!]|$)))`, [...UI, ...SCRIPTS, "svg"], "error", CORE),
       // Style objects.

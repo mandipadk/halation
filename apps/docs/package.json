@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview --port 4174",
-    "deploy": "pnpm build && pnpm dlx wrangler deploy"
+    "prove": "node scripts/prove.mjs",
+    "deploy": "pnpm build && node scripts/prove.mjs && pnpm dlx wrangler deploy"
   },
   "dependencies": {
     "@halation/core": "workspace:*",

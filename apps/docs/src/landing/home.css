@@ -9,7 +9,7 @@
   color: var(--color-fg);
 }
 .home p, .home h2, .home h3, .home dl, .home dd { margin: 0; }
-.wrap-x { max-width: var(--page-x); margin-inline: auto; padding-inline: var(--edge); }
+.wrap-x { max-width: var(--page-x, 1280px); margin-inline: auto; padding-inline: var(--edge, var(--space-gutter)); }
 
 /* The floating bar */
 .capsule-bar { position: fixed; inset: 14px 0 auto; z-index: 50; display: flex; justify-content: center; padding-inline: var(--edge); pointer-events: none; }
@@ -206,12 +206,17 @@
 
 /* Footer */
 .home-foot { border-top: 1px solid var(--color-line); padding-block: 36px 48px; }
+/* On docs pages the appearance pill is fixed at the bottom corner: the footer leaves it room. */
+main[data-docs] ~ .home-foot { padding-bottom: 96px; }
 .home-foot-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 16px 40px; }
 .home-foot-name { font-weight: 600; }
 .home-foot-nav { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--text-body-sm); flex: 1; }
 .home-foot-nav a { color: var(--color-fg-muted); text-decoration: none; transition: color var(--hl-d-hover) ease; }
 @media (hover: hover) { .home-foot-nav a:hover { color: var(--color-fg); } }
 .home-foot-note { color: var(--color-fg-muted); font-size: var(--text-body-sm); }
+.home-foot-proof { display: block; line-height: 0; border-radius: var(--radius-lg); transition: opacity var(--hl-d-hover) ease; }
+.home-foot-proof img { display: block; }
+@media (hover: hover) { .home-foot-proof:hover { opacity: 0.85; } }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-line [data-l], .hero-serif, .hero-foot, .rules-says span, .rules-spec, .rules-note, .light-frame, .piece, .worlds-head, .behave-head, .rules-kicker, .start-body { animation: none !important; }

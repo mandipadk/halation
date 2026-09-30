@@ -17,7 +17,7 @@ test("creates a project from the template with the directory's name", () => {
   const dir = join(root, "acme-notes")
   const out = execFileSync(process.execPath, [BIN, dir], { encoding: "utf8", env: { ...process.env, npm_config_user_agent: "pnpm/11.0.0" } })
 
-  for (const file of ["package.json", "index.html", "tsconfig.json", "vite.config.ts", "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", "src/main.tsx", "src/App.tsx", "src/project.ts", "src/app.css", ".claude/settings.json", ".claude/skills/halation/SKILL.md", ".halation/hooks.sh"]) {
+  for (const file of ["package.json", "index.html", "tsconfig.json", "vite.config.ts", "README.md", "AGENTS.md", "CLAUDE.md", ".gitignore", "src/main.tsx", "src/App.tsx", "src/project.ts", "src/app.css", ".claude/settings.json", ".claude/skills/halation/SKILL.md", ".halation/hooks.sh", ".mcp.json"]) {
     assert.ok(existsSync(join(dir, file)), `${file} is missing`)
   }
   assert.ok(!existsSync(join(dir, "_gitignore")), "_gitignore should be renamed")
@@ -36,6 +36,7 @@ test("creates a project from the template with the directory's name", () => {
   assert.equal(hooks.PostToolUse[0].hooks[0].command, 'sh "${CLAUDE_PROJECT_DIR:-.}/.halation/hooks.sh" lint || exit 2')
   assert.equal(hooks.Stop[0].hooks[0].command, 'sh "${CLAUDE_PROJECT_DIR:-.}/.halation/hooks.sh" stop || exit 2')
   assert.match(read(dir, ".halation/hooks.sh"), /^#!\/bin\/sh\n/)
+  assert.deepEqual(JSON.parse(read(dir, ".mcp.json")).mcpServers.halation, { command: "npx", args: ["--no-install", "halation", "mcp"] })
 
   assert.match(out, /pnpm install/)
   assert.match(out, /pnpm dev/)

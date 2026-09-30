@@ -8,7 +8,7 @@ import { loadRules, corePath } from "./rules.js"
 const kit = (name) => JSON.parse(readFileSync(new URL(`../kit/${name}`, import.meta.url), "utf8"))
 
 /** A concrete "don't" and "do" for each rule, keyed by id. Rules without one fall back to their text. */
-const EXAMPLES = {
+export const EXAMPLES = {
   R1: { dont: "Accent-filled cards, headings, icons and buttons all over a page.", do: "Neutral surfaces; `text-accent` or `<Button variant=\"accent\">` only for identity, focus, selection or live state." },
   R2: { dont: "`<Button variant=\"accent\">Save</Button>` next to two other filled buttons.", do: "`<Button variant=\"ink\">Save</Button>`, one per view; the rest secondary or ghost." },
   R3: { dont: "`className=\"bg-gradient-to-r from-purple-500 to-pink-500\"`, or `background: linear-gradient(...)`.", do: "`<Stage phenomenon=\"rays\">` behind the page, or `<Surface elevation=\"raised\">`." },
@@ -34,7 +34,7 @@ const EXAMPLES = {
   R23: { dont: "A fixed-width row, table or code line that makes a phone scroll sideways.", do: "Let rows wrap, give tables and code their own scroll container, and check at 375 px." },
 }
 
-const PRINCIPLES = [
+export const PRINCIPLES = [
   "Ink, not color. One accent, spent only where it means something; the main action is ink (R1, R2).",
   "Light, not paint. Depth comes from an atmosphere, lit edges and shadows, never decorative gradients (R3, R15).",
   "Structure, not strings. Facts get their own lines, states get a word and a shape (R9, R10).",
@@ -44,7 +44,7 @@ const PRINCIPLES = [
   "Plain words. Sentence case, short labels; errors say what's wrong and how to fix it.",
 ]
 
-const TELLS = [
+export const TELLS = [
   "Purple or violet gradients, gradient text, glowing blobs behind cards (R3, R1).",
   "Inter, Roboto or a bare system stack as the typeface (R18).",
   "Uppercase, letter-spaced eyebrows above headlines (R5, R6).",
@@ -103,6 +103,7 @@ export async function renderSkill({ rules = loadRules() } = {}) {
     "- Before you finish: `npx halation lint` (exits 1 on an error) and, with the app running, `npx halation check http://localhost:3000`.",
     "- After a build: `npx halation gate dist` (or the build's folder) reads the CSS and HTML it emitted and exits 1 on anything off the system, such as a Tailwind arbitrary value.",
     "- A deliberate exception gets a comment saying `halation-ignore R9` (the rule id) on that line or the line above.",
+    "- The `halation` MCP server (`npx halation mcp`, registered in `.mcp.json` by `halation init`) has tools to look up the rules, the scale and the components, lint a draft, declare a component metric and check a page.",
     "",
     "## Principles",
     "",

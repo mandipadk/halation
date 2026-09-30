@@ -6,6 +6,8 @@ import { init } from "./init.js"
 import { formatGate, gate } from "./gate.js"
 import { guardHook } from "./guard.js"
 import { formatReport, lintFiles, lintHook, lintStop, UsageError } from "./lint.js"
+import { serveMcp } from "./mcp.js"
+import { formatProof, formatVerify, proofOk, prove, verify } from "./proof.js"
 import { loadRules } from "./rules.js"
 import { renderSkill } from "./skill.js"
 
@@ -20,10 +22,12 @@ Commands
   lint [paths...]   Check source files against the rulebook
   check <url>       Check a rendered page in a headless browser
   gate [dirs...]    Check what a build emitted: its CSS and the styles in its HTML
+  proof <urls...>   Check a site's pages and write a certificate that says so
   rules             Print every rule with its reason
   skill             Print the Claude Code skill for this design system
-  init [dir]        Set a project up for agents: skill, hooks, AGENTS.md
+  init [dir]        Set a project up for agents: skill, hooks, tools, AGENTS.md
   guard --hook      Keep agents from changing the rule files (a Claude Code hook)
+  mcp               Serve the tools to agents over the Model Context Protocol
 
 Options
   -h, --help        Show help for a command, as in halation lint --help
@@ -75,6 +79,33 @@ Options
 
 Exits 1 when a rule is broken or a budget is over its limit.
 `,
+  proof: `Check a site's pages and write a certificate that says what held.
+
+Usage: halation proof <url> [more urls...] [--out proof.json] [--sign key]
+       halation proof --verify proof.json [--signers allowed_signers]
+
+Runs the page check on every url, in light and dark mode, at a desktop and a
+phone width, and writes a proof: which pages were checked, what held and what
+broke, the rulebook and the checker by their hashes, and an id that is the
+hash of all of it. It also writes the proof's seal as an SVG, beside it.
+With --sign, the proof is signed with an SSH key (ssh-keygen -Y sign), which
+can be a key held by an agent, like one in the Secure Enclave.
+
+Options
+  --out <file>              Where to write the proof (proof.json)
+  --name <name>             The site's name, for its seal (the first url's host)
+  --sign <key>              Sign it with this SSH key, or its .pub with an agent
+  --width <px>              Check only this width
+  --mode <mode>             Check only light or only dark mode
+  --allow-counterexamples   Let [data-counterexample] break the rules, counted
+  --verify <file>           Verify a proof instead of making one
+  --signers <file>          With --verify: an allowed signers file to check the
+                            signature against (ssh-keygen's format)
+  --identity <name>         With --signers: the signer to expect
+  --json                    Print the proof, or the verification, as JSON
+
+Exits 1 when a page broke a rule, or when a proof doesn't verify.
+`,
   gate: `Check what a build emitted against the rules a style sheet can show.
 
 Usage: halation gate [dirs...] [--json]
@@ -125,10 +156,31 @@ In the project folder (the current one by default) it:
   adds hooks to .claude/settings.json that keep Claude Code from changing
     the rule files, lint each file it edits, and lint the project before it
     finishes
+  registers Halation's tools for agents in .mcp.json, keeping any other
+    servers there
   adds a Halation section to AGENTS.md, creating it if needed
   makes sure CLAUDE.md includes @AGENTS.md
 
 Running it again updates what it wrote and never adds anything twice.
+`,
+  mcp: `Serve Halation's tools to an agent over the Model Context Protocol.
+
+Usage: halation mcp
+
+An agent's client, such as Claude Code, starts it and talks to it on stdin
+and stdout. It gives the agent these tools:
+  rules        every rule, or one by id
+  explain      one rule in depth, with a don't and a do
+  scale        the text styles, color roles, radii, named spaces, grid and motion
+  components   the components, found by a word
+  lint         lint files, or text with a filename
+  gate         read what a build emitted
+  check        measure a rendered page (needs playwright-core)
+  metric       declare a component metric with its reason, or learn that the
+               value is already on the scale
+
+and a prompt, new-component, that walks an agent through building a
+component inside the rules. halation init registers it in .mcp.json.
 `,
   guard: `Keep agents from changing the files that hold the project's rules.
 
@@ -145,8 +197,10 @@ settings in package.json. halation init adds it.
 const OPTIONS = {
   lint: { json: false, hook: false, stop: false },
   guard: { hook: false },
+  mcp: {},
   check: { json: false, mode: "value", width: "value", "allow-counterexamples": false },
   gate: { json: false, "allow-counterexamples": false },
+  proof: { json: false, out: "value", name: "value", sign: "value", width: "value", mode: "value", "allow-counterexamples": false, verify: "value", signers: "value", identity: "value" },
   rules: { json: false },
   skill: {},
   init: {},
@@ -258,6 +312,33 @@ export async function main(argv, io = { out: (s) => process.stdout.write(s), err
         io.out(flags.json ? `${JSON.stringify(result, null, 2)}\n` : formatCheck(result))
         return result.pass ? 0 : 1
       }
+      case "proof": {
+        if (flags.verify) {
+          const r = verify(flags.verify, { signers: flags.signers, identity: flags.identity })
+          io.out(flags.json ? `${JSON.stringify({ intact: r.intact, signed: r.signed, rulebook: r.rulebook, pass: r.proof.pass, id: r.proof.id }, null, 2)}\n` : formatVerify(r))
+          return proofOk(r) ? 0 : 1
+        }
+        if (!positional.length) throw new UsageError(`halation proof needs at least one address to check, as in halation proof http://localhost:3000.`)
+        if (flags.mode && !["light", "dark"].includes(flags.mode)) throw new UsageError(`--mode is light or dark, not ${flags.mode}.`)
+        const width = flags.width === undefined ? undefined : Number(flags.width)
+        if (width !== undefined && !(Number.isInteger(width) && width >= 240 && width <= 3840)) throw new UsageError(`--width is a whole number of pixels from 240 to 3840, not ${flags.width}.`)
+        let made
+        try {
+          made = await prove(positional.map((u) => toUrl(u)), {
+            out: flags.out,
+            sign: flags.sign,
+            name: flags.name,
+            modes: flags.mode ? [flags.mode] : ["light", "dark"],
+            widths: width ? [width] : undefined,
+            counterexamples: !!flags["allow-counterexamples"],
+          })
+        } catch (e) {
+          io.err(`${e.message}\n`)
+          return 1
+        }
+        io.out(flags.json ? `${JSON.stringify(made.proof, null, 2)}\n` : formatProof(made))
+        return made.proof.pass ? 0 : 1
+      }
       case "gate": {
         const result = gate(positional, { counterexamples: !!flags["allow-counterexamples"] })
         if (!result.files) {
@@ -283,6 +364,12 @@ export async function main(argv, io = { out: (s) => process.stdout.write(s), err
           lines.push(`${r.id}  ${r.says}`, `    Why: ${r.why}`, `    Instead: ${r.instead}`, `    Caught by: ${r.caught.map((c, i) => (i ? c.toLowerCase() : c)).join(", ")}${r.lint?.length ? " (halation lint has a detector)" : ""}`, "")
         }
         io.out(lines.join("\n"))
+        return 0
+      }
+      case "mcp": {
+        if (positional.length) throw new UsageError("halation mcp takes no arguments. An agent's client starts it and talks to it on stdin and stdout; halation init registers it in .mcp.json.")
+        if (process.stdin.isTTY) io.err("halation mcp is waiting for an agent's client on stdin. Register it in .mcp.json (halation init does) and the client starts it. Press Ctrl-D to stop.\n")
+        await serveMcp()
         return 0
       }
       case "skill": {

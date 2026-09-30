@@ -23,6 +23,7 @@ export function App({ children }) {
 - Before you finish: `npx halation lint` (exits 1 on an error) and, with the app running, `npx halation check http://localhost:3000`.
 - After a build: `npx halation gate dist` (or the build's folder) reads the CSS and HTML it emitted and exits 1 on anything off the system, such as a Tailwind arbitrary value.
 - A deliberate exception gets a comment saying `halation-ignore R9` (the rule id) on that line or the line above.
+- The `halation` MCP server (`npx halation mcp`, registered in `.mcp.json` by `halation init`) has tools to look up the rules, the scale and the components, lint a draft, declare a component metric and check a page.
 
 ## Principles
 

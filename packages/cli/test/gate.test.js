@@ -218,9 +218,9 @@ describe("letter-spacing, case, glow, fonts, gradients", () => {
 describe("spacing (R24) and radii (R25)", () => {
   const pass = (prop, v) => assert.deepEqual(broken(prop, v), [], `${prop}: ${v}`)
   const fail = (prop, v, id) => assert.deepEqual(broken(prop, v), [id], `${prop}: ${v}`)
-  test("the grid: 2 px steps to 24, then 4 px steps", () => {
-    for (const v of ["0", "2px", "24px", "28px", "0 12px", "1rem", "0.75rem 1.5rem", "50%", "inherit", "var(--space-section)", "var(--spacing-gutter)", "var(--m-inset-x)", "calc(var(--m-inset-x) + 1px)"]) pass("padding", v)
-    for (const v of ["13px", "1px", "26px", "0 5px", "0.8rem", "1em", "2vw", "clamp(16px, 4vw, 48px)", "var(--gutter)", "calc(100% - 13px)"]) fail("padding", v, "R24")
+  test("the grid: 2 px steps to 24, then 4 px steps, and a 1 px hairline", () => {
+    for (const v of ["0", "1px", "2px", "24px", "28px", "0 12px", "1rem", "0.75rem 1.5rem", "50%", "inherit", "var(--space-section)", "var(--spacing-gutter)", "var(--m-inset-x)", "calc(var(--m-inset-x) + 1px)"]) pass("padding", v)
+    for (const v of ["13px", "3px", "1.5px", "26px", "0 5px", "0.8rem", "1em", "2vw", "clamp(16px, 4vw, 48px)", "var(--gutter)", "calc(100% - 13px)"]) fail("padding", v, "R24")
   })
   test("Tailwind's spacing: calc(var(--spacing) * N) with N in half steps, negative too", () => {
     for (const v of ["calc(var(--spacing) * 3)", "calc(var(--spacing) * 1.5)", "calc(var(--spacing) * -2)", "calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse))", "calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)))"]) pass("margin-block-start", v)

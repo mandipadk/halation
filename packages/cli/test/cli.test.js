@@ -11,10 +11,10 @@ describe("help", () => {
   test("halation --help lists the commands", () => {
     const r = run("--help")
     assert.equal(r.status, 0)
-    for (const c of ["lint", "check", "rules", "skill", "init", "guard"]) assert.match(r.stdout, new RegExp(`^ {2}${c}\\b`, "m"))
+    for (const c of ["lint", "check", "gate", "proof", "rules", "skill", "init", "guard"]) assert.match(r.stdout, new RegExp(`^ {2}${c}\\b`, "m"))
   })
   test("no command shows help", () => assert.equal(run().status, 0))
-  for (const c of ["lint", "check", "rules", "skill", "init", "guard"]) {
+  for (const c of ["lint", "check", "gate", "proof", "rules", "skill", "init", "guard"]) {
     test(`halation ${c} --help`, () => {
       const r = run(c, "--help")
       assert.equal(r.status, 0)
@@ -64,11 +64,11 @@ describe("halation rules", () => {
 })
 
 describe("the CLI's own words keep the rules", () => {
-  const outputs = [run("--help"), ...["lint", "check", "rules", "skill", "init", "guard"].map((c) => run(c, "--help")), run("rules"), run("lnt")]
+  const outputs = [run("--help"), ...["lint", "check", "gate", "proof", "rules", "skill", "init", "guard"].map((c) => run(c, "--help")), run("rules"), run("lnt")]
   const text = outputs.map((r) => r.stdout + r.stderr).join("\n")
   test("no dots or bullets joining facts", () => assert.doesNotMatch(text, /\s[\u00b7\u2022]\s/))
   test("no capitalized labels", () => {
-    const shouting = (text.match(/\b[A-Z]{3,}\b/g) ?? []).filter((w) => !["JSON", "WCAG", "CSS", "HTML", "SKILL", "AGENTS", "CLAUDE", "MD", "UI", "CLI"].includes(w))
+    const shouting = (text.match(/\b[A-Z]{3,}\b/g) ?? []).filter((w) => !["JSON", "WCAG", "CSS", "HTML", "SKILL", "AGENTS", "CLAUDE", "MD", "UI", "CLI", "SVG", "SSH"].includes(w))
     assert.deepEqual(shouting, [])
   })
 })

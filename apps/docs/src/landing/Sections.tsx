@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { Install } from "./Install.tsx"
 import { Link } from "../router.tsx"
 
@@ -30,6 +31,26 @@ export function Start() {
   )
 }
 
+type Proof = { id: string; pass: boolean; checkedAt: string; measured: string[]; pages: unknown[] }
+
+/** The site's own proof, written by the deploy: its seal, linking to the proof itself. */
+function ProofSeal() {
+  const [proof, setProof] = useState<Proof | null>(null)
+  useEffect(() => {
+    fetch("/proof.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => setProof(p && typeof p.id === "string" ? p : null))
+      .catch(() => {})
+  }, [])
+  if (!proof) return null
+  const what = `${proof.measured.length} rules held on ${proof.pages.length} pages`
+  return (
+    <a className="home-foot-proof" href="/proof.json" title={`Proof ${proof.id.slice(0, 8)}: ${what}`}>
+      <img src="/proof.svg" width={200} height={44} alt={`${proof.pass ? "Proven" : "Checked"} by Halation: ${what}`} />
+    </a>
+  )
+}
+
 export function Footer() {
   return (
     <footer className="home-foot">
@@ -45,6 +66,7 @@ export function Footer() {
           <Link href="/rules">Rules</Link>
         </nav>
         <p className="home-foot-note">Open source under the MIT license.</p>
+        <ProofSeal />
       </div>
     </footer>
   )

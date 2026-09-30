@@ -43,7 +43,7 @@ createRoot(root).render(
         <div className="grid-2" style={{ alignItems: "start" }}>
           <div className="section-head">
             <Heading level={3}>With Tailwind</Heading>
-            <Text tone="muted">Import Halation's Tailwind entry instead of Tailwind itself. Only the system's values exist: text-display, bg-surface, text-fg-muted, rounded-xl. Tailwind's own palette, type scale and letter-spacing are removed, so off-system classes simply don't generate.</Text>
+            <Text tone="muted">Import Halation's Tailwind entry instead of Tailwind itself. Only the system's values exist: text-display, bg-surface, text-fg-muted, rounded-xl. Tailwind's own palette, type scale and letter-spacing are removed, so off-system classes simply don't generate. Arbitrary values in square brackets still compile, so the build gate reads what shipped and refuses the ones off the system.</Text>
           </div>
           <Code label="app.css">{`@import "@halation/core/tailwind.css";`}</Code>
         </div>
@@ -53,11 +53,11 @@ createRoot(root).render(
         <div className="grid-2" style={{ alignItems: "start" }}>
           <div className="section-head">
             <Heading level={3}>The agent kit</Heading>
-            <Text tone="muted">One command sets up a project for Claude Code: the Halation skill, a hook that lints every file an agent edits and hands problems back in the same turn, and a short AGENTS.md other tools read too.</Text>
+            <Text tone="muted">One command sets up a project for Claude Code: the Halation skill, hooks that lint every edit and check the project before an agent finishes, a guard on the rule files, an MCP server with the rules, the scale and the checks, and a short AGENTS.md other tools read too.</Text>
           </div>
           <div className="stack">
             <Code label="Terminal">{`npx halation init`}</Code>
-            <Code label="Check a running page">{`npx halation lint src\nnpx halation check http://localhost:5173`}</Code>
+            <Code label="Check your work">{`npx halation lint src\nnpx halation gate dist\nnpx halation check http://localhost:5173\nnpx halation proof http://localhost:5173`}</Code>
           </div>
         </div>
       </section>

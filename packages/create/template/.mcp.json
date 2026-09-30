@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "halation": {
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "halation",
+        "mcp"
+      ]
+    }
+  }
+}

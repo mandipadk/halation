@@ -75,6 +75,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
             </span>
           )}
         </span>
+      ) : typeof children === "string" ? (
+        <span className="hl-button-text">{children}</span>
       ) : (
         children
       )}

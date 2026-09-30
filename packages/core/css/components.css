@@ -5,13 +5,15 @@
 /* Button */
 .hl-button {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  height: 34px; padding: 0 13px; border-radius: var(--radius-lg); border: 1px solid transparent;
+  height: 34px; max-width: 100%; padding: 0 13px; border-radius: var(--radius-lg); border: 1px solid transparent;
   font: inherit; font-size: var(--text-body-sm); font-weight: 500; letter-spacing: var(--text-body-sm--letter-spacing); line-height: 1;
   white-space: nowrap; text-decoration: none; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
   background: var(--color-fill); color: var(--color-fg); border-color: var(--color-line);
   transition: background-color var(--hl-d-hover) ease, color var(--hl-d-hover) ease, transform var(--hl-d-press) var(--ease-out), box-shadow 900ms var(--ease-out);
 }
 .hl-button:active:not([data-disabled]):not(:disabled) { transform: scale(0.97); }
+/* A label too long for the space ends in an ellipsis instead of pushing the page wider. */
+.hl-button-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .hl-button svg { width: 15px; height: 15px; flex: none; }
 .hl-button[data-variant="ink"] { background: var(--color-ink); color: var(--color-on-ink); border-color: transparent; }
 .hl-button[data-variant="ghost"] { background: transparent; border-color: transparent; }

@@ -5,7 +5,7 @@ import { tmpdir } from "node:os"
 import path from "node:path"
 import { after, describe, test } from "node:test"
 import { fileURLToPath } from "node:url"
-import { GUARD_COMMAND, HOOK_COMMAND, HOOK_SCRIPT, HOOK_SCRIPT_PATH, mergeHook, STOP_COMMAND } from "../src/init.js"
+import { GUARD_COMMAND, HOOK_COMMAND, HOOK_SCRIPT, HOOK_SCRIPT_PATH, MCP_SERVER, mergeHook, mergeMcp, STOP_COMMAND } from "../src/init.js"
 import { lintText } from "../src/lint.js"
 
 const BIN = fileURLToPath(new URL("../bin/halation.js", import.meta.url))
@@ -40,6 +40,8 @@ describe("halation init", () => {
     assert.match(r.stdout, /Created \.claude\/settings\.json with hooks that keep Claude Code from changing the rule files, lint each file it edits, and lint the project before it finishes\./)
     assert.match(read(dir, "AGENTS.md"), /<!-- halation:start -->\n## Design system: Halation/)
     assert.equal(read(dir, "CLAUDE.md"), "@AGENTS.md\n")
+    assert.deepEqual(JSON.parse(read(dir, ".mcp.json")), { mcpServers: { halation: { command: "npx", args: ["--no-install", "halation", "mcp"] } } })
+    assert.match(r.stdout, /Created \.mcp\.json with the Halation MCP server, which gives agents the rules, the scale and checks for their own work\./)
   })
 
   test("takes a folder argument", () => {
@@ -128,6 +130,55 @@ describe("halation init", () => {
     const dir = tempDir()
     run(dir)
     assert.equal(read(dir, ".claude/settings.json"), text)
+  })
+
+  describe(".mcp.json", () => {
+    test("adds the server beside the ones already there, and running twice changes nothing", () => {
+      const dir = tempDir()
+      const other = { command: "node", args: ["tools/server.js"], env: { TOKEN_FILE: ".token" } }
+      writeFileSync(path.join(dir, ".mcp.json"), JSON.stringify({ mcpServers: { tools: other }, extra: true }))
+      const first = run(dir)
+      assert.equal(first.status, 0, first.stderr)
+      assert.match(first.stdout, /Added the Halation MCP server to \.mcp\.json\. It gives agents the rules, the scale and checks for their own work\./)
+      const once = read(dir, ".mcp.json")
+      assert.deepEqual(JSON.parse(once), { mcpServers: { tools: other, halation: MCP_SERVER }, extra: true })
+      const second = run(dir)
+      assert.match(second.stdout, /The Halation MCP server is already in \.mcp\.json\./)
+      assert.equal(read(dir, ".mcp.json"), once)
+    })
+
+    test("brings an older entry up to date", () => {
+      const dir = tempDir()
+      writeFileSync(path.join(dir, ".mcp.json"), JSON.stringify({ mcpServers: { halation: { command: "halation", args: ["mcp"] } } }))
+      const r = run(dir)
+      assert.match(r.stdout, /Updated the Halation MCP server in \.mcp\.json\./)
+      assert.deepEqual(JSON.parse(read(dir, ".mcp.json")), { mcpServers: { halation: MCP_SERVER } })
+      const config = { mcpServers: { halation: structuredClone(MCP_SERVER) } }
+      assert.equal(mergeMcp(config), false)
+      assert.equal(mergeMcp({}), "added")
+    })
+
+    test("an empty file gets the server, and a broken one is left alone", () => {
+      const empty = tempDir()
+      writeFileSync(path.join(empty, ".mcp.json"), "")
+      assert.equal(run(empty).status, 0)
+      assert.deepEqual(JSON.parse(read(empty, ".mcp.json")), { mcpServers: { halation: MCP_SERVER } })
+      for (const text of ["{ nope", JSON.stringify({ mcpServers: [] })]) {
+        const dir = tempDir()
+        writeFileSync(path.join(dir, ".mcp.json"), text)
+        const r = run(dir)
+        assert.equal(r.status, 1)
+        assert.match(r.stderr, /\.mcp\.json.*Fix (the file|it)/)
+        assert.equal(read(dir, ".mcp.json"), text)
+      }
+    })
+
+    test("the starter ships what init writes", () => {
+      const shipped = readFileSync(fileURLToPath(new URL("../../create/template/.mcp.json", import.meta.url)), "utf8")
+      const dir = tempDir()
+      run(dir)
+      assert.equal(read(dir, ".mcp.json"), shipped)
+    })
   })
 
   describe("the hook script", () => {
