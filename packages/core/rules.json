@@ -343,8 +343,7 @@
     "why": "They line up and don't jitter as they change.",
     "instead": "The value style, which sets tabular figures.",
     "caught": [
-      "Theme",
-      "Page check"
+      "Theme"
     ]
   },
   {
@@ -354,7 +353,6 @@
     "why": "Card soup flattens hierarchy.",
     "instead": "A divider or spacing.",
     "caught": [
-      "Page check",
       "Critic"
     ]
   },
@@ -376,7 +374,7 @@
     "why": "An atmosphere is a place, not a decoration.",
     "instead": "The page's one light, with its quiet zone.",
     "caught": [
-      "Page check"
+      "Critic"
     ]
   },
   {

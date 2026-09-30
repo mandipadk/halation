@@ -131,7 +131,7 @@ export function App({ children }) {
 - Do: `<Value>` or `<Count>`, which set tabular figures.
 - Why: They line up and don't jitter as they change.
 - Instead: The value style, which sets tabular figures.
-- Caught by: Theme, page check.
+- Caught by: Theme.
 
 ### R13: Hairlines separate; a box only when something must read as an object. Never a box inside a box.
 
@@ -139,7 +139,7 @@ export function App({ children }) {
 - Do: `<Divider />` or spacing; `<Surface>` only for a real object.
 - Why: Card soup flattens hierarchy.
 - Instead: A divider or spacing.
-- Caught by: Page check, critic.
+- Caught by: Critic.
 
 ### R14: Interface motion stays under 300 ms, exits take 70% of the enter, nothing loops while idle.
 
@@ -155,7 +155,7 @@ export function App({ children }) {
 - Do: One `<Stage>`, with `data-quiet` on the headline it sits behind.
 - Why: An atmosphere is a place, not a decoration.
 - Instead: The page's one light, with its quiet zone.
-- Caught by: Page check.
+- Caught by: Critic.
 
 ### R17: Colors come from tokens, never from literal values in markup.
 

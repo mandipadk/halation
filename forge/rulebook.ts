@@ -120,10 +120,10 @@ export const rules: Rule[] = [
     ],
   },
   { id: "R11", slug: "mono-on-surfaces", says: "Monospace only inside a surface: keys, code wells, token names on cards.", why: "Loose monospace on the page reads as a terminal, and as generated.", instead: "Geist, with tabular figures for numbers.", caught: ["Page check"] },
-  { id: "R12", slug: "tabular-numbers", says: "Numbers that sit in columns or change use tabular figures.", why: "They line up and don't jitter as they change.", instead: "The value style, which sets tabular figures.", caught: ["Theme", "Page check"] },
-  { id: "R13", slug: "lines-before-boxes", says: "Hairlines separate; a box only when something must read as an object. Never a box inside a box.", why: "Card soup flattens hierarchy.", instead: "A divider or spacing.", caught: ["Page check", "Critic"] },
+  { id: "R12", slug: "tabular-numbers", says: "Numbers that sit in columns or change use tabular figures.", why: "They line up and don't jitter as they change.", instead: "The value style, which sets tabular figures.", caught: ["Theme"] },
+  { id: "R13", slug: "lines-before-boxes", says: "Hairlines separate; a box only when something must read as an object. Never a box inside a box.", why: "Card soup flattens hierarchy.", instead: "A divider or spacing.", caught: ["Critic"] },
   { id: "R14", slug: "motion-laws", says: "Interface motion stays under 300 ms, exits take 70% of the enter, nothing loops while idle.", why: "Motion should explain a change, never make anyone wait.", instead: "The moves and their durations.", caught: ["Theme", "Page check"] },
-  { id: "R15", slug: "one-atmosphere", says: "One atmosphere per page, and it dims behind content.", why: "An atmosphere is a place, not a decoration.", instead: "The page's one light, with its quiet zone.", caught: ["Page check"] },
+  { id: "R15", slug: "one-atmosphere", says: "One atmosphere per page, and it dims behind content.", why: "An atmosphere is a place, not a decoration.", instead: "The page's one light, with its quiet zone.", caught: ["Critic"] },
   {
     id: "R17", slug: "raw-colors", says: "Colors come from tokens, never from literal values in markup.", why: "A literal color is a color the system can't check, theme or keep in contrast.", instead: "A color role: bg-surface, text-fg-muted, border-line and so on.", caught: ["Theme", "Lint", "Build gate", "Page check"],
     lint: [
