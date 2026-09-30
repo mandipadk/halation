@@ -1,0 +1,38 @@
+# Every push and pull request: build, lint and test everything, then build the
+# docs, read what the build emitted, and prove the built site in a browser.
+name: Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 25
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm test
+      - name: Build the docs
+        run: pnpm build:docs
+      - name: Read what the docs build emitted
+        run: node packages/cli/bin/halation.js gate apps/docs/dist --allow-counterexamples
+      - name: Prove the built docs
+        run: pnpm --filter @halation/docs run prove
+      - uses: actions/upload-artifact@v4
+        with:
+          name: proof
+          path: |
+            apps/docs/dist/proof.json
+            apps/docs/dist/proof.svg
